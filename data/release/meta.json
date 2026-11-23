@@ -9,8 +9,8 @@
   "license": "ODbL-1.0",
   "counts": {
     "lines": 196,
-    "stations": 2092,
+    "stations": 2091,
     "endpoints": 243,
-    "lengthKm": 38441
+    "lengthKm": 38415
   }
 }
