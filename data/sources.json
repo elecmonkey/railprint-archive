@@ -1,0 +1,161 @@
+{
+  "version": 1,
+  "sources": [
+    {
+      "id": "osm-china",
+      "title": "OpenStreetMap extract: China",
+      "provider": "Geofabrik",
+      "url": "https://download.geofabrik.de/asia/china/china-latest.osm.pbf",
+      "path": "osm/china-latest.osm.pbf",
+      "checksum": {
+        "algorithm": "md5",
+        "suffix": ".md5"
+      },
+      "license": {
+        "id": "ODbL-1.0",
+        "attribution": "© OpenStreetMap contributors",
+        "url": "https://www.openstreetmap.org/copyright"
+      },
+      "notes": "Railway infrastructure, stations, junctions and detailed rivers. 'latest' moves daily; the lock records the snapshot actually used."
+    },
+    {
+      "id": "osm-south-korea",
+      "title": "OpenStreetMap extract: South Korea",
+      "provider": "Geofabrik",
+      "url": "https://download.geofabrik.de/asia/south-korea-latest.osm.pbf",
+      "path": "osm/south-korea-latest.osm.pbf",
+      "checksum": {
+        "algorithm": "md5",
+        "suffix": ".md5"
+      },
+      "license": {
+        "id": "ODbL-1.0",
+        "attribution": "© OpenStreetMap contributors",
+        "url": "https://www.openstreetmap.org/copyright"
+      },
+      "optional": true,
+      "notes": "Reserved for a future Korean railway layer."
+    },
+    {
+      "id": "osm-japan",
+      "title": "OpenStreetMap extract: Japan",
+      "provider": "Geofabrik",
+      "url": "https://download.geofabrik.de/asia/japan-latest.osm.pbf",
+      "path": "osm/japan-latest.osm.pbf",
+      "checksum": {
+        "algorithm": "md5",
+        "suffix": ".md5"
+      },
+      "license": {
+        "id": "ODbL-1.0",
+        "attribution": "© OpenStreetMap contributors",
+        "url": "https://www.openstreetmap.org/copyright"
+      },
+      "optional": true,
+      "notes": "Reserved for a future JR layer."
+    },
+    {
+      "id": "osm-land-polygons-simplified",
+      "title": "OSM land polygons, simplified (global, EPSG:3857)",
+      "provider": "osmdata.openstreetmap.de",
+      "url": "https://osmdata.openstreetmap.de/download/simplified-land-polygons-complete-3857.zip",
+      "path": "osmdata/simplified-land-polygons-complete-3857.zip",
+      "license": {
+        "id": "ODbL-1.0",
+        "attribution": "© OpenStreetMap contributors",
+        "url": "https://osmdata.openstreetmap.de/info/license.html"
+      },
+      "notes": "Land/sea at small and medium scales."
+    },
+    {
+      "id": "osm-land-polygons",
+      "title": "OSM land polygons, full detail (global, EPSG:4326, split)",
+      "provider": "osmdata.openstreetmap.de",
+      "url": "https://osmdata.openstreetmap.de/download/land-polygons-split-4326.zip",
+      "path": "osmdata/land-polygons-split-4326.zip",
+      "license": {
+        "id": "ODbL-1.0",
+        "attribution": "© OpenStreetMap contributors",
+        "url": "https://osmdata.openstreetmap.de/info/license.html"
+      },
+      "notes": "Coastline at large scales, consistent with OSM railway geometry."
+    },
+    {
+      "id": "ne-10m-land",
+      "title": "Natural Earth 1:10m land",
+      "provider": "Natural Earth",
+      "url": "https://naciscdn.org/naturalearth/10m/physical/ne_10m_land.zip",
+      "path": "natural-earth/ne_10m_land.zip",
+      "license": {
+        "id": "public-domain",
+        "attribution": "Made with Natural Earth",
+        "url": "https://www.naturalearthdata.com/about/terms-of-use/"
+      }
+    },
+    {
+      "id": "ne-10m-rivers-lake-centerlines",
+      "title": "Natural Earth 1:10m rivers and lake centerlines",
+      "provider": "Natural Earth",
+      "url": "https://naciscdn.org/naturalearth/10m/physical/ne_10m_rivers_lake_centerlines.zip",
+      "path": "natural-earth/ne_10m_rivers_lake_centerlines.zip",
+      "license": {
+        "id": "public-domain",
+        "attribution": "Made with Natural Earth",
+        "url": "https://www.naturalearthdata.com/about/terms-of-use/"
+      },
+      "notes": "Rivers at small scales, uniform across the whole display extent."
+    },
+    {
+      "id": "ne-10m-lakes",
+      "title": "Natural Earth 1:10m lakes",
+      "provider": "Natural Earth",
+      "url": "https://naciscdn.org/naturalearth/10m/physical/ne_10m_lakes.zip",
+      "path": "natural-earth/ne_10m_lakes.zip",
+      "license": {
+        "id": "public-domain",
+        "attribution": "Made with Natural Earth",
+        "url": "https://www.naturalearthdata.com/about/terms-of-use/"
+      }
+    },
+    {
+      "id": "ne-10m-shaded-relief",
+      "title": "Natural Earth 1:10m shaded relief (high resolution)",
+      "provider": "Natural Earth",
+      "url": "https://naciscdn.org/naturalearth/10m/raster/SR_HR.zip",
+      "path": "natural-earth/SR_HR.zip",
+      "license": {
+        "id": "public-domain",
+        "attribution": "Made with Natural Earth",
+        "url": "https://www.naturalearthdata.com/about/terms-of-use/"
+      },
+      "notes": "Ready-made hillshade for early prototypes."
+    },
+    {
+      "id": "etopo-2022-60s",
+      "title": "ETOPO 2022 surface elevation, 60 arc-second (global)",
+      "provider": "NOAA NCEI",
+      "url": "https://www.ngdc.noaa.gov/thredds/fileServer/global/ETOPO2022/60s/60s_surface_elev_netcdf/ETOPO_2022_v1_60s_N90W180_surface.nc",
+      "path": "etopo/ETOPO_2022_v1_60s_N90W180_surface.nc",
+      "license": {
+        "id": "public-domain",
+        "attribution": "NOAA National Centers for Environmental Information. 2022: ETOPO 2022 Global Relief Model. https://doi.org/10.25921/fd45-gt74",
+        "url": "https://www.ncei.noaa.gov/products/etopo-global-relief-model"
+      },
+      "notes": "Primary terrain source (~1.8 km) for our own hillshade and hypsometric tints."
+    },
+    {
+      "id": "etopo-2022-30s",
+      "title": "ETOPO 2022 surface elevation, 30 arc-second (global)",
+      "provider": "NOAA NCEI",
+      "url": "https://www.ngdc.noaa.gov/thredds/fileServer/global/ETOPO2022/30s/30s_surface_elev_netcdf/ETOPO_2022_v1_30s_N90W180_surface.nc",
+      "path": "etopo/ETOPO_2022_v1_30s_N90W180_surface.nc",
+      "license": {
+        "id": "public-domain",
+        "attribution": "NOAA National Centers for Environmental Information. 2022: ETOPO 2022 Global Relief Model. https://doi.org/10.25921/fd45-gt74",
+        "url": "https://www.ncei.noaa.gov/products/etopo-global-relief-model"
+      },
+      "optional": true,
+      "notes": "Finer terrain (~0.9 km), fetched only when needed."
+    }
+  ]
+}

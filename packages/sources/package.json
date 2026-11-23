@@ -1,0 +1,19 @@
+{
+  "name": "@railprint/sources",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Declared external data sources: resumable download, checksum verification and the sources lock file.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "bin": {
+    "railprint-sources": "./src/cli.ts"
+  },
+  "scripts": {
+    "test": "rs test"
+  },
+  "dependencies": {
+    "@railprint/layout": "workspace:^"
+  }
+}

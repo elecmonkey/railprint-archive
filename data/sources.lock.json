@@ -1,0 +1,89 @@
+{
+  "version": 1,
+  "entries": {
+    "etopo-2022-60s": {
+      "id": "etopo-2022-60s",
+      "url": "https://www.ngdc.noaa.gov/thredds/fileServer/global/ETOPO2022/60s/60s_surface_elev_netcdf/ETOPO_2022_v1_60s_N90W180_surface.nc",
+      "path": "etopo/ETOPO_2022_v1_60s_N90W180_surface.nc",
+      "bytes": 478290125,
+      "sha256": "74bbc5c23e85188d93f0beba8116babf69e1a8f160e8dc9f053bf8df01b197b6",
+      "lastModified": "Tue, 04 Oct 2022 21:55:19 GMT",
+      "fetchedAt": "2026-11-23T11:54:23.233Z"
+    },
+    "ne-10m-lakes": {
+      "id": "ne-10m-lakes",
+      "url": "https://naciscdn.org/naturalearth/10m/physical/ne_10m_lakes.zip",
+      "path": "natural-earth/ne_10m_lakes.zip",
+      "bytes": 2349685,
+      "sha256": "0803a06f9c3cb4671d89b68c48b142aad9366ba40f665245e12a913fbc61722a",
+      "etag": "\"06c430248e291f69d856f4d7f9967968\"",
+      "lastModified": "Wed, 08 Dec 2021 00:46:46 GMT",
+      "fetchedAt": "2026-11-23T11:03:29.659Z"
+    },
+    "ne-10m-land": {
+      "id": "ne-10m-land",
+      "url": "https://naciscdn.org/naturalearth/10m/physical/ne_10m_land.zip",
+      "path": "natural-earth/ne_10m_land.zip",
+      "bytes": 3269070,
+      "sha256": "e547d749445eaa0964aba76738090ec88f5e63c4585122170f98c67a7ea922dc",
+      "etag": "\"be3001f37196d2894e17aacd13ff2cc2\"",
+      "lastModified": "Fri, 13 May 2022 05:21:35 GMT",
+      "fetchedAt": "2026-11-23T11:34:42.658Z"
+    },
+    "ne-10m-rivers-lake-centerlines": {
+      "id": "ne-10m-rivers-lake-centerlines",
+      "url": "https://naciscdn.org/naturalearth/10m/physical/ne_10m_rivers_lake_centerlines.zip",
+      "path": "natural-earth/ne_10m_rivers_lake_centerlines.zip",
+      "bytes": 2079507,
+      "sha256": "ded71b01870855ccfe19b51f2ec14c9bb48fae23c0e9f3c11974d426433b5c38",
+      "etag": "\"686e256cbb714e63ab7728aeda7a269d\"",
+      "lastModified": "Wed, 08 Dec 2021 00:46:46 GMT",
+      "fetchedAt": "2026-11-23T11:34:45.278Z"
+    },
+    "ne-10m-shaded-relief": {
+      "id": "ne-10m-shaded-relief",
+      "url": "https://naciscdn.org/naturalearth/10m/raster/SR_HR.zip",
+      "path": "natural-earth/SR_HR.zip",
+      "bytes": 44367365,
+      "sha256": "b2619fff2fc73c17152983c066adfaa25c4b626916b822bad2fae8bcd9be41a5",
+      "etag": "\"8e22acc8feae8c1beea3e882cd205009\"",
+      "lastModified": "Wed, 08 Sep 2021 06:23:11 GMT",
+      "fetchedAt": "2026-11-23T11:35:45.504Z"
+    },
+    "osm-china": {
+      "id": "osm-china",
+      "url": "https://download.geofabrik.de/asia/china/china-latest.osm.pbf",
+      "resolvedUrl": "https://download.geofabrik.de/asia/china/china-261122.osm.pbf",
+      "path": "osm/china-latest.osm.pbf",
+      "bytes": 1641484332,
+      "sha256": "fe5b6faa61d73956b60f7735dca728e4e6a6a60f01335e36c88e051806775dbe",
+      "upstreamChecksum": {
+        "algorithm": "md5",
+        "value": "3318d588a160f626bc99826e1a7c3f59"
+      },
+      "etag": "\"61d7102c-660e5edadc22a\"",
+      "lastModified": "Sun, 22 Nov 2026 23:35:11 GMT",
+      "fetchedAt": "2026-11-23T12:00:45.965Z"
+    },
+    "osm-land-polygons": {
+      "id": "osm-land-polygons",
+      "url": "https://osmdata.openstreetmap.de/download/land-polygons-split-4326.zip",
+      "path": "osmdata/land-polygons-split-4326.zip",
+      "bytes": 930921460,
+      "sha256": "17cdd947ef4d6af6007f9816a59d4040aa1ee0c07c760da703744741ffffa548",
+      "etag": "\"6b039d70-377cbbf4\"",
+      "lastModified": "Mon, 23 Nov 2026 01:57:04 GMT",
+      "fetchedAt": "2026-11-23T12:07:17.292Z"
+    },
+    "osm-land-polygons-simplified": {
+      "id": "osm-land-polygons-simplified",
+      "url": "https://osmdata.openstreetmap.de/download/simplified-land-polygons-complete-3857.zip",
+      "path": "osmdata/simplified-land-polygons-complete-3857.zip",
+      "bytes": 24453492,
+      "sha256": "cf2f62051eec2b3551fbc4a6278e8d15da287a813651dc5e962077cb3b981d33",
+      "etag": "\"6b039e90-1752174\"",
+      "lastModified": "Mon, 23 Nov 2026 02:01:52 GMT",
+      "fetchedAt": "2026-11-23T11:36:20.866Z"
+    }
+  }
+}

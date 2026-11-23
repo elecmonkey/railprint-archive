@@ -6,10 +6,12 @@ The line list is hand-maintained in `data/catalog/`; geometry comes from OSM; th
 
 ## Layout
 
-| Path              | Contents                            |
-| ----------------- | ----------------------------------- |
-| `apps/web`        | Web viewer (placeholder for now)    |
-| `packages/layout` | Canonical repository and data paths |
+| Path               | Contents                                                                   |
+| ------------------ | -------------------------------------------------------------------------- |
+| `apps/web`         | Web viewer (placeholder for now)                                           |
+| `packages/layout`  | Canonical repository and data paths                                        |
+| `packages/sources` | External data sources: download, resume, checksum, lock file               |
+| `data/`            | Committed data and ignored downloads, see [data/README.md](data/README.md) |
 
 ## Requirements
 
@@ -23,11 +25,14 @@ pnpm install
 
 Run from the repository root:
 
-| Command      | Purpose                           |
-| ------------ | --------------------------------- |
-| `pnpm test`  | Run all package tests             |
-| `pnpm check` | Lint, type check and format check |
-| `pnpm dev`   | Start the web app                 |
+| Command                       | Purpose                                      |
+| ----------------------------- | -------------------------------------------- |
+| `pnpm sources status`         | Which external sources are present locally   |
+| `pnpm sources fetch [id...]`  | Download missing sources and update the lock |
+| `pnpm sources verify [id...]` | Re-hash downloaded files against the lock    |
+| `pnpm test`                   | Run all package tests                        |
+| `pnpm check`                  | Lint, type check and format check            |
+| `pnpm dev`                    | Start the web app                            |
 
 ## Package conventions
 
@@ -35,3 +40,7 @@ Run from the repository root:
 - Node-side packages extend `tsconfig.node.json`; browser code extends `tsconfig.base.json`.
 - Each package has its own `rstack.config.ts` with `define.test()`; tests live in `tests/` and import from `rstack/test`.
 - CLIs resolve every path from the repository root (found through `pnpm-workspace.yaml`), so they work from any working directory.
+
+## Licences
+
+Map data © OpenStreetMap contributors (ODbL 1.0). Other sources and their terms are listed in `data/sources.json`.

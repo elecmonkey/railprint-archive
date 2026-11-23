@@ -209,6 +209,12 @@ importers:
 
   packages/layout: {}
 
+  packages/sources:
+    dependencies:
+      '@railprint/layout':
+        specifier: workspace:^
+        version: link:../layout
+
 packages:
 
   '@adobe/css-tools@4.5.0':

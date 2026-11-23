@@ -9,7 +9,8 @@
     "check": "rs check --type-check",
     "lint": "rs lint",
     "format": "rs fmt",
-    "prepare": "rs hooks"
+    "prepare": "rs hooks",
+    "sources": "node packages/sources/src/cli.ts"
   },
   "devDependencies": {
     "@types/node": "^26.6.6",
