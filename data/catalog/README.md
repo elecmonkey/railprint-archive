@@ -26,7 +26,7 @@ The catalog says _what_ to draw; how each line corresponds to OSM relations, nod
 
 ### Map category
 
-Lines are drawn in three categories: `emu` (red, lines with 动车), `trunk` (black, conventional trunk lines) and `other` (grey). The automatic rule: 客运专线, 动分客货共线 and provincial high-speed or intercity lines are `emu`; other inter-province lines are `trunk`; provincial conventional lines are `other`; 联络线 are `emu` when at least half of their track is high-speed, otherwise `other`. Set `category` on a line to override it.
+Lines are drawn in three categories: `emu` (red, lines with 动车), `trunk` (black, conventional lines) and `other` (grey, 联络线). The automatic rule: 客运专线, 动分客货共线 and provincial high-speed or intercity lines are `emu`; 联络线 and 疏解线 are `other`; every other line is `trunk`. Set `category` on a line to override it, e.g. `other` for a minor branch.
 
 ### Endpoint notation
 

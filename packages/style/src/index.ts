@@ -5,8 +5,8 @@
  */
 
 /**
- * Visual category of a line: lines with EMU (动车) service, conventional trunk
- * lines, and everything else (regional conventional lines and links).
+ * Visual category of a line: lines with EMU (动车) service, conventional
+ * lines, and 联络线.
  */
 export type LineCategory = 'emu' | 'trunk' | 'other';
 
@@ -132,8 +132,6 @@ export interface CategorizableLine {
     | { scope: '跨省线路'; class: string }
     | { scope: '省内线路'; province: string };
   lineClass: 'high-speed' | 'intercity' | 'link' | 'conventional';
-  /** Share of the line on high-speed track; decides 联络线. */
-  highSpeedShare?: number;
   /** Category chosen by the author; wins over every rule. */
   category?: LineCategory;
 }
@@ -141,19 +139,17 @@ export interface CategorizableLine {
 /** Inter-province groups whose lines carry EMU (动车) trains. */
 const EMU_GROUPS = new Set(['客运专线', '动分客货共线']);
 
-/** A 联络线 counts as an EMU line when at least this share is high-speed track. */
-export const LINK_HIGH_SPEED_SHARE = 0.5;
-
+/**
+ * 联络线 are `other`; lines with 动车 are `emu`; every other line, inter-
+ * province or provincial, is a conventional line (`trunk`). The author's
+ * `category` wins over all of this.
+ */
 export function lineCategory(line: CategorizableLine): LineCategory {
   if (line.category) return line.category;
-  if (line.lineClass === 'link') {
-    return (line.highSpeedShare ?? 0) >= LINK_HIGH_SPEED_SHARE
-      ? 'emu'
-      : 'other';
-  }
+  if (line.lineClass === 'link') return 'other';
   if (line.group.scope === '跨省线路')
     return EMU_GROUPS.has(line.group.class) ? 'emu' : 'trunk';
-  return line.lineClass === 'conventional' ? 'other' : 'emu';
+  return line.lineClass === 'conventional' ? 'trunk' : 'emu';
 }
 
 /** CSS custom properties for UI code, e.g. `--rp-text`. */
