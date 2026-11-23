@@ -1,0 +1,27 @@
+import type { LineCategory, Theme } from '@railprint/style';
+import styles from './Legend.module.css';
+
+const ENTRIES: [LineCategory, string][] = [
+  ['emu', '动车线路'],
+  ['trunk', '普速干线'],
+  ['other', '其它普速线路、联络线'],
+];
+
+export function Legend({ theme }: { theme: Theme }) {
+  return (
+    <ul className={styles.legend} aria-label="图例">
+      {ENTRIES.map(([category, label]) => (
+        <li key={category}>
+          <span
+            className={styles.swatch}
+            style={{
+              height: theme.lines[category].width,
+              background: `var(--rp-line-${category})`,
+            }}
+          />
+          {label}
+        </li>
+      ))}
+    </ul>
+  );
+}

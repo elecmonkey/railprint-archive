@@ -5,6 +5,15 @@ define.app(async () => {
   const { pluginReact } = await import('@rsbuild/plugin-react');
   return {
     plugins: [pluginReact()],
+    html: { title: 'railprint' },
+    server: {
+      // Serve the railway release and the basemap assets at the site root,
+      // and copy both into the build output.
+      publicDir: [
+        { name: '../../data/release', copyOnBuild: true, watch: true },
+        { name: '../../packages/basemap/assets', copyOnBuild: true },
+      ],
+    },
   };
 });
 

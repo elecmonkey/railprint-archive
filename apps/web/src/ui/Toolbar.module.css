@@ -1,0 +1,46 @@
+.toolbar {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.segmented,
+.group {
+  display: flex;
+  padding: 3px;
+  border: 1px solid var(--rp-border);
+  border-radius: 10px;
+  background: var(--rp-surface);
+  backdrop-filter: blur(8px);
+}
+
+.segmented button,
+.group button {
+  min-width: 36px;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 7px;
+  color: var(--rp-text);
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.segmented button:hover,
+.group button:hover {
+  background: var(--rp-border);
+}
+
+.segmented .selected {
+  color: var(--rp-background);
+  background: var(--rp-text);
+}
+
+.segmented .selected:hover {
+  background: var(--rp-text);
+}
