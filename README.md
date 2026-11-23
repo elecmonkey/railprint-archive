@@ -6,15 +6,16 @@ The line list is hand-maintained in `data/catalog/`; geometry comes from OSM; th
 
 ## Layout
 
-| Path               | Contents                                                                   |
-| ------------------ | -------------------------------------------------------------------------- |
-| `apps/web`         | Web viewer (placeholder for now)                                           |
-| `packages/layout`  | Canonical repository and data paths                                        |
-| `packages/sources` | External data sources: download, resume, checksum, lock file               |
-| `packages/catalog` | Line catalog types, validation and CLI                                     |
-| `packages/osm`     | OSM PBF reader, osmium-based extracts and incremental updates              |
-| `packages/railnet` | Railway network model: track graph, places, relations, shortest paths      |
-| `data/`            | Committed data and ignored downloads, see [data/README.md](data/README.md) |
+| Path                | Contents                                                                   |
+| ------------------- | -------------------------------------------------------------------------- |
+| `apps/web`          | Web viewer (placeholder for now)                                           |
+| `packages/layout`   | Canonical repository and data paths                                        |
+| `packages/sources`  | External data sources: download, resume, checksum, lock file               |
+| `packages/catalog`  | Line catalog types, validation and CLI                                     |
+| `packages/osm`      | OSM PBF reader, osmium-based extracts and incremental updates              |
+| `packages/railnet`  | Railway network model: track graph, places, relations, shortest paths      |
+| `packages/matching` | Catalog line ↔ OSM matching, confirmed mappings and the review report      |
+| `data/`             | Committed data and ignored downloads, see [data/README.md](data/README.md) |
 
 ## Requirements
 
@@ -28,18 +29,20 @@ pnpm install
 
 Run from the repository root:
 
-| Command                       | Purpose                                        |
-| ----------------------------- | ---------------------------------------------- |
-| `pnpm sources status`         | Which external sources are present locally     |
-| `pnpm sources fetch [id...]`  | Download missing sources and update the lock   |
-| `pnpm sources verify [id...]` | Re-hash downloaded files against the lock      |
-| `pnpm catalog check`          | Validate the line catalog and print a summary  |
-| `pnpm catalog notes`          | List catalog lines with open questions         |
-| `pnpm osm update [id]`        | Apply OSM change files to a downloaded extract |
-| `pnpm osm extract`            | Build the railway extract in `data/cache/osm/` |
-| `pnpm test`                   | Run all package tests                          |
-| `pnpm check`                  | Lint, type check and format check              |
-| `pnpm dev`                    | Start the web app                              |
+| Command                                  | Purpose                                                                  |
+| ---------------------------------------- | ------------------------------------------------------------------------ |
+| `pnpm sources status`                    | Which external sources are present locally                               |
+| `pnpm sources fetch [id...]`             | Download missing sources and update the lock                             |
+| `pnpm sources verify [id...]`            | Re-hash downloaded files against the lock                                |
+| `pnpm catalog check`                     | Validate the line catalog and print a summary                            |
+| `pnpm catalog notes`                     | List catalog lines with open questions                                   |
+| `pnpm osm update [id]`                   | Apply OSM change files to a downloaded extract                           |
+| `pnpm osm extract`                       | Build the railway extract in `data/cache/osm/`                           |
+| `pnpm match [line-id...]`                | Match catalog lines to OSM, write `data/cache/matching/report.{json,md}` |
+| `pnpm match confirm <line-id...\|--all>` | Fix the current result of lines in `data/mapping/`                       |
+| `pnpm test`                              | Run all package tests                                                    |
+| `pnpm check`                             | Lint, type check and format check                                        |
+| `pnpm dev`                               | Start the web app                                                        |
 
 ## Package conventions
 

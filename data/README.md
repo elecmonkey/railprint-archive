@@ -7,7 +7,7 @@ data/
 ├── sources.json        committed  declared external sources
 ├── sources.lock.json   committed  what was actually downloaded (generated)
 ├── catalog/            committed  the line catalog, hand-maintained
-├── mapping/            committed  catalog line → OSM correspondence (planned)
+├── mapping/            committed  confirmed catalog line → OSM correspondence
 ├── release/            committed  final geometry for web and export (planned)
 ├── sources/            ignored    raw downloads, never edited
 └── cache/              ignored    rebuildable intermediates
@@ -59,15 +59,25 @@ Rebuild everything derived from an updated source and commit the lock with it.
 
 Everything in `cache/` is rebuilt from `sources/` and can be deleted at any time.
 
-| Path                           | Built by           | Contents                                                                                                    |
-| ------------------------------ | ------------------ | ----------------------------------------------------------------------------------------------------------- |
-| `cache/osm/china-rail.osm.pbf` | `pnpm osm extract` | Railway objects of the China extract (osmium `tags-filter`), with a `.meta.json` naming the source snapshot |
+| Path                              | Built by           | Contents                                                                                                    |
+| --------------------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------- |
+| `cache/osm/china-rail.osm.pbf`    | `pnpm osm extract` | Railway objects of the China extract (osmium `tags-filter`), with a `.meta.json` naming the source snapshot |
+| `cache/matching/report.{json,md}` | `pnpm match`       | Catalog ↔ OSM matching results for review                                                                   |
 
-`.meta.json` records the source sha256, so later steps can refuse a stale extract.
+`pnpm match` refuses to run on an extract built from a different snapshot than the one in the lock.
 
 ## Catalog
 
 See [catalog/README.md](catalog/README.md).
+
+## Mapping
+
+Confirmed decisions linking each catalog line to OSM, written by `pnpm match confirm`:
+
+- `mapping/lines.json`: per line, the OSM endpoint objects (`node/<id>` or `way/<id>`; a bare track node where OSM has no named object), the relations the path follows, the confirmation date and notes.
+- `mapping/paths.json`: per line, the exact confirmed path as `[wayId, fromNodeId, toNodeId]` segments, one line per catalog line.
+
+`pnpm match` reuses a confirmed path while every segment still exists in the current extract. If a segment breaks after an OSM update, the line becomes `review` with a freshly routed proposal; check it and run `pnpm match confirm <id>`.
 
 ## Licences
 

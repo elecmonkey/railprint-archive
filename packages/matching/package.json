@@ -1,0 +1,23 @@
+{
+  "name": "@railprint/matching",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Match catalog lines to OSM: endpoint places, route relations and track paths; writes the review report.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "bin": {
+    "railprint-match": "./src/cli.ts"
+  },
+  "scripts": {
+    "test": "rs test"
+  },
+  "dependencies": {
+    "@railprint/catalog": "workspace:^",
+    "@railprint/layout": "workspace:^",
+    "@railprint/osm": "workspace:^",
+    "@railprint/railnet": "workspace:^",
+    "@railprint/sources": "workspace:^"
+  }
+}
