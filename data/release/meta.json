@@ -8,9 +8,9 @@
   "attribution": "© OpenStreetMap contributors",
   "license": "ODbL-1.0",
   "counts": {
-    "lines": 195,
-    "stations": 2089,
-    "endpoints": 242,
-    "lengthKm": 38421
+    "lines": 196,
+    "stations": 2090,
+    "endpoints": 244,
+    "lengthKm": 38420
   }
 }
