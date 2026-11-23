@@ -1,0 +1,19 @@
+{
+  "name": "@railprint/catalog",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The hand-maintained railway line catalog: types, validation, loading and the check CLI.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "bin": {
+    "railprint-catalog": "./src/cli.ts"
+  },
+  "scripts": {
+    "test": "rs test"
+  },
+  "dependencies": {
+    "@railprint/layout": "workspace:^"
+  }
+}

@@ -6,7 +6,7 @@ Everything the map is built from. Human decisions and small reproducible records
 data/
 ├── sources.json        committed  declared external sources
 ├── sources.lock.json   committed  what was actually downloaded (generated)
-├── catalog/            committed  the line catalog (planned)
+├── catalog/            committed  the line catalog, hand-maintained
 ├── mapping/            committed  catalog line → OSM correspondence (planned)
 ├── release/            committed  final geometry for web and export (planned)
 ├── sources/            ignored    raw downloads, never edited
@@ -53,6 +53,10 @@ NODE_USE_ENV_PROXY=1 HTTPS_PROXY=http://127.0.0.1:10802 pnpm sources fetch
 - Any source: `pnpm sources fetch <id> --force` downloads it again and replaces the lock entry.
 
 Rebuild everything derived from an updated source and commit the lock with it.
+
+## Catalog
+
+See [catalog/README.md](catalog/README.md).
 
 ## Licences
 

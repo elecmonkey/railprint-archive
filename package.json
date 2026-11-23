@@ -10,7 +10,8 @@
     "lint": "rs lint",
     "format": "rs fmt",
     "prepare": "rs hooks",
-    "sources": "node packages/sources/src/cli.ts"
+    "sources": "node packages/sources/src/cli.ts",
+    "catalog": "node packages/catalog/src/cli.ts"
   },
   "devDependencies": {
     "@types/node": "^26.6.6",

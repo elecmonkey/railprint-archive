@@ -11,6 +11,7 @@ The line list is hand-maintained in `data/catalog/`; geometry comes from OSM; th
 | `apps/web`         | Web viewer (placeholder for now)                                           |
 | `packages/layout`  | Canonical repository and data paths                                        |
 | `packages/sources` | External data sources: download, resume, checksum, lock file               |
+| `packages/catalog` | Line catalog types, validation and CLI                                     |
 | `data/`            | Committed data and ignored downloads, see [data/README.md](data/README.md) |
 
 ## Requirements
@@ -25,14 +26,16 @@ pnpm install
 
 Run from the repository root:
 
-| Command                       | Purpose                                      |
-| ----------------------------- | -------------------------------------------- |
-| `pnpm sources status`         | Which external sources are present locally   |
-| `pnpm sources fetch [id...]`  | Download missing sources and update the lock |
-| `pnpm sources verify [id...]` | Re-hash downloaded files against the lock    |
-| `pnpm test`                   | Run all package tests                        |
-| `pnpm check`                  | Lint, type check and format check            |
-| `pnpm dev`                    | Start the web app                            |
+| Command                       | Purpose                                       |
+| ----------------------------- | --------------------------------------------- |
+| `pnpm sources status`         | Which external sources are present locally    |
+| `pnpm sources fetch [id...]`  | Download missing sources and update the lock  |
+| `pnpm sources verify [id...]` | Re-hash downloaded files against the lock     |
+| `pnpm catalog check`          | Validate the line catalog and print a summary |
+| `pnpm catalog notes`          | List catalog lines with open questions        |
+| `pnpm test`                   | Run all package tests                         |
+| `pnpm check`                  | Lint, type check and format check             |
+| `pnpm dev`                    | Start the web app                             |
 
 ## Package conventions
 
