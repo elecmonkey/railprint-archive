@@ -1,14 +1,26 @@
 {
-  "version": 1,
+  "version": 2,
   "lines": [
     {
       "id": "皖赣线/芜湖-宣城",
       "name": "皖赣线",
       "from": "芜湖",
       "to": "宣城",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
+      "category": "conventional",
+      "osm": {
+        "from": "node/9235207765",
+        "to": "node/6240058953",
+        "relations": [
+          {
+            "id": 2084094,
+            "name": "皖赣线"
+          },
+          {
+            "id": 1799881,
+            "name": "宁芜线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -16,9 +28,17 @@
       "name": "皖赣线",
       "from": "绩溪县",
       "to": "歙县",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
+      "category": "conventional",
+      "osm": {
+        "from": "node/7272083204",
+        "to": "node/1675935526",
+        "relations": [
+          {
+            "id": 2084094,
+            "name": "皖赣线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -26,9 +46,21 @@
       "name": "侯西线",
       "from": "阎良",
       "to": "韩城",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
+      "category": "conventional",
+      "osm": {
+        "from": "node/1530850989",
+        "to": "node/1011213583",
+        "relations": [
+          {
+            "id": 7953019,
+            "name": "侯西线"
+          },
+          {
+            "id": 7953041,
+            "name": "北芝线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -36,9 +68,17 @@
       "name": "包西线",
       "from": "新丰镇",
       "to": "绥德",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
+      "category": "conventional",
+      "osm": {
+        "from": "node/2876178098",
+        "to": "node/1606221014",
+        "relations": [
+          {
+            "id": 3066878,
+            "name": "包西线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -46,9 +86,17 @@
       "name": "干武线",
       "from": "干塘",
       "to": "武威南",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
+      "category": "conventional",
+      "osm": {
+        "from": "node/2340595334",
+        "to": "node/9295636266",
+        "relations": [
+          {
+            "id": 2994429,
+            "name": "干武线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -56,9 +104,17 @@
       "name": "西平线",
       "from": "彬州",
       "to": "永寿",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
+      "category": "conventional",
+      "osm": {
+        "from": "node/3462876026",
+        "to": "node/3003935017",
+        "relations": [
+          {
+            "id": 8355928,
+            "name": "西平线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -66,9 +122,21 @@
       "name": "太银线",
       "from": "太原南",
       "to": "银川",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
+      "category": "conventional",
+      "osm": {
+        "from": "node/1880719610",
+        "to": "node/9118892109",
+        "relations": [
+          {
+            "id": 2237862,
+            "name": "太中线"
+          },
+          {
+            "id": 8355930,
+            "name": "定银线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -76,9 +144,21 @@
       "name": "青藏线",
       "from": "西宁",
       "to": "格尔木",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
+      "category": "conventional",
+      "osm": {
+        "from": "node/307345596",
+        "to": "node/7296211438",
+        "relations": [
+          {
+            "id": 152884,
+            "name": "青藏线"
+          },
+          {
+            "id": 19256347,
+            "name": "relation 19256347"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -86,9 +166,21 @@
       "name": "宁西线",
       "from": "信阳",
       "to": "新丰镇",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
+      "category": "conventional",
+      "osm": {
+        "from": "node/6237929169",
+        "to": "node/2876178098",
+        "relations": [
+          {
+            "id": 9670754,
+            "name": "宁西线"
+          },
+          {
+            "id": 8347487,
+            "name": "宁西铁路二线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -96,9 +188,25 @@
       "name": "宁西线",
       "from": "合肥",
       "to": "<桃花镇>",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
+      "category": "conventional",
+      "osm": {
+        "from": "node/6234423783",
+        "to": "node/8252002423",
+        "relations": [
+          {
+            "id": 14406153,
+            "name": "合武绕行线"
+          },
+          {
+            "id": 11589056,
+            "name": "京港高速线"
+          },
+          {
+            "id": 14028711,
+            "name": "淮南绕行线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -106,9 +214,17 @@
       "name": "铜九线",
       "from": "铜陵",
       "to": "湖口",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
+      "category": "conventional",
+      "osm": {
+        "from": "node/9521958023",
+        "to": "node/2381264576",
+        "relations": [
+          {
+            "id": 2047712,
+            "name": "铜九线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -116,9 +232,21 @@
       "name": "宁芜线",
       "from": "南京",
       "to": "芜湖",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
+      "category": "conventional",
+      "osm": {
+        "from": "node/267225237",
+        "to": "node/9235207765",
+        "relations": [
+          {
+            "id": 1799881,
+            "name": "宁芜线"
+          },
+          {
+            "id": 163022,
+            "name": "京沪线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -126,9 +254,25 @@
       "name": "合九线",
       "from": "合肥",
       "to": "柯坦",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
+      "category": "conventional",
+      "osm": {
+        "from": "node/6234423783",
+        "to": "node/9229648666",
+        "relations": [
+          {
+            "id": 2047770,
+            "name": "合九线"
+          },
+          {
+            "id": 14406153,
+            "name": "合武绕行线"
+          },
+          {
+            "id": 11589056,
+            "name": "京港高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -136,9 +280,21 @@
       "name": "合九线",
       "from": "<桃花镇>",
       "to": "柯坦",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
+      "category": "conventional",
+      "osm": {
+        "from": "node/8252002423",
+        "to": "node/9229648666",
+        "relations": [
+          {
+            "id": 2047770,
+            "name": "合九线"
+          },
+          {
+            "id": 11589056,
+            "name": "京港高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -146,9 +302,17 @@
       "name": "宣杭线",
       "from": "宣城",
       "to": "杭州",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
+      "category": "conventional",
+      "osm": {
+        "from": "node/6240058953",
+        "to": "node/7299090915",
+        "relations": [
+          {
+            "id": 3046174,
+            "name": "宣杭线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -156,9 +320,17 @@
       "name": "武九线",
       "from": "何刘",
       "to": "九江西",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
+      "category": "conventional",
+      "osm": {
+        "from": "node/1235648681",
+        "to": "node/2450075261",
+        "relations": [
+          {
+            "id": 2203703,
+            "name": "武九线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -166,9 +338,17 @@
       "name": "衢九线",
       "from": "衢州",
       "to": "九江",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
+      "category": "conventional",
+      "osm": {
+        "from": "node/1584384382",
+        "to": "node/2988920235",
+        "relations": [
+          {
+            "id": 3924206,
+            "name": "衢九线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -176,9 +356,21 @@
       "name": "京通线",
       "from": "昌平",
       "to": "昌平北",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
+      "category": "conventional",
+      "osm": {
+        "from": "node/2662698203",
+        "to": "node/7805052938",
+        "relations": [
+          {
+            "id": 1109833,
+            "name": "京通线"
+          },
+          {
+            "id": 9694964,
+            "name": "东北环线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -186,9 +378,17 @@
       "name": "新长线",
       "from": "新沂",
       "to": "海安",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
+      "category": "conventional",
+      "osm": {
+        "from": "node/1605321380",
+        "to": "node/1608115665",
+        "relations": [
+          {
+            "id": 2073179,
+            "name": "新长线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -196,9 +396,17 @@
       "name": "襄渝线",
       "from": "老河口东",
       "to": "安康",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
+      "category": "conventional",
+      "osm": {
+        "from": "way/1074877632",
+        "to": "node/1575728431",
+        "relations": [
+          {
+            "id": 1965081,
+            "name": "襄渝线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -206,9 +414,17 @@
       "name": "襄渝线",
       "from": "老河口东",
       "to": "磨心坡",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
+      "category": "conventional",
+      "osm": {
+        "from": "way/1074877632",
+        "to": "node/3500253632",
+        "relations": [
+          {
+            "id": 1965081,
+            "name": "襄渝线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -216,9 +432,17 @@
       "name": "粤海线",
       "from": "湛江西",
       "to": "海安南",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
+      "category": "conventional",
+      "osm": {
+        "from": "node/7285032809",
+        "to": "node/8440210940",
+        "relations": [
+          {
+            "id": 12341107,
+            "name": "湛海线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -226,29 +450,55 @@
       "name": "粤海线",
       "from": "湛江西",
       "to": "北港轮渡",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
-      }
+      "category": "conventional",
+      "osm": {
+        "from": "node/7285032809",
+        "to": "node/274403094",
+        "relations": [
+          {
+            "id": 12341107,
+            "name": "湛海线"
+          }
+        ],
+        "confirmed": "2026-11-23"
+      },
+      "notes": ["北港轮渡：OSM 无同名对象，取粤海轮渡线北端"]
     },
     {
       "id": "粤海线/北港轮渡-海口",
       "name": "粤海线",
       "from": "北港轮渡",
       "to": "海口",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
-      }
+      "category": "conventional",
+      "osm": {
+        "from": "node/274403094",
+        "to": "node/12747885398",
+        "relations": [
+          {
+            "id": 11222848,
+            "name": "海南西环货线"
+          }
+        ],
+        "confirmed": "2026-11-23"
+      },
+      "notes": ["北港轮渡：OSM 无同名对象，取粤海轮渡线北端"]
     },
     {
       "id": "南同蒲线/孟塬-榆次",
       "name": "南同蒲线",
       "from": "孟塬",
       "to": "榆次",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
+      "category": "conventional",
+      "osm": {
+        "from": "node/787700715",
+        "to": "node/7793098479",
+        "relations": [
+          {
+            "id": 13484904,
+            "name": "南同蒲线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -256,9 +506,25 @@
       "name": "石太线",
       "from": "太原",
       "to": "榆次",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
+      "category": "conventional",
+      "osm": {
+        "from": "node/273217367",
+        "to": "node/7793098479",
+        "relations": [
+          {
+            "id": 1953505,
+            "name": "石太线"
+          },
+          {
+            "id": 5399232,
+            "name": "石太客专线"
+          },
+          {
+            "id": 12098424,
+            "name": "郑太客专线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -266,9 +532,17 @@
       "name": "鹰厦线",
       "from": "杏林",
       "to": "厦门",
-      "group": {
-        "scope": "跨省线路",
-        "class": "其它线路"
+      "category": "conventional",
+      "osm": {
+        "from": "node/2502480510",
+        "to": "node/928056895",
+        "relations": [
+          {
+            "id": 1531653,
+            "name": "鹰厦线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -276,9 +550,17 @@
       "name": "杭深线",
       "from": "深圳坪山",
       "to": "深圳北",
-      "group": {
-        "scope": "跨省线路",
-        "class": "动分客货共线"
+      "category": "emu",
+      "osm": {
+        "from": "node/6708684808",
+        "to": "node/5369745039",
+        "relations": [
+          {
+            "id": 2052885,
+            "name": "杭深线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -286,9 +568,25 @@
       "name": "杭深线",
       "from": "乐清",
       "to": "福州南",
-      "group": {
-        "scope": "跨省线路",
-        "class": "动分客货共线"
+      "category": "emu",
+      "osm": {
+        "from": "node/7714110151",
+        "to": "node/7719582540",
+        "relations": [
+          {
+            "id": 2052885,
+            "name": "杭深线"
+          },
+          {
+            "id": 408506,
+            "name": "温福线"
+          },
+          {
+            "id": 417230,
+            "name": "甬台温铁路"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -296,9 +594,21 @@
       "name": "杭深线",
       "from": "台州西",
       "to": "温岭",
-      "group": {
-        "scope": "跨省线路",
-        "class": "动分客货共线"
+      "category": "emu",
+      "osm": {
+        "from": "node/7714110156",
+        "to": "node/7714110154",
+        "relations": [
+          {
+            "id": 2052885,
+            "name": "杭深线"
+          },
+          {
+            "id": 417230,
+            "name": "甬台温铁路"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -306,9 +616,21 @@
       "name": "杭深线",
       "from": "余姚北",
       "to": "奉化",
-      "group": {
-        "scope": "跨省线路",
-        "class": "动分客货共线"
+      "category": "emu",
+      "osm": {
+        "from": "node/7714110163",
+        "to": "node/7714110160",
+        "relations": [
+          {
+            "id": 2052885,
+            "name": "杭深线"
+          },
+          {
+            "id": 417230,
+            "name": "甬台温铁路"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -316,9 +638,17 @@
       "name": "杭深线",
       "from": "杭州东",
       "to": "绍兴北",
-      "group": {
-        "scope": "跨省线路",
-        "class": "动分客货共线"
+      "category": "emu",
+      "osm": {
+        "from": "node/7160108921",
+        "to": "node/7714110164",
+        "relations": [
+          {
+            "id": 2052885,
+            "name": "杭深线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -326,9 +656,21 @@
       "name": "青盐线",
       "from": "青岛北",
       "to": "连云港",
-      "group": {
-        "scope": "跨省线路",
-        "class": "动分客货共线"
+      "category": "emu",
+      "osm": {
+        "from": "node/8081624907",
+        "to": "node/4050213966",
+        "relations": [
+          {
+            "id": 9218558,
+            "name": "青盐线"
+          },
+          {
+            "id": 7742413,
+            "name": "青连铁路"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -336,9 +678,21 @@
       "name": "青盐线",
       "from": "青岛北",
       "to": "董集",
-      "group": {
-        "scope": "跨省线路",
-        "class": "动分客货共线"
+      "category": "emu",
+      "osm": {
+        "from": "node/8081624907",
+        "to": "node/4050153585",
+        "relations": [
+          {
+            "id": 9218558,
+            "name": "青盐线"
+          },
+          {
+            "id": 7742413,
+            "name": "青连铁路"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -346,9 +700,21 @@
       "name": "沪苏通线",
       "from": "南通西",
       "to": "上海",
-      "group": {
-        "scope": "跨省线路",
-        "class": "动分客货共线"
+      "category": "emu",
+      "osm": {
+        "from": "node/8061438171",
+        "to": "node/7161749775",
+        "relations": [
+          {
+            "id": 8400678,
+            "name": "沪苏通铁路"
+          },
+          {
+            "id": 163022,
+            "name": "京沪线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -356,9 +722,17 @@
       "name": "沪苏通线",
       "from": "南通西",
       "to": "黄渡",
-      "group": {
-        "scope": "跨省线路",
-        "class": "动分客货共线"
+      "category": "emu",
+      "osm": {
+        "from": "node/8061438171",
+        "to": "node/4513596856",
+        "relations": [
+          {
+            "id": 8400678,
+            "name": "沪苏通铁路"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -366,9 +740,21 @@
       "name": "兰渝线",
       "from": "广元",
       "to": "井口",
-      "group": {
-        "scope": "跨省线路",
-        "class": "动分客货共线"
+      "category": "emu",
+      "osm": {
+        "from": "node/1532826989",
+        "to": "node/3500252727",
+        "relations": [
+          {
+            "id": 7873545,
+            "name": "兰渝线"
+          },
+          {
+            "id": 13548564,
+            "name": "渭井线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -376,9 +762,17 @@
       "name": "宝成线",
       "from": "宝鸡",
       "to": "广元",
-      "group": {
-        "scope": "跨省线路",
-        "class": "普速三横五纵"
+      "category": "conventional",
+      "osm": {
+        "from": "node/7728028162",
+        "to": "node/1532826989",
+        "relations": [
+          {
+            "id": 1912130,
+            "name": "宝成线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -386,9 +780,17 @@
       "name": "焦柳线",
       "from": "石门县北",
       "to": "关林",
-      "group": {
-        "scope": "跨省线路",
-        "class": "普速三横五纵"
+      "category": "conventional",
+      "osm": {
+        "from": "node/4812631025",
+        "to": "node/6752636232",
+        "relations": [
+          {
+            "id": 1953373,
+            "name": "焦柳线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -396,9 +798,17 @@
       "name": "京广线",
       "from": "广州",
       "to": "郑州",
-      "group": {
-        "scope": "跨省线路",
-        "class": "普速三横五纵"
+      "category": "conventional",
+      "osm": {
+        "from": "node/7855785186",
+        "to": "node/269806844",
+        "relations": [
+          {
+            "id": 193064,
+            "name": "京广线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -406,19 +816,40 @@
       "name": "京广线",
       "from": "<长阳>",
       "to": "良乡",
-      "group": {
-        "scope": "跨省线路",
-        "class": "普速三横五纵"
-      }
+      "category": "conventional",
+      "osm": {
+        "from": "node/8042871180",
+        "to": "node/8313484663",
+        "relations": [
+          {
+            "id": 193064,
+            "name": "京广线"
+          }
+        ],
+        "confirmed": "2026-11-23"
+      },
+      "notes": ["长阳：OSM 无同名对象，取西长线南端"]
     },
     {
       "id": "京哈线/北京-北京东",
       "name": "京哈线",
       "from": "北京",
       "to": "北京东",
-      "group": {
-        "scope": "跨省线路",
-        "class": "普速三横五纵"
+      "category": "conventional",
+      "osm": {
+        "from": "node/269996666",
+        "to": "node/7907338281",
+        "relations": [
+          {
+            "id": 198494,
+            "name": "京哈线"
+          },
+          {
+            "id": 14567776,
+            "name": "北京联络线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -426,9 +857,17 @@
       "name": "京哈线",
       "from": "北京",
       "to": "中仓",
-      "group": {
-        "scope": "跨省线路",
-        "class": "普速三横五纵"
+      "category": "conventional",
+      "osm": {
+        "from": "node/269996666",
+        "to": "node/4883415766",
+        "relations": [
+          {
+            "id": 198494,
+            "name": "京哈线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -436,9 +875,17 @@
       "name": "京九线",
       "from": "南昌",
       "to": "南昌北",
-      "group": {
-        "scope": "跨省线路",
-        "class": "普速三横五纵"
+      "category": "conventional",
+      "osm": {
+        "from": "node/1575144250",
+        "to": "node/2370492050",
+        "relations": [
+          {
+            "id": 162982,
+            "name": "京九线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -446,9 +893,17 @@
       "name": "京九线",
       "from": "南昌北",
       "to": "向塘",
-      "group": {
-        "scope": "跨省线路",
-        "class": "普速三横五纵"
+      "category": "conventional",
+      "osm": {
+        "from": "node/2370492050",
+        "to": "node/1575144251",
+        "relations": [
+          {
+            "id": 162982,
+            "name": "京九线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -456,9 +911,17 @@
       "name": "京九线",
       "from": "九江",
       "to": "九江西",
-      "group": {
-        "scope": "跨省线路",
-        "class": "普速三横五纵"
+      "category": "conventional",
+      "osm": {
+        "from": "node/2988920235",
+        "to": "node/2450075261",
+        "relations": [
+          {
+            "id": 162982,
+            "name": "京九线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -466,9 +929,17 @@
       "name": "京沪线",
       "from": "北京",
       "to": "上海",
-      "group": {
-        "scope": "跨省线路",
-        "class": "普速三横五纵"
+      "category": "conventional",
+      "osm": {
+        "from": "node/269996666",
+        "to": "node/7161749775",
+        "relations": [
+          {
+            "id": 163022,
+            "name": "京沪线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -476,9 +947,25 @@
       "name": "沪昆线",
       "from": "上海西",
       "to": "株洲",
-      "group": {
-        "scope": "跨省线路",
-        "class": "普速三横五纵"
+      "category": "conventional",
+      "osm": {
+        "from": "node/7169128140",
+        "to": "node/5814548885",
+        "relations": [
+          {
+            "id": 14031196,
+            "name": "沪昆线"
+          },
+          {
+            "id": 3183115,
+            "name": "(原)浙赣线"
+          },
+          {
+            "id": 300666,
+            "name": "(原)沪杭线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -486,9 +973,17 @@
       "name": "兰新线",
       "from": "兰州",
       "to": "柳沟",
-      "group": {
-        "scope": "跨省线路",
-        "class": "普速三横五纵"
+      "category": "conventional",
+      "osm": {
+        "from": "node/269826006",
+        "to": "node/7276773543",
+        "relations": [
+          {
+            "id": 163418,
+            "name": "兰新线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -496,9 +991,17 @@
       "name": "陇海线",
       "from": "连云港",
       "to": "兰州",
-      "group": {
-        "scope": "跨省线路",
-        "class": "普速三横五纵"
+      "category": "conventional",
+      "osm": {
+        "from": "node/4050213966",
+        "to": "node/269826006",
+        "relations": [
+          {
+            "id": 284857,
+            "name": "陇海线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -506,9 +1009,17 @@
       "name": "兰银线",
       "from": "干塘",
       "to": "银川",
-      "group": {
-        "scope": "跨省线路",
-        "class": "普速三横五纵"
+      "category": "conventional",
+      "osm": {
+        "from": "node/2340595334",
+        "to": "node/9118892109",
+        "relations": [
+          {
+            "id": 1106681,
+            "name": "包兰线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -516,9 +1027,17 @@
       "name": "包兰线",
       "from": "干塘",
       "to": "银川",
-      "group": {
-        "scope": "跨省线路",
-        "class": "普速三横五纵"
+      "category": "conventional",
+      "osm": {
+        "from": "node/2340595334",
+        "to": "node/9118892109",
+        "relations": [
+          {
+            "id": 1106681,
+            "name": "包兰线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -526,9 +1045,17 @@
       "name": "京包线",
       "from": "昌平",
       "to": "八达岭",
-      "group": {
-        "scope": "跨省线路",
-        "class": "普速三横五纵"
+      "category": "conventional",
+      "osm": {
+        "from": "node/2662698203",
+        "to": "node/7805044408",
+        "relations": [
+          {
+            "id": 11543971,
+            "name": "京包线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -536,9 +1063,17 @@
       "name": "兰新客专",
       "from": "兰州西",
       "to": "柳沟南",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/3481086575",
+        "to": "way/1466334497",
+        "relations": [
+          {
+            "id": 1043244,
+            "name": "兰新客专线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -546,9 +1081,33 @@
       "name": "京沪高铁",
       "from": "北京南",
       "to": "上海虹桥",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/539260172",
+        "to": "node/4610023440",
+        "relations": [
+          {
+            "id": 356778,
+            "name": "京沪高铁"
+          },
+          {
+            "id": 8663896,
+            "name": "丹昆特大桥"
+          },
+          {
+            "id": 8765947,
+            "name": "天津特大桥"
+          },
+          {
+            "id": 8765965,
+            "name": "沧德特大桥"
+          },
+          {
+            "id": 9304694,
+            "name": "淮河特大桥"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -556,9 +1115,17 @@
       "name": "宁杭高铁",
       "from": "南京南",
       "to": "杭州东",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/2483530943",
+        "to": "node/7160108921",
+        "relations": [
+          {
+            "id": 3246605,
+            "name": "宁杭高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -566,9 +1133,17 @@
       "name": "商合高铁",
       "from": "商丘",
       "to": "合肥北城",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/1775221285",
+        "to": "node/6233986121",
+        "relations": [
+          {
+            "id": 11589056,
+            "name": "京港高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -576,9 +1151,17 @@
       "name": "沪宁城际",
       "from": "南京",
       "to": "上海",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/267225237",
+        "to": "node/7161749775",
+        "relations": [
+          {
+            "id": 1022200,
+            "name": "沪宁城际线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -586,9 +1169,21 @@
       "name": "宁安高铁",
       "from": "芜湖",
       "to": "安庆西",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/9235207765",
+        "to": "node/5968244721",
+        "relations": [
+          {
+            "id": 3710053,
+            "name": "宁安客运专线"
+          },
+          {
+            "id": 11997642,
+            "name": "安庆联络线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -596,9 +1191,21 @@
       "name": "宁安高铁",
       "from": "南京南",
       "to": "安庆西",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/2483530943",
+        "to": "node/5968244721",
+        "relations": [
+          {
+            "id": 3710053,
+            "name": "宁安客运专线"
+          },
+          {
+            "id": 11997642,
+            "name": "安庆联络线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -606,9 +1213,17 @@
       "name": "京广高铁",
       "from": "信阳东",
       "to": "广州南",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/2264149886",
+        "to": "node/3677030154",
+        "relations": [
+          {
+            "id": 12265072,
+            "name": "京广高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -616,9 +1231,17 @@
       "name": "京广高铁",
       "from": "郑州东",
       "to": "许昌东",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/6654827885",
+        "to": "node/8093975737",
+        "relations": [
+          {
+            "id": 12265072,
+            "name": "京广高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -626,9 +1249,17 @@
       "name": "银西高铁",
       "from": "彬州东",
       "to": "西安北",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/7966315898",
+        "to": "node/4185074601",
+        "relations": [
+          {
+            "id": 11549538,
+            "name": "银西高铁"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -636,9 +1267,21 @@
       "name": "郑万高铁",
       "from": "郑州东",
       "to": "郑州航空港",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/6654827885",
+        "to": "node/5575721417",
+        "relations": [
+          {
+            "id": 7047172,
+            "name": "郑万高速铁路"
+          },
+          {
+            "id": 11847121,
+            "name": "郑渝高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -647,9 +1290,21 @@
       "aliases": ["京包高速线"],
       "from": "八达岭长城",
       "to": "北京北",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/6472124842",
+        "to": "node/8016534536",
+        "relations": [
+          {
+            "id": 11597839,
+            "name": "京包客专线"
+          },
+          {
+            "id": 14974550,
+            "name": "沙河-二拨子"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -657,9 +1312,17 @@
       "name": "大西客专",
       "from": "太原南",
       "to": "平遥古城",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/1880719610",
+        "to": "node/3012070515",
+        "relations": [
+          {
+            "id": 7248327,
+            "name": "大西高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -668,9 +1331,17 @@
       "aliases": ["大西高速线"],
       "from": "西安北",
       "to": "大荔",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/4185074601",
+        "to": "node/2876179002",
+        "relations": [
+          {
+            "id": 7248327,
+            "name": "大西高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -678,9 +1349,17 @@
       "name": "西成客专",
       "from": "西安北",
       "to": "成都东",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/4185074601",
+        "to": "node/7212021583",
+        "relations": [
+          {
+            "id": 1925853,
+            "name": "西成客专线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -689,9 +1368,17 @@
       "aliases": ["徐兰高速线"],
       "from": "徐州东",
       "to": "兰州西",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/7733885004",
+        "to": "node/3481086575",
+        "relations": [
+          {
+            "id": 6651966,
+            "name": "徐兰高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -700,9 +1387,17 @@
       "aliases": ["成贵客专线"],
       "from": "成都南",
       "to": "乐山",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/9334658569",
+        "to": "node/3740929566",
+        "relations": [
+          {
+            "id": 7754722,
+            "name": "成贵客运专线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -710,9 +1405,17 @@
       "name": "京雄城际",
       "from": "北京西",
       "to": "大兴机场",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/7780210950",
+        "to": "node/6817368517",
+        "relations": [
+          {
+            "id": 10066765,
+            "name": "京雄城际线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -720,9 +1423,17 @@
       "name": "合福高铁",
       "from": "绩溪北",
       "to": "黄山北",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/9242148049",
+        "to": "node/3656291049",
+        "relations": [
+          {
+            "id": 3200434,
+            "name": "合福高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -730,9 +1441,17 @@
       "name": "合福高铁",
       "from": "绩溪北",
       "to": "上饶",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/9242148049",
+        "to": "node/1579354022",
+        "relations": [
+          {
+            "id": 3200434,
+            "name": "合福高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -740,9 +1459,17 @@
       "name": "合福高铁",
       "from": "合肥北城",
       "to": "合肥南",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/6233986121",
+        "to": "node/7197518162",
+        "relations": [
+          {
+            "id": 3200434,
+            "name": "合福高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -750,9 +1477,17 @@
       "name": "合福高铁",
       "from": "合肥北城",
       "to": "巢湖东",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/6233986121",
+        "to": "node/9242148036",
+        "relations": [
+          {
+            "id": 3200434,
+            "name": "合福高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -760,9 +1495,21 @@
       "name": "合杭高铁",
       "from": "芜湖",
       "to": "桐庐东",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/9235207765",
+        "to": "node/9302063144",
+        "relations": [
+          {
+            "id": 7047175,
+            "name": "合杭高速线"
+          },
+          {
+            "id": 12011512,
+            "name": "湖杭铁路"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -770,9 +1517,21 @@
       "name": "合杭高铁",
       "from": "巢湖东",
       "to": "桐庐东",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/9242148036",
+        "to": "node/9302063144",
+        "relations": [
+          {
+            "id": 7047175,
+            "name": "合杭高速线"
+          },
+          {
+            "id": 12011512,
+            "name": "湖杭铁路"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -780,9 +1539,17 @@
       "name": "杭黄高速线",
       "from": "桐庐",
       "to": "黄山北",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/5907959824",
+        "to": "node/3656291049",
+        "relations": [
+          {
+            "id": 8399095,
+            "name": "杭昌高速线杭黄段"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -790,9 +1557,21 @@
       "name": "杭昌高铁",
       "from": "桐庐",
       "to": "南昌东",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/5907959824",
+        "to": "node/7213210230",
+        "relations": [
+          {
+            "id": 11959088,
+            "name": "杭昌高速线昌景黄段"
+          },
+          {
+            "id": 8399095,
+            "name": "杭昌高速线杭黄段"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -801,9 +1580,17 @@
       "aliases": ["沪昆高速线"],
       "from": "义乌",
       "to": "金华",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/1579354026",
+        "to": "node/7160193955",
+        "relations": [
+          {
+            "id": 10627959,
+            "name": "沪昆高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -811,9 +1598,21 @@
       "name": "沪昆高铁",
       "from": "上海虹桥",
       "to": "杭州东",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/4610023440",
+        "to": "node/7160108921",
+        "relations": [
+          {
+            "id": 10627959,
+            "name": "沪昆高速线"
+          },
+          {
+            "id": 14192552,
+            "name": "沪杭高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -821,9 +1620,17 @@
       "name": "沪昆高铁",
       "from": "湘潭北",
       "to": "长沙南",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/2953763267",
+        "to": "node/2803078099",
+        "relations": [
+          {
+            "id": 10627959,
+            "name": "沪昆高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -831,9 +1638,17 @@
       "name": "沪昆高铁",
       "from": "上饶",
       "to": "湘潭北",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/1579354022",
+        "to": "node/2953763267",
+        "relations": [
+          {
+            "id": 10627959,
+            "name": "沪昆高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -841,9 +1656,17 @@
       "name": "武九客专",
       "from": "武汉",
       "to": "鄂州",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/579971406",
+        "to": "node/12732524417",
+        "relations": [
+          {
+            "id": 4638419,
+            "name": "武九客专线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -851,9 +1674,17 @@
       "name": "宁蓉线",
       "from": "重庆北",
       "to": "成都东",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/654769359",
+        "to": "node/7212021583",
+        "relations": [
+          {
+            "id": 10694395,
+            "name": "沪蓉线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -861,9 +1692,17 @@
       "name": "宁蓉线",
       "from": "南京南",
       "to": "汉口",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/2483530943",
+        "to": "node/2492403981",
+        "relations": [
+          {
+            "id": 10694395,
+            "name": "沪蓉线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -871,9 +1710,17 @@
       "name": "沪苏湖高铁",
       "from": "上海虹桥",
       "to": "湖州",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/4610023440",
+        "to": "node/7342299452",
+        "relations": [
+          {
+            "id": 14566947,
+            "name": "沪苏湖高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -881,9 +1728,17 @@
       "name": "郑阜高铁",
       "from": "郑州航空港",
       "to": "阜阳西",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/5575721417",
+        "to": "node/4592130192",
+        "relations": [
+          {
+            "id": 9251970,
+            "name": "郑阜高速铁路"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -891,9 +1746,17 @@
       "name": "成渝高铁",
       "from": "成都东",
       "to": "沙坪坝",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/7212021583",
+        "to": "node/7238688341",
+        "relations": [
+          {
+            "id": 3419497,
+            "name": "成渝高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -901,9 +1764,17 @@
       "name": "日兰高铁",
       "from": "日照",
       "to": "<大王庄>",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/9242869607",
+        "to": "node/8436980649",
+        "relations": [
+          {
+            "id": 9197919,
+            "name": "日兰高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -911,9 +1782,17 @@
       "name": "石济客专",
       "from": "济南东",
       "to": "<大郑庄>",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/6184527923",
+        "to": "node/5615208045",
+        "relations": [
+          {
+            "id": 8399952,
+            "name": "石济客专线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -921,9 +1800,17 @@
       "name": "广深港高铁",
       "from": "广州南",
       "to": "深圳北",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/3677030154",
+        "to": "node/5369745039",
+        "relations": [
+          {
+            "id": 9405634,
+            "name": "广深港高速线 廣深港高速綫 Guangshengang Highspeed Line"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -931,9 +1818,17 @@
       "name": "广深港高铁",
       "from": "广州南",
       "to": "香港西九龙",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/3677030154",
+        "to": "node/7919700008",
+        "relations": [
+          {
+            "id": 9405634,
+            "name": "广深港高速线 廣深港高速綫 Guangshengang Highspeed Line"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -941,19 +1836,36 @@
       "name": "赣深高铁",
       "from": "赣州西",
       "to": "<塘厦东>",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
-      }
+      "category": "emu",
+      "osm": {
+        "from": "node/2942047402",
+        "to": "node/9432546243",
+        "relations": [
+          {
+            "id": 11589056,
+            "name": "京港高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
+      },
+      "notes": ["塘厦东：OSM 无同名对象，取莞塘深联络线接京港高速线一端"]
     },
     {
       "id": "昌福线/南昌西-东村",
       "name": "昌福线",
       "from": "南昌西",
       "to": "<东村>",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/2266601966",
+        "to": "node/9053957974",
+        "relations": [
+          {
+            "id": 3189831,
+            "name": "昌福线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -961,9 +1873,17 @@
       "name": "合安九高铁",
       "from": "安庆西",
       "to": "庐山",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/5968244721",
+        "to": "node/1769587482",
+        "relations": [
+          {
+            "id": 11589056,
+            "name": "京港高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -971,9 +1891,17 @@
       "name": "石太客专",
       "from": "太原",
       "to": "太原南",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/273217367",
+        "to": "node/1880719610",
+        "relations": [
+          {
+            "id": 5399232,
+            "name": "石太客专线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -981,9 +1909,17 @@
       "name": "西武高铁",
       "from": "西安东",
       "to": "云梦东",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/14007558344",
+        "to": "node/8535898770",
+        "relations": [
+          {
+            "id": 9610910,
+            "name": "武西高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -991,9 +1927,17 @@
       "name": "西渝高铁",
       "from": "西安东",
       "to": "安康西",
-      "group": {
-        "scope": "跨省线路",
-        "class": "客运专线"
+      "category": "emu",
+      "osm": {
+        "from": "node/14007558344",
+        "to": "node/10855657242",
+        "relations": [
+          {
+            "id": 15786510,
+            "name": "西渝高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1001,9 +1945,17 @@
       "name": "海洋线",
       "from": "海安",
       "to": "如东",
-      "group": {
-        "scope": "省内线路",
-        "province": "江苏省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/1608115665",
+        "to": "node/4503716497",
+        "relations": [
+          {
+            "id": 8374456,
+            "name": "海洋线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1011,9 +1963,17 @@
       "name": "仙西联络线",
       "from": "仙林",
       "to": "南京南",
-      "group": {
-        "scope": "省内线路",
-        "province": "江苏省"
+      "category": "link",
+      "osm": {
+        "from": "node/7197704007",
+        "to": "node/2483530943",
+        "relations": [
+          {
+            "id": 10694869,
+            "name": "仙宁线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1021,9 +1981,17 @@
       "name": "仙宁线",
       "from": "仙林",
       "to": "南京南",
-      "group": {
-        "scope": "省内线路",
-        "province": "江苏省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/7197704007",
+        "to": "node/2483530943",
+        "relations": [
+          {
+            "id": 10694869,
+            "name": "仙宁线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1031,9 +1999,17 @@
       "name": "宁启线",
       "from": "林场",
       "to": "启东",
-      "group": {
-        "scope": "省内线路",
-        "province": "江苏省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/1524297084",
+        "to": "node/7723050258",
+        "relations": [
+          {
+            "id": 2073769,
+            "name": "宁启线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1041,9 +2017,17 @@
       "name": "沪宁沿江高铁",
       "from": "南京南",
       "to": "太仓",
-      "group": {
-        "scope": "省内线路",
-        "province": "江苏省"
+      "category": "emu",
+      "osm": {
+        "from": "node/2483530943",
+        "to": "node/7434948409",
+        "relations": [
+          {
+            "id": 15948791,
+            "name": "沪宁沿江高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1051,9 +2035,17 @@
       "name": "连镇客专",
       "from": "董集",
       "to": "镇江",
-      "group": {
-        "scope": "省内线路",
-        "province": "江苏省"
+      "category": "emu",
+      "osm": {
+        "from": "node/4050153585",
+        "to": "node/1971813821",
+        "relations": [
+          {
+            "id": 7047174,
+            "name": "连镇客专线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1061,9 +2053,17 @@
       "name": "中川线",
       "from": "兰州西",
       "to": "中川机场",
-      "group": {
-        "scope": "省内线路",
-        "province": "甘肃省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/3481086575",
+        "to": "node/3744898244",
+        "relations": [
+          {
+            "id": 6143691,
+            "name": "中川线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1071,9 +2071,17 @@
       "name": "敦煌线",
       "from": "柳沟",
       "to": "敦煌",
-      "group": {
-        "scope": "省内线路",
-        "province": "甘肃省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/7276773543",
+        "to": "node/5010527067",
+        "relations": [
+          {
+            "id": 1474854,
+            "name": "敦煌线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1082,9 +2090,17 @@
       "aliases": ["兰张高速线"],
       "from": "中川机场",
       "to": "武威东",
-      "group": {
-        "scope": "省内线路",
-        "province": "甘肃省"
+      "category": "emu",
+      "osm": {
+        "from": "node/3744898244",
+        "to": "node/11822437463",
+        "relations": [
+          {
+            "id": 11903714,
+            "name": "兰张高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1092,9 +2108,21 @@
       "name": "柳沟南联络线",
       "from": "柳沟南",
       "to": "双塔",
-      "group": {
-        "scope": "省内线路",
-        "province": "甘肃省"
+      "category": "link",
+      "osm": {
+        "from": "way/1466334497",
+        "to": "node/7276774510",
+        "relations": [
+          {
+            "id": 10800659,
+            "name": "柳沟南联络线"
+          },
+          {
+            "id": 1043244,
+            "name": "兰新客专线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1102,9 +2130,17 @@
       "name": "金温货线",
       "from": "东孝",
       "to": "温州",
-      "group": {
-        "scope": "省内线路",
-        "province": "浙江省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/3022089959",
+        "to": "node/7699195680",
+        "relations": [
+          {
+            "id": 2050565,
+            "name": "金温货线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1112,9 +2148,17 @@
       "name": "金台线",
       "from": "永康南",
       "to": "台州西",
-      "group": {
-        "scope": "省内线路",
-        "province": "浙江省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/3469247632",
+        "to": "node/7714110156",
+        "relations": [
+          {
+            "id": 11930484,
+            "name": "金台线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1122,9 +2166,17 @@
       "name": "杭温高速线",
       "from": "桐庐东",
       "to": "温州北",
-      "group": {
-        "scope": "省内线路",
-        "province": "浙江省"
+      "category": "emu",
+      "osm": {
+        "from": "node/9302063144",
+        "to": "node/7714110150",
+        "relations": [
+          {
+            "id": 11956151,
+            "name": "杭温高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1132,9 +2184,17 @@
       "name": "萧甬线",
       "from": "绍兴",
       "to": "余姚",
-      "group": {
-        "scope": "省内线路",
-        "province": "浙江省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/1579354023",
+        "to": "node/571882460",
+        "relations": [
+          {
+            "id": 1724457,
+            "name": "萧甬线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1142,9 +2202,17 @@
       "name": "甬金线",
       "from": "云龙",
       "to": "义乌",
-      "group": {
-        "scope": "省内线路",
-        "province": "浙江省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/7687112643",
+        "to": "node/1579354026",
+        "relations": [
+          {
+            "id": 11955604,
+            "name": "甬金线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1152,9 +2220,17 @@
       "name": "金温线",
       "from": "金华南",
       "to": "永康南",
-      "group": {
-        "scope": "省内线路",
-        "province": "浙江省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/1645281122",
+        "to": "node/3469247632",
+        "relations": [
+          {
+            "id": 9653142,
+            "name": "金温线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1162,9 +2238,21 @@
       "name": "杭州沪昆绕行线",
       "from": "笕桥",
       "to": "萧山",
-      "group": {
-        "scope": "省内线路",
-        "province": "浙江省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/2454049450",
+        "to": "node/1072744710",
+        "relations": [
+          {
+            "id": 14031196,
+            "name": "沪昆线"
+          },
+          {
+            "id": 3183115,
+            "name": "(原)浙赣线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1172,9 +2260,21 @@
       "name": "桐庐联络线",
       "from": "桐庐东",
       "to": "桐庐",
-      "group": {
-        "scope": "省内线路",
-        "province": "浙江省"
+      "category": "link",
+      "osm": {
+        "from": "node/9302063144",
+        "to": "node/5907959824",
+        "relations": [
+          {
+            "id": 20823539,
+            "name": "桐庐联络线"
+          },
+          {
+            "id": 11956151,
+            "name": "杭温高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1182,9 +2282,17 @@
       "name": "杭台高速线",
       "from": "绍兴北",
       "to": "玉环",
-      "group": {
-        "scope": "省内线路",
-        "province": "浙江省"
+      "category": "emu",
+      "osm": {
+        "from": "node/7714110164",
+        "to": "node/13506807366",
+        "relations": [
+          {
+            "id": 11930610,
+            "name": "杭台高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1192,9 +2300,17 @@
       "name": "湖州联络线",
       "from": "<妙西镇>",
       "to": "<康山>",
-      "group": {
-        "scope": "省内线路",
-        "province": "浙江省"
+      "category": "link",
+      "osm": {
+        "from": "node/10012908158",
+        "to": "node/11669202705",
+        "relations": [
+          {
+            "id": 17426432,
+            "name": "康山联络线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1202,9 +2318,17 @@
       "name": "汉丹线",
       "from": "襄阳北",
       "to": "老河口东",
-      "group": {
-        "scope": "省内线路",
-        "province": "湖北省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/7800640130",
+        "to": "way/1074877632",
+        "relations": [
+          {
+            "id": 2201129,
+            "name": "汉丹线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1212,9 +2336,17 @@
       "name": "汉丹线",
       "from": "汉口",
       "to": "襄州",
-      "group": {
-        "scope": "省内线路",
-        "province": "湖北省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/2492403981",
+        "to": "node/7713641011",
+        "relations": [
+          {
+            "id": 2201129,
+            "name": "汉丹线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1222,9 +2354,17 @@
       "name": "汉丹线",
       "from": "汉西",
       "to": "襄州",
-      "group": {
-        "scope": "省内线路",
-        "province": "湖北省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/1886917420",
+        "to": "node/7713641011",
+        "relations": [
+          {
+            "id": 2201129,
+            "name": "汉丹线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1232,9 +2372,21 @@
       "name": "武昌南环线",
       "from": "武昌南",
       "to": "何刘",
-      "group": {
-        "scope": "省内线路",
-        "province": "湖北省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/582350173",
+        "to": "node/1235648681",
+        "relations": [
+          {
+            "id": 11785095,
+            "name": "武昌南环线"
+          },
+          {
+            "id": 193064,
+            "name": "京广线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1242,9 +2394,25 @@
       "name": "汉丹襄阳联络线",
       "from": "襄州",
       "to": "襄阳",
-      "group": {
-        "scope": "省内线路",
-        "province": "湖北省"
+      "category": "link",
+      "osm": {
+        "from": "node/7713641011",
+        "to": "node/1586077500",
+        "relations": [
+          {
+            "id": 11785147,
+            "name": "襄阳汉丹客车联络线"
+          },
+          {
+            "id": 1953373,
+            "name": "焦柳线"
+          },
+          {
+            "id": 2201129,
+            "name": "汉丹线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1252,9 +2420,21 @@
       "name": "汉西联络线",
       "from": "汉西",
       "to": "新墩",
-      "group": {
-        "scope": "省内线路",
-        "province": "湖北省"
+      "category": "link",
+      "osm": {
+        "from": "node/1886917420",
+        "to": "node/7197875254",
+        "relations": [
+          {
+            "id": 10696441,
+            "name": "汉西联络线"
+          },
+          {
+            "id": 193064,
+            "name": "京广线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1262,9 +2442,17 @@
       "name": "余花联络线",
       "from": "余家湾",
       "to": "南湖东",
-      "group": {
-        "scope": "省内线路",
-        "province": "湖北省"
+      "category": "link",
+      "osm": {
+        "from": "node/8337379751",
+        "to": "node/3377844348",
+        "relations": [
+          {
+            "id": 13524289,
+            "name": "余花联络线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1272,9 +2460,17 @@
       "name": "鸦宜线",
       "from": "鸦雀岭",
       "to": "宜昌东",
-      "group": {
-        "scope": "省内线路",
-        "province": "湖北省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/7202301456",
+        "to": "node/539460541",
+        "relations": [
+          {
+            "id": 1968085,
+            "name": "鸦宜线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1282,9 +2478,17 @@
       "name": "汉孝城际",
       "from": "天河机场",
       "to": "汉口",
-      "group": {
-        "scope": "省内线路",
-        "province": "湖北省"
+      "category": "emu",
+      "osm": {
+        "from": "node/9317600734",
+        "to": "node/2492403981",
+        "relations": [
+          {
+            "id": 8400871,
+            "name": "武孝城际铁路"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1292,9 +2496,17 @@
       "name": "汉孝城际",
       "from": "云梦东",
       "to": "汉口",
-      "group": {
-        "scope": "省内线路",
-        "province": "湖北省"
+      "category": "emu",
+      "osm": {
+        "from": "way/1356670981",
+        "to": "node/2492403981",
+        "relations": [
+          {
+            "id": 8400871,
+            "name": "武孝城际铁路"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1302,9 +2514,17 @@
       "name": "长株潭城际线",
       "from": "长沙",
       "to": "株洲",
-      "group": {
-        "scope": "省内线路",
-        "province": "湖南省"
+      "category": "emu",
+      "osm": {
+        "from": "way/973585033",
+        "to": "node/5814548885",
+        "relations": [
+          {
+            "id": 6824013,
+            "name": "长株城际线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1312,9 +2532,21 @@
       "name": "长株潭城际线",
       "from": "开福寺",
       "to": "株洲",
-      "group": {
-        "scope": "省内线路",
-        "province": "湖南省"
+      "category": "emu",
+      "osm": {
+        "from": "node/3410058503",
+        "to": "node/5814548885",
+        "relations": [
+          {
+            "id": 6824013,
+            "name": "长株城际线"
+          },
+          {
+            "id": 19442891,
+            "name": "长沙西城际线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1322,9 +2554,21 @@
       "name": "石长线",
       "from": "石门县北",
       "to": "长沙",
-      "group": {
-        "scope": "省内线路",
-        "province": "湖南省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/4812631025",
+        "to": "way/973585033",
+        "relations": [
+          {
+            "id": 1999084,
+            "name": "石长线"
+          },
+          {
+            "id": 193064,
+            "name": "京广线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1332,9 +2576,17 @@
       "name": "石长线",
       "from": "石门县北",
       "to": "捞刀河",
-      "group": {
-        "scope": "省内线路",
-        "province": "湖南省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/4812631025",
+        "to": "node/582370787",
+        "relations": [
+          {
+            "id": 1999084,
+            "name": "石长线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1342,9 +2594,17 @@
       "name": "青荣城际",
       "from": "城阳",
       "to": "青岛北",
-      "group": {
-        "scope": "省内线路",
-        "province": "山东省"
+      "category": "emu",
+      "osm": {
+        "from": "node/5582581360",
+        "to": "node/8081624907",
+        "relations": [
+          {
+            "id": 4520976,
+            "name": "青荣城际铁路"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1353,9 +2613,17 @@
       "aliases": ["胶济客专线"],
       "from": "胶州北",
       "to": "青岛",
-      "group": {
-        "scope": "省内线路",
-        "province": "山东省"
+      "category": "emu",
+      "osm": {
+        "from": "node/6201492201",
+        "to": "node/9255077341",
+        "relations": [
+          {
+            "id": 356823,
+            "name": "胶济客专线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1364,9 +2632,17 @@
       "aliases": ["济青高速线"],
       "from": "青岛机场",
       "to": "红岛",
-      "group": {
-        "scope": "省内线路",
-        "province": "山东省"
+      "category": "emu",
+      "osm": {
+        "from": "node/8253269141",
+        "to": "node/5111172547",
+        "relations": [
+          {
+            "id": 7742408,
+            "name": "济青高速铁路"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1374,9 +2650,17 @@
       "name": "济沪联络线",
       "from": "<崔马庄>",
       "to": "济南",
-      "group": {
-        "scope": "省内线路",
-        "province": "山东省"
+      "category": "link",
+      "osm": {
+        "from": "node/6844121862",
+        "to": "node/269797019",
+        "relations": [
+          {
+            "id": 11524612,
+            "name": "济沪联络线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1384,9 +2668,17 @@
       "name": "大郑庄联络线",
       "from": "<大郑庄>",
       "to": "<大漠刘>",
-      "group": {
-        "scope": "省内线路",
-        "province": "山东省"
+      "category": "link",
+      "osm": {
+        "from": "node/5615208045",
+        "to": "node/5615208046",
+        "relations": [
+          {
+            "id": 13994591,
+            "name": "大郑庄联络线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1394,9 +2686,17 @@
       "name": "齐河联络线",
       "from": "<大漠刘>",
       "to": "济南西",
-      "group": {
-        "scope": "省内线路",
-        "province": "山东省"
+      "category": "link",
+      "osm": {
+        "from": "node/5615208046",
+        "to": "way/227465776",
+        "relations": [
+          {
+            "id": 13994587,
+            "name": "齐河联络线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1404,9 +2704,17 @@
       "name": "大王庄联络线",
       "from": "<大王庄>",
       "to": "曲阜东",
-      "group": {
-        "scope": "省内线路",
-        "province": "山东省"
+      "category": "link",
+      "osm": {
+        "from": "node/8436980649",
+        "to": "node/6193950294",
+        "relations": [
+          {
+            "id": 18551472,
+            "name": "大王庄联络线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1415,9 +2723,17 @@
       "aliases": ["宣绩高速线"],
       "from": "宣城",
       "to": "绩溪北",
-      "group": {
-        "scope": "省内线路",
-        "province": "安徽省"
+      "category": "emu",
+      "osm": {
+        "from": "node/6240058953",
+        "to": "node/9242148049",
+        "relations": [
+          {
+            "id": 16386306,
+            "name": "宣绩高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1425,9 +2741,17 @@
       "name": "庐铜线",
       "from": "柯坦",
       "to": "钟鸣",
-      "group": {
-        "scope": "省内线路",
-        "province": "安徽省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/9229648666",
+        "to": "node/8509562691",
+        "relations": [
+          {
+            "id": 8356185,
+            "name": "庐铜线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1435,9 +2759,21 @@
       "name": "芜铜线",
       "from": "芜湖",
       "to": "钟鸣",
-      "group": {
-        "scope": "省内线路",
-        "province": "安徽省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/9235207765",
+        "to": "node/8509562691",
+        "relations": [
+          {
+            "id": 13418075,
+            "name": "芜铜线"
+          },
+          {
+            "id": 1799881,
+            "name": "宁芜线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1445,9 +2781,25 @@
       "name": "合宁联络线",
       "from": "肥东",
       "to": "合肥",
-      "group": {
-        "scope": "省内线路",
-        "province": "安徽省"
+      "category": "link",
+      "osm": {
+        "from": "node/9242148038",
+        "to": "node/6234423783",
+        "relations": [
+          {
+            "id": 14406183,
+            "name": "合肥新客线"
+          },
+          {
+            "id": 13995133,
+            "name": "合宁绕行线"
+          },
+          {
+            "id": 7047175,
+            "name": "合杭高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1455,9 +2807,17 @@
       "name": "阳安线",
       "from": "阳平关",
       "to": "汉中",
-      "group": {
-        "scope": "省内线路",
-        "province": "陕西省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/1546239767",
+        "to": "node/9295305367",
+        "relations": [
+          {
+            "id": 2969345,
+            "name": "阳安线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1465,9 +2825,21 @@
       "name": "咸铜线",
       "from": "咸阳",
       "to": "铜川东",
-      "group": {
-        "scope": "省内线路",
-        "province": "陕西省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/1532510499",
+        "to": "node/9290860299",
+        "relations": [
+          {
+            "id": 1992417,
+            "name": "咸铜线"
+          },
+          {
+            "id": 8387322,
+            "name": "西安北环线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1475,9 +2847,17 @@
       "name": "梅七线",
       "from": "梅家坪",
       "to": "前河镇",
-      "group": {
-        "scope": "省内线路",
-        "province": "陕西省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/3733842642",
+        "to": "node/2758337191",
+        "relations": [
+          {
+            "id": 1992914,
+            "name": "梅前线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1485,9 +2865,21 @@
       "name": "西康线",
       "from": "吕河",
       "to": "新丰镇",
-      "group": {
-        "scope": "省内线路",
-        "province": "陕西省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/3020201803",
+        "to": "node/2876178098",
+        "relations": [
+          {
+            "id": 1964519,
+            "name": "西康铁路"
+          },
+          {
+            "id": 19796831,
+            "name": "大旬联络线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1495,9 +2887,17 @@
       "name": "甘钟线",
       "from": "钟家村",
       "to": "蒲城",
-      "group": {
-        "scope": "省内线路",
-        "province": "陕西省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/1607295774",
+        "to": "node/1607295757",
+        "relations": [
+          {
+            "id": 1992116,
+            "name": "甘钟线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1505,9 +2905,17 @@
       "name": "甘钟线",
       "from": "钟家村",
       "to": "甘泉北",
-      "group": {
-        "scope": "省内线路",
-        "province": "陕西省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/1607295774",
+        "to": "node/3029246484",
+        "relations": [
+          {
+            "id": 1992116,
+            "name": "甘钟线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1515,9 +2923,17 @@
       "name": "田灞联络线",
       "from": "田王",
       "to": "灞桥",
-      "group": {
-        "scope": "省内线路",
-        "province": "陕西省"
+      "category": "link",
+      "osm": {
+        "from": "node/2726647402",
+        "to": "node/2741208696",
+        "relations": [
+          {
+            "id": 8387288,
+            "name": "田灞联络线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       },
       "notes": [
         "初始导入时同一区段的端点标记不一致：田王-灞桥 与 [田王]-[灞桥]，待与 OSM 核对"
@@ -1528,9 +2944,21 @@
       "name": "三桥联络线",
       "from": "西安",
       "to": "西安西",
-      "group": {
-        "scope": "省内线路",
-        "province": "陕西省"
+      "category": "link",
+      "osm": {
+        "from": "node/9620122767",
+        "to": "node/5762027860",
+        "relations": [
+          {
+            "id": 284857,
+            "name": "陇海线"
+          },
+          {
+            "id": 19465213,
+            "name": "陇海西成联络线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1538,9 +2966,21 @@
       "name": "关惠联络线",
       "from": "[关山]",
       "to": "[惠刘]",
-      "group": {
-        "scope": "省内线路",
-        "province": "陕西省"
+      "category": "link",
+      "osm": {
+        "from": "node/3012148388",
+        "to": "node/2956850477",
+        "relations": [
+          {
+            "id": 7953019,
+            "name": "侯西线"
+          },
+          {
+            "id": 19820926,
+            "name": "关惠联络线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1548,9 +2988,17 @@
       "name": "西延高铁",
       "from": "延安",
       "to": "<耿镇>",
-      "group": {
-        "scope": "省内线路",
-        "province": "陕西省"
+      "category": "emu",
+      "osm": {
+        "from": "node/7765120777",
+        "to": "node/11764057883",
+        "relations": [
+          {
+            "id": 19529971,
+            "name": "包西高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1558,9 +3006,17 @@
       "name": "西延高铁",
       "from": "延安",
       "to": "西安东",
-      "group": {
-        "scope": "省内线路",
-        "province": "陕西省"
+      "category": "emu",
+      "osm": {
+        "from": "node/7765120777",
+        "to": "node/14007558344",
+        "relations": [
+          {
+            "id": 19529971,
+            "name": "包西高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1568,9 +3024,33 @@
       "name": "耿镇联络线",
       "from": "<耿镇>",
       "to": "西安北",
-      "group": {
-        "scope": "省内线路",
-        "province": "陕西省"
+      "category": "link",
+      "osm": {
+        "from": "node/11764057883",
+        "to": "node/4185074601",
+        "relations": [
+          {
+            "id": 19530689,
+            "name": "郭北联络线"
+          },
+          {
+            "id": 19530690,
+            "name": "耿义联络线"
+          },
+          {
+            "id": 19583630,
+            "name": "草店村疏解线"
+          },
+          {
+            "id": 19587334,
+            "name": "徐兰大西疏解线"
+          },
+          {
+            "id": 6651966,
+            "name": "徐兰高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1578,9 +3058,21 @@
       "name": "西康直通线",
       "from": "[大岭铺]",
       "to": "<安康东>",
-      "group": {
-        "scope": "省内线路",
-        "province": "陕西省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/2975808868",
+        "to": "node/9290601100",
+        "relations": [
+          {
+            "id": 1964519,
+            "name": "西康铁路"
+          },
+          {
+            "id": 8208633,
+            "name": "西康直通线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1588,9 +3080,21 @@
       "name": "洛阳西南联络线",
       "from": "关林",
       "to": "洛阳东",
-      "group": {
-        "scope": "省内线路",
-        "province": "河南省"
+      "category": "link",
+      "osm": {
+        "from": "node/6752636232",
+        "to": "node/6757299733",
+        "relations": [
+          {
+            "id": 1953373,
+            "name": "焦柳线"
+          },
+          {
+            "id": 19803404,
+            "name": "洛阳东南环线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1599,9 +3103,17 @@
       "aliases": ["郑开城际线"],
       "from": "郑州东",
       "to": "宋城路",
-      "group": {
-        "scope": "省内线路",
-        "province": "河南省"
+      "category": "emu",
+      "osm": {
+        "from": "node/6654827885",
+        "to": "node/6708802185",
+        "relations": [
+          {
+            "id": 8400819,
+            "name": "郑开城际线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1610,9 +3122,17 @@
       "aliases": ["郑机城际线"],
       "from": "郑州东",
       "to": "郑州航空港",
-      "group": {
-        "scope": "省内线路",
-        "province": "河南省"
+      "category": "emu",
+      "osm": {
+        "from": "node/6654827885",
+        "to": "node/5575721417",
+        "relations": [
+          {
+            "id": 8400820,
+            "name": "郑机城际铁路"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1620,9 +3140,17 @@
       "name": "郑荥联络线",
       "from": "中原",
       "to": "郑州西",
-      "group": {
-        "scope": "省内线路",
-        "province": "河南省"
+      "category": "link",
+      "osm": {
+        "from": "node/6894218190",
+        "to": "node/742843791",
+        "relations": [
+          {
+            "id": 10745814,
+            "name": "徐兰高速郑州联络线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1630,9 +3158,17 @@
       "name": "沪春线",
       "from": "上海南",
       "to": "春申",
-      "group": {
-        "scope": "省内线路",
-        "province": "上海市"
+      "category": "conventional",
+      "osm": {
+        "from": "node/7171261760",
+        "to": "node/7168518929",
+        "relations": [
+          {
+            "id": 10697170,
+            "name": "沪春线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1640,9 +3176,17 @@
       "name": "金山线",
       "from": "春申",
       "to": "金山卫",
-      "group": {
-        "scope": "省内线路",
-        "province": "上海市"
+      "category": "conventional",
+      "osm": {
+        "from": "node/7168518929",
+        "to": "node/7171384791",
+        "relations": [
+          {
+            "id": 10653454,
+            "name": "金山线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1650,9 +3194,17 @@
       "name": "虹安联络线",
       "from": "<安亭北>",
       "to": "上海虹桥",
-      "group": {
-        "scope": "省内线路",
-        "province": "上海市"
+      "category": "link",
+      "osm": {
+        "from": "node/7169087736",
+        "to": "node/4610023440",
+        "relations": [
+          {
+            "id": 10649663,
+            "name": "沪宁城际虹桥联络线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1660,9 +3212,21 @@
       "name": "北京直径线",
       "from": "北京西",
       "to": "北京",
-      "group": {
-        "scope": "省内线路",
-        "province": "北京市"
+      "category": "conventional",
+      "osm": {
+        "from": "node/7780210950",
+        "to": "node/269996666",
+        "relations": [
+          {
+            "id": 12147859,
+            "name": "北京直通线"
+          },
+          {
+            "id": 14567776,
+            "name": "北京联络线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1670,19 +3234,40 @@
       "name": "西长联络线",
       "from": "北京西",
       "to": "<长阳>",
-      "group": {
-        "scope": "省内线路",
-        "province": "北京市"
-      }
+      "category": "link",
+      "osm": {
+        "from": "node/7780210950",
+        "to": "node/8042871180",
+        "relations": [
+          {
+            "id": 12257095,
+            "name": "西长线"
+          }
+        ],
+        "confirmed": "2026-11-23"
+      },
+      "notes": ["长阳：OSM 无同名对象，取西长线南端"]
     },
     {
       "id": "东星联络线/北京朝阳-北京东",
       "name": "东星联络线",
       "from": "北京朝阳",
       "to": "北京东",
-      "group": {
-        "scope": "省内线路",
-        "province": "北京市"
+      "category": "link",
+      "osm": {
+        "from": "node/1824913462",
+        "to": "node/7907338281",
+        "relations": [
+          {
+            "id": 13886605,
+            "name": "东星线"
+          },
+          {
+            "id": 9694964,
+            "name": "东北环线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1690,9 +3275,17 @@
       "name": "北京东北环线",
       "from": "黄土店",
       "to": "昌平",
-      "group": {
-        "scope": "省内线路",
-        "province": "北京市"
+      "category": "conventional",
+      "osm": {
+        "from": "node/1419186468",
+        "to": "node/2662698203",
+        "relations": [
+          {
+            "id": 9694964,
+            "name": "东北环线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1700,9 +3293,21 @@
       "name": "通三线",
       "from": "中仓",
       "to": "乔庄东",
-      "group": {
-        "scope": "省内线路",
-        "province": "北京市"
+      "category": "conventional",
+      "osm": {
+        "from": "node/4883415766",
+        "to": "node/9875307791",
+        "relations": [
+          {
+            "id": 198494,
+            "name": "京哈线"
+          },
+          {
+            "id": 14080704,
+            "name": "通乔线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1710,9 +3315,21 @@
       "name": "庐山联络线",
       "from": "九里垄",
       "to": "九江西",
-      "group": {
-        "scope": "省内线路",
-        "province": "江西省"
+      "category": "link",
+      "osm": {
+        "from": "node/2509918452",
+        "to": "node/2450075261",
+        "relations": [
+          {
+            "id": 20286198,
+            "name": "发西线"
+          },
+          {
+            "id": 162982,
+            "name": "京九线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1720,9 +3337,17 @@
       "name": "昌赣高铁",
       "from": "<朴树>",
       "to": "赣州西",
-      "group": {
-        "scope": "省内线路",
-        "province": "江西省"
+      "category": "emu",
+      "osm": {
+        "from": "node/8482525766",
+        "to": "node/2942047402",
+        "relations": [
+          {
+            "id": 11589056,
+            "name": "京港高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1730,9 +3355,17 @@
       "name": "昌九城际",
       "from": "庐山",
       "to": "南昌西",
-      "group": {
-        "scope": "省内线路",
-        "province": "江西省"
+      "category": "emu",
+      "osm": {
+        "from": "node/1769587482",
+        "to": "node/2266601966",
+        "relations": [
+          {
+            "id": 3184780,
+            "name": "昌九城际线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1740,9 +3373,17 @@
       "name": "朴树联络线",
       "from": "<东村>",
       "to": "<朴树>",
-      "group": {
-        "scope": "省内线路",
-        "province": "江西省"
+      "category": "link",
+      "osm": {
+        "from": "node/9053957974",
+        "to": "node/8482525766",
+        "relations": [
+          {
+            "id": 13550621,
+            "name": "朴树联络线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1750,9 +3391,25 @@
       "name": "昌北联络线",
       "from": "南昌北",
       "to": "乐化",
-      "group": {
-        "scope": "省内线路",
-        "province": "江西省"
+      "category": "link",
+      "osm": {
+        "from": "node/2370492050",
+        "to": "node/2341431066",
+        "relations": [
+          {
+            "id": 14512149,
+            "name": "昌北联络线"
+          },
+          {
+            "id": 3184780,
+            "name": "昌九城际线"
+          },
+          {
+            "id": 162982,
+            "name": "京九线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1760,9 +3417,25 @@
       "name": "向东联络线",
       "from": "向塘",
       "to": "[梁家渡]",
-      "group": {
-        "scope": "省内线路",
-        "province": "江西省"
+      "category": "link",
+      "osm": {
+        "from": "node/1575144251",
+        "to": "node/2279174925",
+        "relations": [
+          {
+            "id": 13557812,
+            "name": "向东D2线;向东E2线"
+          },
+          {
+            "id": 14549358,
+            "name": "向东D线"
+          },
+          {
+            "id": 14031196,
+            "name": "沪昆线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1770,9 +3443,21 @@
       "name": "上饶东南联络线",
       "from": "上饶",
       "to": "<上饶>",
-      "group": {
-        "scope": "省内线路",
-        "province": "江西省"
+      "category": "link",
+      "osm": {
+        "from": "node/1579354022",
+        "to": "node/7217663632",
+        "relations": [
+          {
+            "id": 19425919,
+            "name": "上饶东南联络线"
+          },
+          {
+            "id": 3200434,
+            "name": "合福高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1780,9 +3465,21 @@
       "name": "上饶西南联络线",
       "from": "<上饶>",
       "to": "上饶",
-      "group": {
-        "scope": "省内线路",
-        "province": "江西省"
+      "category": "link",
+      "osm": {
+        "from": "node/7217663632",
+        "to": "node/1579354022",
+        "relations": [
+          {
+            "id": 19425920,
+            "name": "上饶西南联络线"
+          },
+          {
+            "id": 10627959,
+            "name": "沪昆高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1790,9 +3487,17 @@
       "name": "襄遂联络线",
       "from": "磨心坡",
       "to": "<黄桷>",
-      "group": {
-        "scope": "省内线路",
-        "province": "重庆市"
+      "category": "link",
+      "osm": {
+        "from": "node/3500253632",
+        "to": "node/8189675777",
+        "relations": [
+          {
+            "id": 18950284,
+            "name": "襄遂联络线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1800,9 +3505,17 @@
       "name": "蔡歌联络线",
       "from": "<K141>",
       "to": "歌乐山",
-      "group": {
-        "scope": "省内线路",
-        "province": "重庆市"
+      "category": "link",
+      "osm": {
+        "from": "node/7239071038",
+        "to": "node/6989684877",
+        "relations": [
+          {
+            "id": 10747372,
+            "name": "蔡歌联络线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1810,9 +3523,17 @@
       "name": "井西线",
       "from": "歌乐山",
       "to": "重庆西",
-      "group": {
-        "scope": "省内线路",
-        "province": "重庆市"
+      "category": "conventional",
+      "osm": {
+        "from": "node/6989684877",
+        "to": "node/7238885494",
+        "relations": [
+          {
+            "id": 10747290,
+            "name": "井西线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1820,9 +3541,17 @@
       "name": "海南西环客专",
       "from": "海口",
       "to": "三亚",
-      "group": {
-        "scope": "省内线路",
-        "province": "海南省"
+      "category": "emu",
+      "osm": {
+        "from": "node/12747885398",
+        "to": "node/7639541307",
+        "relations": [
+          {
+            "id": 8211195,
+            "name": "海南西环高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1830,9 +3559,17 @@
       "name": "海南东环客专",
       "from": "海口",
       "to": "三亚",
-      "group": {
-        "scope": "省内线路",
-        "province": "海南省"
+      "category": "emu",
+      "osm": {
+        "from": "node/12747885398",
+        "to": "node/7639541307",
+        "relations": [
+          {
+            "id": 2129275,
+            "name": "海南东环高速线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1840,9 +3577,21 @@
       "name": "海南西环线",
       "from": "崖州",
       "to": "<凤凰西>",
-      "group": {
-        "scope": "省内线路",
-        "province": "海南省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/3926611765",
+        "to": "node/12747906905",
+        "relations": [
+          {
+            "id": 11222848,
+            "name": "海南西环货线"
+          },
+          {
+            "id": 18976932,
+            "name": "崖州联络线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1850,9 +3599,17 @@
       "name": "广茂线",
       "from": "<狮山西>",
       "to": "肇庆",
-      "group": {
-        "scope": "省内线路",
-        "province": "广东省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/13634179175",
+        "to": "node/7453106321",
+        "relations": [
+          {
+            "id": 2046111,
+            "name": "广茂线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1860,9 +3617,17 @@
       "name": "广珠线",
       "from": "大田",
       "to": "<沙头东>",
-      "group": {
-        "scope": "省内线路",
-        "province": "广东省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/7707072348",
+        "to": "node/13634179174",
+        "relations": [
+          {
+            "id": 2728709,
+            "name": "广珠线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1870,19 +3635,36 @@
       "name": "江大联络线",
       "from": "<江村南>",
       "to": "大田",
-      "group": {
-        "scope": "省内线路",
-        "province": "广东省"
-      }
+      "category": "link",
+      "osm": {
+        "from": "node/5592971098",
+        "to": "node/7707072348",
+        "relations": [
+          {
+            "id": 20318644,
+            "name": "江大联络线"
+          }
+        ],
+        "confirmed": "2026-11-23"
+      },
+      "notes": ["江村南：OSM 无同名对象，取江大联络线北端"]
     },
     {
       "id": "沙狮联络线/沙头东-狮山西",
       "name": "沙狮联络线",
       "from": "<沙头东>",
       "to": "<狮山西>",
-      "group": {
-        "scope": "省内线路",
-        "province": "广东省"
+      "category": "link",
+      "osm": {
+        "from": "node/13634179174",
+        "to": "node/13634179175",
+        "relations": [
+          {
+            "id": 20306484,
+            "name": "沙狮联络线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1890,9 +3672,17 @@
       "name": "深湛线",
       "from": "江门",
       "to": "湛江西",
-      "group": {
-        "scope": "省内线路",
-        "province": "广东省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/2414867084",
+        "to": "node/7285032809",
+        "relations": [
+          {
+            "id": 8381929,
+            "name": "深湛线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1900,9 +3690,17 @@
       "name": "珠机城际",
       "from": "珠海",
       "to": "横琴",
-      "group": {
-        "scope": "省内线路",
-        "province": "广东省"
+      "category": "emu",
+      "osm": {
+        "from": "node/7710011713",
+        "to": "node/2936895090",
+        "relations": [
+          {
+            "id": 11352868,
+            "name": "珠机城际铁路"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1910,9 +3708,17 @@
       "name": "广珠城际",
       "from": "广州南",
       "to": "珠海",
-      "group": {
-        "scope": "省内线路",
-        "province": "广东省"
+      "category": "emu",
+      "osm": {
+        "from": "node/3677030154",
+        "to": "node/7710011713",
+        "relations": [
+          {
+            "id": 5456788,
+            "name": "广珠城际铁路"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1921,9 +3727,17 @@
       "aliases": ["江门线"],
       "from": "江门",
       "to": "小榄",
-      "group": {
-        "scope": "省内线路",
-        "province": "广东省"
+      "category": "emu",
+      "osm": {
+        "from": "node/2414867084",
+        "to": "way/154399942",
+        "relations": [
+          {
+            "id": 5496304,
+            "name": "江门线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1931,29 +3745,62 @@
       "name": "广深城际",
       "from": "<塘厦南>",
       "to": "深圳",
-      "group": {
-        "scope": "省内线路",
-        "province": "广东省"
-      }
+      "category": "emu",
+      "osm": {
+        "from": "node/8594376826",
+        "to": "node/7097725032",
+        "relations": [
+          {
+            "id": 408151,
+            "name": "广深线"
+          }
+        ],
+        "confirmed": "2026-11-23"
+      },
+      "notes": ["塘厦南：OSM 无同名对象，取莞塘深联络线接广深线一端"]
     },
     {
       "id": "莞塘深联络线/塘厦东-塘厦南",
       "name": "莞塘深联络线",
       "from": "<塘厦东>",
       "to": "<塘厦南>",
-      "group": {
-        "scope": "省内线路",
-        "province": "广东省"
-      }
+      "category": "link",
+      "osm": {
+        "from": "node/9432546243",
+        "to": "node/8594376826",
+        "relations": [
+          {
+            "id": 14029129,
+            "name": "莞塘深联络线"
+          }
+        ],
+        "confirmed": "2026-11-23"
+      },
+      "notes": [
+        "塘厦东：OSM 无同名对象，取莞塘深联络线接京港高速线一端",
+        "塘厦南：OSM 无同名对象，取莞塘深联络线接广深线一端"
+      ]
     },
     {
       "id": "福厦高铁/福州南-厦门北",
       "name": "福厦高铁",
       "from": "福州南",
       "to": "厦门北",
-      "group": {
-        "scope": "省内线路",
-        "province": "福建省"
+      "category": "emu",
+      "osm": {
+        "from": "node/7719582540",
+        "to": "node/6527623010",
+        "relations": [
+          {
+            "id": 16339140,
+            "name": "福厦高速铁路"
+          },
+          {
+            "id": 18311601,
+            "name": "甬广高速铁路"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1961,9 +3808,21 @@
       "name": "厦门北联络线",
       "from": "厦门北",
       "to": "杏林",
-      "group": {
-        "scope": "省内线路",
-        "province": "福建省"
+      "category": "link",
+      "osm": {
+        "from": "node/6527623010",
+        "to": "node/2502480510",
+        "relations": [
+          {
+            "id": 10760515,
+            "name": "厦门北联络线"
+          },
+          {
+            "id": 2052885,
+            "name": "杭深线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     },
     {
@@ -1971,9 +3830,17 @@
       "name": "福平铁路",
       "from": "福州",
       "to": "福州南",
-      "group": {
-        "scope": "省内线路",
-        "province": "福建省"
+      "category": "conventional",
+      "osm": {
+        "from": "node/6999105218",
+        "to": "node/7719582540",
+        "relations": [
+          {
+            "id": 11486525,
+            "name": "福平线"
+          }
+        ],
+        "confirmed": "2026-11-23"
       }
     }
   ]

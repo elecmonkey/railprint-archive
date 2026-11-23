@@ -27,10 +27,11 @@ async function main(): Promise<number> {
     const catalog = await loadCatalog(layout.catalog);
     if (command === 'check') {
       const summary = summarizeCatalog(catalog);
-      console.log(`${summary.lines} lines, ${summary.withNotes} with notes`);
+      console.log(
+        `${summary.lines} lines, ${summary.confirmed} confirmed, ${summary.withNotes} with notes`,
+      );
+      console.log(`categories: ${JSON.stringify(summary.byCategory)}`);
       console.log(`endpoints: ${JSON.stringify(summary.endpointKinds)}`);
-      for (const { label, lines } of summary.byGroup)
-        console.log(`  ${String(lines).padStart(3)}  ${label}`);
       return 0;
     }
     if (command === 'notes') {

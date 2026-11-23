@@ -5,14 +5,22 @@ export {
   type EndpointKind,
 } from './endpoint.ts';
 export {
-  INTER_PROVINCE_CLASSES,
   LINE_CATEGORIES,
-  type LineCategoryName,
   type Catalog,
   type CatalogLine,
-  type InterProvinceClass,
-  type LineGroup,
+  type LineCategory,
+  type LineOsm,
+  type OsmRef,
+  type RelationRef,
 } from './types.ts';
-export { CatalogError, parseCatalog } from './validate.ts';
+export { CatalogError, parseCatalog, parseRef } from './validate.ts';
 export { CATALOG_FILE, catalogPath, loadCatalog, saveCatalog } from './io.ts';
+export {
+  loadPaths,
+  PATHS_FILE,
+  savePaths,
+  serializePaths,
+  type PathsFile,
+  type StoredSegment,
+} from './paths.ts';
 export { summarizeCatalog, type CatalogSummary } from './summary.ts';

@@ -4,13 +4,15 @@ import { join } from 'node:path';
 import { parseArgs } from 'node:util';
 import {
   loadCatalog,
+  loadPaths,
+  saveCatalog,
+  savePaths,
   type Catalog,
   type CatalogLine,
 } from '@railprint/catalog';
 import { dataLayout } from '@railprint/layout';
 import { readExtractMeta, requireFreshRailExtract } from '@railprint/osm';
 import { loadRailNetwork } from '@railprint/railnet';
-import { loadMapping, loadPaths, saveMapping, savePaths } from './mapping.ts';
 import { audit } from './audit.ts';
 import { confirmMatch, Matcher } from './match.ts';
 import { buildReport, renderMarkdown } from './report.ts';
@@ -22,9 +24,10 @@ const USAGE = `Usage:
   railprint-match audit                 Re-route confirmed lines under the current
                                         rules and list those that differ
 
-The report goes to data/cache/matching/report.{json,md}. Confirming writes the
-endpoints and relations to data/mapping/lines.json and the exact track path to
-data/mapping/paths.json; confirmed lines keep that path while it stays intact.
+The report goes to data/cache/matching/report.{json,md}. Confirming writes each
+line's OSM endpoints and relations into data/catalog/lines.json and the exact
+track path into data/catalog/paths.json; confirmed lines keep that path while
+it stays intact.
 `;
 
 function select(catalog: Catalog, ids: string[]): CatalogLine[] {
@@ -59,8 +62,7 @@ async function main(): Promise<number> {
   const layout = dataLayout();
   const catalog = await loadCatalog(layout.catalog);
   const order = catalog.lines.map((l) => l.id);
-  const mapping = await loadMapping(layout.mapping, new Set(order));
-  const paths = await loadPaths(layout.mapping, new Set(order));
+  const paths = await loadPaths(layout.catalog, new Set(order));
   const lines = select(catalog, ids);
 
   const extract = await requireFreshRailExtract(layout);
@@ -68,7 +70,7 @@ async function main(): Promise<number> {
   const started = Date.now();
   const matcher = new Matcher(await loadRailNetwork(extract));
   if (auditing) {
-    const findings = audit(matcher, { version: 1, lines }, mapping, paths);
+    const findings = audit(matcher, { version: 2, lines }, paths);
     for (const f of findings) {
       const rel = (m: typeof f.fresh) =>
         m.path?.onRelations
@@ -87,7 +89,7 @@ async function main(): Promise<number> {
   }
 
   const results = lines.map((line) =>
-    matcher.match(line, mapping.lines[line.id], paths.lines[line.id]),
+    matcher.match(line, line.osm, paths.lines[line.id]),
   );
 
   if (confirming) {
@@ -105,18 +107,13 @@ async function main(): Promise<number> {
         g.from,
         g.to,
       ]);
-      mapping.lines[result.id] = confirmMatch(
-        result,
-        mapping.lines[result.id] ?? {},
-        date,
-      );
+      const line = catalog.lines.find((l) => l.id === result.id)!;
+      line.osm = confirmMatch(result, date);
       count++;
     }
-    await saveMapping(layout.mapping, mapping, order);
-    await savePaths(layout.mapping, paths, order);
-    console.log(
-      `confirmed ${count} line(s) → ${join(layout.mapping, 'lines.json')}`,
-    );
+    await saveCatalog(layout.catalog, catalog);
+    await savePaths(layout.catalog, paths, order);
+    console.log(`confirmed ${count} line(s) → ${layout.catalog}`);
     return 0;
   }
 

@@ -53,11 +53,13 @@ function endpointCell(e: LineMatch['from']): string {
 
 /** Human-readable review table, grouped by status. */
 export function renderMarkdown(report: MatchReport, catalog: Catalog): string {
+  const CATEGORY_LABEL = {
+    emu: '动车',
+    conventional: '普速',
+    link: '联络线',
+  } as const;
   const groupOf = new Map(
-    catalog.lines.map((l) => [
-      l.id,
-      l.group.scope === '跨省线路' ? l.group.class : l.group.province,
-    ]),
+    catalog.lines.map((l) => [l.id, CATEGORY_LABEL[l.category]]),
   );
   const out: string[] = [
     '# 线路匹配报告',
@@ -73,7 +75,7 @@ export function renderMarkdown(report: MatchReport, catalog: Catalog): string {
     if (!lines.length) continue;
     out.push('', `## ${STATUS_TITLE[status]}（${lines.length}）`, '');
     out.push(
-      '| 线路 | 分组 | 起点 | 终点 | 长度 km | 绕行 | 覆盖率 | 路径所在 relation | 问题 |',
+      '| 线路 | 类别 | 起点 | 终点 | 长度 km | 绕行 | 覆盖率 | 路径所在 relation | 问题 |',
     );
     out.push('| --- | --- | --- | --- | --: | --: | --: | --- | --- |');
     for (const l of lines) {

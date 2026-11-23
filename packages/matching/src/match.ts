@@ -1,4 +1,11 @@
-import { parseEndpoint, type CatalogLine } from '@railprint/catalog';
+import {
+  parseEndpoint,
+  parseRef,
+  type CatalogLine,
+  type LineOsm,
+  type OsmRef,
+  type StoredSegment,
+} from '@railprint/catalog';
 import {
   haversine,
   nodeIndexOf,
@@ -12,16 +19,10 @@ import {
   walkWay,
   wayIndexOf,
 } from '@railprint/railnet';
-import {
-  parseRef,
-  type EndpointPin,
-  type LineMapping,
-  type StoredSegment,
-} from './mapping.ts';
-import { lineKey, lineKeyString, type LineClass } from './names.ts';
+import { lineKey, lineKeyString } from './names.ts';
 import { PlaceIndex, type PlaceMatch } from './places.ts';
 
-/** `confirmed`: the mapping fixes every decision and still resolves in OSM. */
+/** `confirmed`: the line's OSM correspondence is confirmed and still resolves. */
 export type MatchStatus = 'confirmed' | 'ok' | 'review' | 'failed';
 
 export type IssueCode =
@@ -56,7 +57,7 @@ export interface EndpointResult {
   /** The place the chosen route starts or ends at. */
   place?: PlaceRef;
   candidates: number;
-  /** True when the endpoint came from the mapping. */
+  /** True when the endpoint is fixed in the catalog's `osm` block. */
   pinned: boolean;
 }
 
@@ -227,10 +228,10 @@ export class Matcher {
    * A pinned endpoint: a known place, or any track node (for junctions that
    * OSM does not name, such as where a link line meets a main line).
    */
-  private resolvePin(pin: EndpointPin, text: string): RailPlace | undefined {
-    const place = this.placeByRef.get(pin.osm);
+  private resolvePin(pin: OsmRef, text: string): RailPlace | undefined {
+    const place = this.placeByRef.get(pin);
     if (place) return place;
-    const { type, id } = parseRef(pin.osm);
+    const { type, id } = parseRef(pin);
     if (type !== 'node') return undefined;
     const n = nodeIndexOf(this.network, id);
     if (n < 0 || this.network.adjOffset[n + 1] === this.network.adjOffset[n])
@@ -238,7 +239,7 @@ export class Matcher {
     return {
       osm: { type: 'node', id },
       railway: 'track',
-      names: [pin.name ?? parseEndpoint(text).name],
+      names: [parseEndpoint(text).name],
       oldNames: [],
       lon: this.network.lon[n]!,
       lat: this.network.lat[n]!,
@@ -248,7 +249,7 @@ export class Matcher {
 
   private resolveEndpoint(
     text: string,
-    pin: EndpointPin | undefined,
+    pin: OsmRef | undefined,
     label: string,
     issues: Issue[],
   ): Resolved {
@@ -257,7 +258,7 @@ export class Matcher {
       if (!place) {
         issues.push({
           code: 'pin-missing',
-          message: `${label}固定的 ${pin.osm} 在当前 OSM 中不存在或不在轨道上`,
+          message: `${label}固定的 ${pin} 在当前 OSM 中不存在或不在轨道上`,
         });
         return { candidates: [], pinned: true };
       }
@@ -352,12 +353,9 @@ export class Matcher {
     }
   }
 
-  private pinnedRelations(
-    mapping: LineMapping,
-    issues: Issue[],
-  ): RailRelation[] {
+  private pinnedRelations(osm: LineOsm, issues: Issue[]): RailRelation[] {
     const found: RailRelation[] = [];
-    for (const pin of mapping.relations ?? []) {
+    for (const pin of osm.relations ?? []) {
       const relation = this.relationById.get(pin.id);
       if (relation) found.push(relation);
       else {
@@ -394,33 +392,29 @@ export class Matcher {
   }
 
   /**
-   * Match one line. With a confirmed mapping and its stored path, the path is
-   * reused as long as it is intact; otherwise a route is searched.
+   * Match one line. `osm` defaults to the line's own OSM block; with a
+   * confirmed block and the stored path, the path is reused as long as it is
+   * intact; otherwise a route is searched.
    */
   match(
     line: CatalogLine,
-    mapping: LineMapping = {},
+    osm: LineOsm = line.osm ?? {},
     stored?: readonly StoredSegment[],
   ): LineMatch {
     const issues: Issue[] = [];
-    const confirmed = Boolean(mapping.confirmed);
+    const confirmed = Boolean(osm.confirmed);
     const fromResolved = this.resolveEndpoint(
       line.from,
-      mapping.from,
+      osm.from,
       '起点',
       issues,
     );
-    const toResolved = this.resolveEndpoint(
-      line.to,
-      mapping.to,
-      '终点',
-      issues,
-    );
+    const toResolved = this.resolveEndpoint(line.to, osm.to, '终点', issues);
 
-    const relations = mapping.relations
-      ? this.pinnedRelations(mapping, issues)
+    const relations = osm.relations
+      ? this.pinnedRelations(osm, issues)
       : this.relationsFor(line);
-    if (!mapping.relations && !relations.length) {
+    if (!osm.relations && !relations.length) {
       issues.push({
         code: 'no-relation',
         message: `OSM 中没有与「${line.name}」同名的线路 relation`,
@@ -458,7 +452,6 @@ export class Matcher {
       return result('failed');
     }
 
-    const cls = lineKey(line.name).class;
     let route: { nodes: number[]; ways: number[] } | undefined;
     let fromPlace: RailPlace;
     let toPlace: RailPlace;
@@ -547,7 +540,7 @@ export class Matcher {
           message: `路径只有 ${(coverage * 100).toFixed(0)}% 在同名 relation 上`,
         });
       }
-      if (cls === 'link' && lengthM > this.thresholds.linkKm * 1000) {
+      if (line.category === 'link' && lengthM > this.thresholds.linkKm * 1000) {
         issues.push({
           code: 'long-link',
           message: `联络线路径长 ${(lengthM / 1000).toFixed(0)} km，端点可能匹配错了`,
@@ -595,50 +588,33 @@ function placeRef(place: RailPlace): PlaceRef {
 /** Which kind of track a line should prefer when routing. */
 export type SpeedPreference = 'high-speed' | 'conventional' | 'any';
 
-/**
- * The author's group decides first: 客运专线 are high-speed whatever their
- * name ends with (宁蓉线 runs on the high-speed 沪蓉线), 动分客货共线 and
- * links may use either. Otherwise the name suffix decides.
- */
+/** The line's category decides: 动车 lines prefer high-speed track. */
 export function speedPreference(line: CatalogLine): SpeedPreference {
-  const cls: LineClass = lineKey(line.name).class;
-  if (cls === 'link') return 'any';
-  if (line.group.scope === '跨省线路') {
-    if (line.group.class === '客运专线') return 'high-speed';
-    if (line.group.class === '动分客货共线') return 'any';
-  }
-  return cls === 'high-speed' || cls === 'intercity'
-    ? 'high-speed'
-    : 'conventional';
+  if (line.category === 'emu') return 'high-speed';
+  if (line.category === 'conventional') return 'conventional';
+  return 'any';
 }
 
 /** Share of a path a relation must cover to be pinned when confirming. */
 export const PIN_RELATION_SHARE = 0.05;
 
 /**
- * Mapping entry that fixes a successful match: its endpoints, the relations
- * carrying at least `PIN_RELATION_SHARE` of the path, and the date.
+ * OSM block that fixes a successful match: its endpoints, the relations
+ * carrying at least `PIN_RELATION_SHARE` of the path, and the date. The path
+ * itself goes to paths.json.
  */
-export function confirmMatch(
-  match: LineMatch,
-  previous: LineMapping,
-  date: string,
-): LineMapping {
+export function confirmMatch(match: LineMatch, date: string): LineOsm {
   if (!match.path || !match.from.place || !match.to.place) {
     throw new Error(`${match.id}: cannot confirm a line without a path`);
   }
-  const pin = (p: PlaceRef): EndpointPin => ({
-    osm: `${p.type}/${p.id}`,
-    name: p.name,
-  });
+  const ref = (p: PlaceRef): OsmRef => `${p.type}/${p.id}`;
   const minKm = match.path.lengthKm * PIN_RELATION_SHARE;
   return {
-    from: pin(match.from.place),
-    to: pin(match.to.place),
+    from: ref(match.from.place),
+    to: ref(match.to.place),
     relations: match.path.onRelations
       .filter((r) => r.km >= minKm)
       .map((r) => ({ id: r.id, name: r.name })),
     confirmed: date,
-    ...(previous.notes ? { notes: previous.notes } : {}),
   };
 }

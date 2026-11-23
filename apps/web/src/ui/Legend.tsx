@@ -3,8 +3,8 @@ import styles from './Legend.module.css';
 
 const ENTRIES: [LineCategory, string][] = [
   ['emu', '动车线路'],
-  ['trunk', '普速线路'],
-  ['other', '联络线'],
+  ['conventional', '普速线路'],
+  ['link', '联络线'],
 ];
 
 export function Legend({ theme }: { theme: Theme }) {

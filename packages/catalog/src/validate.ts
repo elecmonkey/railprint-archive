@@ -1,12 +1,12 @@
 import { parseEndpoint } from './endpoint.ts';
 import {
-  INTER_PROVINCE_CLASSES,
   LINE_CATEGORIES,
-  type LineCategoryName,
   type Catalog,
-  type InterProvinceClass,
   type CatalogLine,
-  type LineGroup,
+  type LineCategory,
+  type LineOsm,
+  type OsmRef,
+  type RelationRef,
 } from './types.ts';
 
 export class CatalogError extends Error {
@@ -30,38 +30,20 @@ const LINE_KEYS = new Set([
   'aliases',
   'from',
   'to',
-  'group',
   'category',
+  'osm',
   'notes',
 ]);
+const OSM_KEYS = new Set(['from', 'to', 'relations', 'confirmed']);
+const REF = /^(node|way)\/(\d+)$/;
 
-function checkGroup(
-  raw: unknown,
-  where: string,
-  problems: string[],
-): LineGroup | undefined {
-  if (!isRecord(raw)) {
-    problems.push(`${where}.group must be an object`);
-    return undefined;
-  }
-  if (raw.scope === '跨省线路') {
-    if (!INTER_PROVINCE_CLASSES.includes(raw.class as never)) {
-      problems.push(
-        `${where}.group.class must be one of ${INTER_PROVINCE_CLASSES.join(', ')}`,
-      );
-      return undefined;
-    }
-    return { scope: '跨省线路', class: raw.class as InterProvinceClass };
-  }
-  if (raw.scope === '省内线路') {
-    if (!isNonEmpty(raw.province)) {
-      problems.push(`${where}.group.province must be a non-empty string`);
-      return undefined;
-    }
-    return { scope: '省内线路', province: raw.province };
-  }
-  problems.push(`${where}.group.scope must be 跨省线路 or 省内线路`);
-  return undefined;
+export function parseRef(ref: string): { type: 'node' | 'way'; id: number } {
+  const match = REF.exec(ref);
+  if (!match)
+    throw new Error(
+      `Invalid OSM reference "${ref}" (expected node/<id> or way/<id>)`,
+    );
+  return { type: match[1] as 'node' | 'way', id: Number(match[2]) };
 }
 
 function checkStringList(
@@ -77,6 +59,54 @@ function checkStringList(
   return raw;
 }
 
+function checkOsm(
+  raw: unknown,
+  where: string,
+  problems: string[],
+): LineOsm | undefined {
+  if (raw === undefined) return undefined;
+  if (!isRecord(raw)) {
+    problems.push(`${where} must be an object`);
+    return undefined;
+  }
+  for (const key of Object.keys(raw)) {
+    if (!OSM_KEYS.has(key)) problems.push(`${where} has unknown key "${key}"`);
+  }
+  const osm: LineOsm = {};
+  for (const key of ['from', 'to'] as const) {
+    const value = raw[key];
+    if (value === undefined) continue;
+    if (typeof value !== 'string' || !REF.test(value)) {
+      problems.push(`${where}.${key} must be "node/<id>" or "way/<id>"`);
+    } else osm[key] = value as OsmRef;
+  }
+  if (raw.relations !== undefined) {
+    const ok =
+      Array.isArray(raw.relations) &&
+      raw.relations.every(
+        (r) =>
+          isRecord(r) && Number.isInteger(r.id) && typeof r.name === 'string',
+      );
+    if (ok) osm.relations = raw.relations as RelationRef[];
+    else
+      problems.push(
+        `${where}.relations must be [{ "id": number, "name": string }]`,
+      );
+  }
+  if (raw.confirmed !== undefined) {
+    if (
+      typeof raw.confirmed === 'string' &&
+      /^\d{4}-\d{2}-\d{2}$/.test(raw.confirmed)
+    ) {
+      osm.confirmed = raw.confirmed;
+    } else problems.push(`${where}.confirmed must be YYYY-MM-DD`);
+  }
+  if (osm.confirmed && (!osm.from || !osm.to)) {
+    problems.push(`${where}: a confirmed line needs both endpoints`);
+  }
+  return osm;
+}
+
 /**
  * Validate untrusted JSON as a catalog. All problems are collected and
  * reported together so a hand edit can be fixed in one pass.
@@ -84,7 +114,7 @@ function checkStringList(
 export function parseCatalog(json: unknown): Catalog {
   const problems: string[] = [];
   if (!isRecord(json)) throw new CatalogError(['root must be an object']);
-  if (json.version !== 1) problems.push('version must be 1');
+  if (json.version !== 2) problems.push('version must be 2');
   if (!Array.isArray(json.lines))
     throw new CatalogError([...problems, 'lines must be an array']);
 
@@ -119,7 +149,7 @@ export function parseCatalog(json: unknown): Catalog {
     const previous = ids.get(raw.id);
     if (previous !== undefined)
       problems.push(`${label} duplicates the id of lines[${previous}]`);
-    ids.set(raw.id, index);
+    else ids.set(raw.id, index);
 
     for (const key of ['from', 'to'] as const) {
       try {
@@ -137,24 +167,19 @@ export function parseCatalog(json: unknown): Catalog {
     const twin = sections.get(section);
     if (twin !== undefined)
       problems.push(`${label} repeats the section of lines[${twin}]`);
-    if (twin === undefined) sections.set(section, index);
+    else sections.set(section, index);
 
-    const group = checkGroup(raw.group, label, problems);
+    if (!LINE_CATEGORIES.includes(raw.category as LineCategory)) {
+      problems.push(
+        `${label}.category must be one of ${LINE_CATEGORIES.join(', ')}`,
+      );
+      return;
+    }
     const aliases = checkStringList(raw.aliases, `${label}.aliases`, problems);
     const notes = checkStringList(raw.notes, `${label}.notes`, problems);
-    let category: LineCategoryName | undefined;
-    if (raw.category !== undefined) {
-      if (LINE_CATEGORIES.includes(raw.category as LineCategoryName)) {
-        category = raw.category as LineCategoryName;
-      } else {
-        problems.push(
-          `${label}.category must be one of ${LINE_CATEGORIES.join(', ')}`,
-        );
-      }
-    }
     if (aliases?.includes(raw.name))
       problems.push(`${label}.aliases repeats the name`);
-    if (!group) return;
+    const osm = checkOsm(raw.osm, `${label}.osm`, problems);
 
     lines.push({
       id: raw.id,
@@ -162,12 +187,12 @@ export function parseCatalog(json: unknown): Catalog {
       ...(aliases?.length ? { aliases } : {}),
       from: raw.from,
       to: raw.to,
-      group,
-      ...(category ? { category } : {}),
+      category: raw.category as LineCategory,
+      ...(osm && Object.keys(osm).length ? { osm } : {}),
       ...(notes?.length ? { notes } : {}),
     });
   });
 
   if (problems.length) throw new CatalogError(problems);
-  return { version: 1, lines };
+  return { version: 2, lines };
 }

@@ -1,17 +1,11 @@
 import {
   parseEndpoint,
-  type Catalog,
-  type LineCategoryName,
-  type LineGroup,
-} from '@railprint/catalog';
-import {
-  lineKey,
   parseRef,
-  placeKey,
-  type LineClass,
-  type MappingFile,
+  type Catalog,
+  type LineCategory,
   type PathsFile,
-} from '@railprint/matching';
+} from '@railprint/catalog';
+import { placeKey } from '@railprint/matching';
 import {
   haversine,
   nodeIndexOf,
@@ -31,16 +25,13 @@ export interface ReleaseLine {
   id: string;
   name: string;
   aliases?: string[];
-  group: LineGroup;
-  lineClass: LineClass;
+  category: LineCategory;
   /** Endpoint names as written in the catalog, without markers. */
   from: string;
   to: string;
   lengthKm: number;
   /** Share of the path on highspeed=yes track. */
   highSpeedShare: number;
-  /** Category chosen by the author in the catalog, if any. */
-  category?: LineCategoryName;
   relations: { id: number; name: string }[];
   /** [lon, lat] from `from` to `to`. */
   coordinates: [number, number][];
@@ -123,18 +114,17 @@ function walkPath(
 }
 
 /**
- * Build the release from confirmed mappings. Every catalog line must be
+ * Build the release from the confirmed catalog. Every catalog line must be
  * confirmed with a stored path; the output is deterministic for a given
- * extract, catalog and mapping.
+ * extract, catalog and paths.
  */
 export function buildRelease(
   network: RailNetwork,
   catalog: Catalog,
-  mapping: MappingFile,
   paths: PathsFile,
 ): Release {
   const unconfirmed = catalog.lines.filter(
-    (l) => !mapping.lines[l.id]?.confirmed || !paths.lines[l.id]?.length,
+    (l) => !l.osm?.confirmed || !paths.lines[l.id]?.length,
   );
   if (unconfirmed.length) {
     throw new ReleaseError(
@@ -148,7 +138,7 @@ export function buildRelease(
   const nodeLines = new Map<number, Set<number>>();
 
   catalog.lines.forEach((line, index) => {
-    const entry = mapping.lines[line.id]!;
+    const osm = line.osm!;
     const { nodes, ways } = walkPath(network, line.id, paths.lines[line.id]!);
     let lengthM = 0;
     let highSpeedM = 0;
@@ -169,16 +159,14 @@ export function buildRelease(
       id: line.id,
       name: line.name,
       ...(line.aliases?.length ? { aliases: line.aliases } : {}),
-      group: line.group,
-      lineClass: lineKey(line.name).class,
+      category: line.category,
       from: parseEndpoint(line.from).name,
       to: parseEndpoint(line.to).name,
       lengthKm: Math.round(lengthM / 100) / 10,
       highSpeedShare: lengthM
         ? Math.round((highSpeedM / lengthM) * 1000) / 1000
         : 0,
-      ...(line.category ? { category: line.category } : {}),
-      relations: entry.relations ?? [],
+      relations: osm.relations ?? [],
       coordinates: nodes.map((n) => [round6(lon[n]!), round6(lat[n]!)]),
     });
   });
@@ -213,7 +201,7 @@ export function buildRelease(
 
   const withoutMembers = new Set<number>();
   catalog.lines.forEach((line, index) => {
-    const members = (mapping.lines[line.id]!.relations ?? []).flatMap((pin) => [
+    const members = (line.osm!.relations ?? []).flatMap((pin) => [
       ...(relationById.get(pin.id)?.places ?? []),
     ]);
     if (!members.length) withoutMembers.add(index);
@@ -256,30 +244,29 @@ export function buildRelease(
     return served;
   }
 
-  // Endpoints come from the mapping and may be unnamed track nodes.
+  // Endpoints come from the catalog's osm block and may be unnamed track nodes.
   const endpoints = new Map<
     string,
     { name: string; kind: StationKind; lines: Set<number> }
   >();
   catalog.lines.forEach((line, index) => {
-    const entry = mapping.lines[line.id]!;
     for (const [pin, text] of [
-      [entry.from, line.from],
-      [entry.to, line.to],
+      [line.osm!.from, line.from],
+      [line.osm!.to, line.to],
     ] as const) {
       if (!pin)
         throw new ReleaseError(
-          `${line.id}: confirmed mapping lacks an endpoint`,
+          `${line.id}: confirmed line lacks an OSM endpoint`,
         );
       const endpoint = parseEndpoint(text);
       const kind: StationKind = endpoint.kind;
-      const current = endpoints.get(pin.osm) ?? {
+      const current = endpoints.get(pin) ?? {
         name: endpoint.name,
         kind,
         lines: new Set(),
       };
       current.lines.add(index);
-      endpoints.set(pin.osm, current);
+      endpoints.set(pin, current);
     }
   });
 

@@ -36,10 +36,8 @@ export interface DataLayout {
   sources: string;
   /** Rebuildable intermediates derived from sources (ignored by git). */
   cache: string;
-  /** Hand-maintained line catalog (committed). */
+  /** Line catalog and confirmed paths (committed). */
   catalog: string;
-  /** Catalog entry → OSM correspondence decisions (committed). */
-  mapping: string;
   /** Final geometry consumed by the web app and exporters (committed). */
   release: string;
   /** Declared external sources (committed). */
@@ -56,7 +54,6 @@ export function dataLayout(root: string = findRepoRoot()): DataLayout {
     sources: join(data, 'sources'),
     cache: join(data, 'cache'),
     catalog: join(data, 'catalog'),
-    mapping: join(data, 'mapping'),
     release: join(data, 'release'),
     sourcesManifest: join(data, 'sources.json'),
     sourcesLock: join(data, 'sources.lock.json'),

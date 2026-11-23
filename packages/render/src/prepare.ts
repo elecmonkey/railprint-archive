@@ -1,4 +1,4 @@
-import { lineCategory, light } from '@railprint/style';
+import { light } from '@railprint/style';
 import type { Bounds } from './projection.ts';
 import { simplify } from './simplify.ts';
 import type {
@@ -19,7 +19,7 @@ export function prepareData(
 ): RenderData {
   const prepared = lines.features.map((feature) => ({
     properties: feature.properties,
-    category: lineCategory(feature.properties),
+    category: feature.properties.category,
     levels: LEVEL_TOLERANCES.map((t) =>
       simplify(feature.geometry.coordinates, t),
     ),

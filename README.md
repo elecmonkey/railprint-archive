@@ -14,7 +14,7 @@ The line list is hand-maintained in `data/catalog/`; geometry comes from OSM; th
 | `packages/catalog`  | Line catalog types, validation and CLI                                              |
 | `packages/osm`      | OSM PBF reader, osmium-based extracts and incremental updates                       |
 | `packages/railnet`  | Railway network model: track graph, places, relations, shortest paths               |
-| `packages/matching` | Catalog line ↔ OSM matching, confirmed mappings and the review report               |
+| `packages/matching` | Catalog line ↔ OSM matching, confirmation, audit and the review report              |
 | `packages/release`  | Final line and station GeoJSON in `data/release/`                                   |
 | `packages/style`    | Design tokens: line, station and background styles, light and dark                  |
 | `packages/render`   | Canvas renderer for the release data, shared by the web app and export              |
@@ -43,9 +43,9 @@ Run from the repository root:
 | `pnpm osm update [id]`                   | Apply OSM change files to a downloaded extract                           |
 | `pnpm osm extract`                       | Build the railway extract in `data/cache/osm/`                           |
 | `pnpm match [line-id...]`                | Match catalog lines to OSM, write `data/cache/matching/report.{json,md}` |
-| `pnpm match confirm <line-id...\|--all>` | Fix the current result of lines in `data/mapping/`                       |
+| `pnpm match confirm <line-id...\|--all>` | Record the current result of lines in `data/catalog/`                    |
 | `pnpm match audit`                       | Re-route confirmed lines under the current rules and list differences    |
-| `pnpm release`                           | Build `data/release/` from the confirmed mappings                        |
+| `pnpm release`                           | Build `data/release/` from the confirmed catalog                         |
 | `pnpm basemap`                           | Rebuild the basemap assets (see packages/basemap/README.md)              |
 | `pnpm test`                              | Run all package tests                                                    |
 | `pnpm check`                             | Lint, type check and format check                                        |

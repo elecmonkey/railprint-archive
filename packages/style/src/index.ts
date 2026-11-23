@@ -4,11 +4,8 @@
  * both always agree and a theme switch changes one place.
  */
 
-/**
- * Visual category of a line: lines with EMU (动车) service, conventional
- * lines, and 联络线.
- */
-export type LineCategory = 'emu' | 'trunk' | 'other';
+/** Category of a line, from the catalog: 动车 (red), 普速 (black), 联络线 (grey). */
+export type LineCategory = 'emu' | 'conventional' | 'link';
 
 export interface LineStyle {
   color: string;
@@ -72,8 +69,8 @@ export const light: Theme = {
   border: 'rgba(35, 48, 58, 0.14)',
   lines: {
     emu: { color: '#c0392b', width: 2.3, z: 3 },
-    trunk: { color: '#2e3f4c', width: 1.9, z: 2 },
-    other: { color: '#8a99a3', width: 1.1, z: 1 },
+    conventional: { color: '#2e3f4c', width: 1.9, z: 2 },
+    link: { color: '#8a99a3', width: 1.1, z: 1 },
   },
   station: {
     fill: '#ffffff',
@@ -105,8 +102,8 @@ export const dark: Theme = {
   border: 'rgba(228, 233, 236, 0.14)',
   lines: {
     emu: { color: '#ff6b52', width: 2.3, z: 3 },
-    trunk: { color: '#d7dee3', width: 1.9, z: 2 },
-    other: { color: '#6f7f89', width: 1.1, z: 1 },
+    conventional: { color: '#d7dee3', width: 1.9, z: 2 },
+    link: { color: '#6f7f89', width: 1.1, z: 1 },
   },
   station: {
     fill: '#1d262c',
@@ -125,32 +122,6 @@ export const dark: Theme = {
 };
 
 export const themes = { light, dark } as const;
-
-/** Minimal shape of a release line needed to pick its category. */
-export interface CategorizableLine {
-  group:
-    | { scope: '跨省线路'; class: string }
-    | { scope: '省内线路'; province: string };
-  lineClass: 'high-speed' | 'intercity' | 'link' | 'conventional';
-  /** Category chosen by the author; wins over every rule. */
-  category?: LineCategory;
-}
-
-/** Inter-province groups whose lines carry EMU (动车) trains. */
-const EMU_GROUPS = new Set(['客运专线', '动分客货共线']);
-
-/**
- * 联络线 are `other`; lines with 动车 are `emu`; every other line, inter-
- * province or provincial, is a conventional line (`trunk`). The author's
- * `category` wins over all of this.
- */
-export function lineCategory(line: CategorizableLine): LineCategory {
-  if (line.category) return line.category;
-  if (line.lineClass === 'link') return 'other';
-  if (line.group.scope === '跨省线路')
-    return EMU_GROUPS.has(line.group.class) ? 'emu' : 'trunk';
-  return line.lineClass === 'conventional' ? 'trunk' : 'emu';
-}
 
 /** CSS custom properties for UI code, e.g. `--rp-text`. */
 export function cssVariables(theme: Theme): Record<string, string> {

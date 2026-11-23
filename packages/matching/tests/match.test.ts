@@ -18,7 +18,7 @@ const line = (over: Partial<CatalogLine>): CatalogLine => ({
   name: '甲丙高铁',
   from: '甲',
   to: '丙',
-  group: { scope: '跨省线路', class: '客运专线' },
+  category: 'emu',
   ...over,
 });
 

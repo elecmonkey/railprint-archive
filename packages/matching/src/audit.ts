@@ -1,5 +1,4 @@
-import type { Catalog } from '@railprint/catalog';
-import type { MappingFile, PathsFile } from './mapping.ts';
+import type { Catalog, PathsFile } from '@railprint/catalog';
 import { speedPreference, type LineMatch, type Matcher } from './match.ts';
 
 export interface AuditFinding {
@@ -35,18 +34,17 @@ export const DEFAULT_AUDIT: AuditOptions = {
 export function audit(
   matcher: Matcher,
   catalog: Catalog,
-  mapping: MappingFile,
   paths: PathsFile,
   options: AuditOptions = DEFAULT_AUDIT,
 ): AuditFinding[] {
   const findings: AuditFinding[] = [];
   for (const line of catalog.lines) {
-    const entry = mapping.lines[line.id];
-    if (!entry?.confirmed) continue;
-    const confirmed = matcher.match(line, entry, paths.lines[line.id]);
+    const osm = line.osm;
+    if (!osm?.confirmed) continue;
+    const confirmed = matcher.match(line, osm, paths.lines[line.id]);
     const fresh = matcher.match(line, {
-      ...(entry.from ? { from: entry.from } : {}),
-      ...(entry.to ? { to: entry.to } : {}),
+      ...(osm.from ? { from: osm.from } : {}),
+      ...(osm.to ? { to: osm.to } : {}),
     });
     const reasons: string[] = [];
     const a = confirmed.path;

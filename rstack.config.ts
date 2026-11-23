@@ -23,7 +23,7 @@ define.fmt({
   singleQuote: true,
   // Generated with one line per catalog line; keep that layout.
   ignorePatterns: [
-    'data/mapping/paths.json',
+    'data/catalog/paths.json',
     'data/sources.lock.json',
     'data/release/**',
     'packages/basemap/assets/**',

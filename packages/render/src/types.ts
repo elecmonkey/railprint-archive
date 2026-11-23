@@ -1,7 +1,8 @@
-import type { CategorizableLine, LineCategory } from '@railprint/style';
+import type { LineCategory } from '@railprint/style';
 
 /** Properties of a feature in data/release/lines.geojson. */
-export interface ReleaseLineProperties extends CategorizableLine {
+export interface ReleaseLineProperties {
+  category: LineCategory;
   id: string;
   name: string;
   aliases?: string[];

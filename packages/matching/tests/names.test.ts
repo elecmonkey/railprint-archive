@@ -29,14 +29,12 @@ test.each([
 });
 
 test.each([
-  ['宁蓉线', { scope: '跨省线路', class: '客运专线' }, 'high-speed'],
-  ['杭深线', { scope: '跨省线路', class: '动分客货共线' }, 'any'],
-  ['京沪线', { scope: '跨省线路', class: '普速三横五纵' }, 'conventional'],
-  ['郑开城际', { scope: '省内线路', province: '河南省' }, 'high-speed'],
-  ['桐庐联络线', { scope: '省内线路', province: '浙江省' }, 'any'],
-] as const)('speedPreference(%s)', async (name, group, expected) => {
+  ['emu', 'high-speed'],
+  ['conventional', 'conventional'],
+  ['link', 'any'],
+] as const)('speedPreference(%s) = %s', async (category, expected) => {
   const { speedPreference } = await import('../src/match.ts');
-  expect(speedPreference({ id: 'x', name, from: 'a', to: 'b', group })).toBe(
-    expected,
-  );
+  expect(
+    speedPreference({ id: 'x', name: 'x', from: 'a', to: 'b', category }),
+  ).toBe(expected);
 });

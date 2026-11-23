@@ -1,6 +1,5 @@
 import { fileURLToPath } from 'node:url';
-import type { Catalog } from '@railprint/catalog';
-import type { MappingFile, PathsFile } from '@railprint/matching';
+import type { Catalog, PathsFile } from '@railprint/catalog';
 import { loadRailNetwork, type RailNetwork } from '@railprint/railnet';
 import { beforeAll, expect, test } from 'rstack/test';
 import { buildRelease, ReleaseError } from '../src/build.ts';
@@ -16,42 +15,36 @@ beforeAll(async () => {
 });
 
 const catalog: Catalog = {
-  version: 1,
+  version: 2,
   lines: [
     {
       id: 'hs',
       name: '甲丙高铁',
       from: '甲',
       to: '丙',
-      group: { scope: '跨省线路', class: '客运专线' },
+      category: 'emu',
+      osm: {
+        from: 'node/1',
+        to: 'node/5',
+        relations: [{ id: 100, name: '甲丙高速线' }],
+        confirmed: '2026-01-01',
+      },
     },
+    // Ends at an unnamed track node; its relations list no stations.
     {
       id: 'link',
       name: '乙丁联络线',
       from: '<乙>',
       to: '<丁>',
-      group: { scope: '省内线路', province: '某省' },
+      category: 'link',
+      osm: {
+        from: 'node/3',
+        to: 'node/4',
+        relations: [],
+        confirmed: '2026-01-01',
+      },
     },
   ],
-};
-
-const mapping: MappingFile = {
-  version: 1,
-  lines: {
-    hs: {
-      from: { osm: 'node/1' },
-      to: { osm: 'node/5' },
-      relations: [{ id: 100, name: '甲丙高速线' }],
-      confirmed: '2026-01-01',
-    },
-    // Ends at an unnamed track node; its relation lists no stations.
-    link: {
-      from: { osm: 'node/3' },
-      to: { osm: 'node/4', name: '无名' },
-      relations: [],
-      confirmed: '2026-01-01',
-    },
-  },
 };
 
 const paths: PathsFile = {
@@ -66,11 +59,11 @@ const paths: PathsFile = {
 };
 
 test('builds lines from confirmed paths', () => {
-  const release = buildRelease(net, catalog, mapping, paths);
+  const release = buildRelease(net, catalog, paths);
   const hs = release.lines[0]!;
   expect(hs).toMatchObject({
     id: 'hs',
-    lineClass: 'high-speed',
+    category: 'emu',
     from: '甲',
     to: '丙',
   });
@@ -83,14 +76,14 @@ test('builds lines from confirmed paths', () => {
   ]);
   expect(hs.lengthKm).toBeCloseTo(3.9, 1);
   expect(release.lines[1]).toMatchObject({
-    lineClass: 'link',
+    category: 'link',
     from: '乙',
     to: '丁',
   });
 });
 
 test('collects stations from relation members, path nodes and endpoints', () => {
-  const { stations } = buildRelease(net, catalog, mapping, paths);
+  const { stations } = buildRelease(net, catalog, paths);
   const byRef = Object.fromEntries(stations.map((s) => [s.osm, s]));
   expect(byRef['node/1']).toMatchObject({
     name: '甲',
@@ -127,27 +120,22 @@ test('collects stations from relation members, path nodes and endpoints', () => 
 });
 
 test('refuses unconfirmed or broken lines', () => {
-  const unconfirmed = {
-    ...mapping,
-    lines: {
-      ...mapping.lines,
-      link: { ...mapping.lines.link!, confirmed: undefined },
-    },
-  } as MappingFile;
-  expect(() => buildRelease(net, catalog, unconfirmed, paths)).toThrow(
-    ReleaseError,
-  );
+  const unconfirmed: Catalog = {
+    version: 2,
+    lines: catalog.lines.map((l) =>
+      l.id === 'link' ? { ...l, osm: { from: 'node/3', to: 'node/4' } } : l,
+    ),
+  };
+  expect(() => buildRelease(net, unconfirmed, paths)).toThrow(ReleaseError);
   const broken: PathsFile = {
     version: 1,
     lines: { ...paths.lines, hs: [[10, 1, 5]] },
   };
-  expect(() => buildRelease(net, catalog, mapping, broken)).toThrow(
-    /broken at way 10/,
-  );
+  expect(() => buildRelease(net, catalog, broken)).toThrow(/broken at way 10/);
 });
 
 test('writes one feature per text line', () => {
-  const release = buildRelease(net, catalog, mapping, paths);
+  const release = buildRelease(net, catalog, paths);
   const text = featureCollection(release.lines.map(lineFeature));
   expect(text.split('\n')).toHaveLength(5);
   const parsed = JSON.parse(text) as {

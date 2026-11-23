@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 import { parseArgs } from 'node:util';
-import { loadCatalog } from '@railprint/catalog';
+import { loadCatalog, loadPaths } from '@railprint/catalog';
 import { dataLayout } from '@railprint/layout';
-import { loadMapping, loadPaths } from '@railprint/matching';
 import { readExtractMeta, requireFreshRailExtract } from '@railprint/osm';
 import { loadRailNetwork } from '@railprint/railnet';
 import { buildRelease, ReleaseError } from './build.ts';
@@ -11,7 +10,7 @@ import { releaseMeta, writeRelease } from './write.ts';
 const USAGE = `Usage: railprint-release
 
 Build data/release/ (lines.geojson, stations.geojson, meta.json) from the
-confirmed mappings. Every catalog line must be confirmed.
+confirmed catalog. Every catalog line must be confirmed.
 `;
 
 async function main(): Promise<number> {
@@ -25,15 +24,13 @@ async function main(): Promise<number> {
   const layout = dataLayout();
   const catalog = await loadCatalog(layout.catalog);
   const ids = new Set(catalog.lines.map((l) => l.id));
-  const mapping = await loadMapping(layout.mapping, ids);
-  const paths = await loadPaths(layout.mapping, ids);
+  const paths = await loadPaths(layout.catalog, ids);
   const extract = await requireFreshRailExtract(layout);
   const meta = (await readExtractMeta(extract))!;
   try {
     const release = buildRelease(
       await loadRailNetwork(extract),
       catalog,
-      mapping,
       paths,
     );
     const info = releaseMeta(release, {

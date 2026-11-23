@@ -26,24 +26,6 @@ export {
 } from './match.ts';
 export { buildReport, renderMarkdown, type MatchReport } from './report.ts';
 export {
-  loadMapping,
-  loadPaths,
-  MAPPING_FILE,
-  PATHS_FILE,
-  savePaths,
-  serializePaths,
-  type PathsFile,
-  type StoredSegment,
-  parseMapping,
-  parseRef,
-  saveMapping,
-  type EndpointPin,
-  type LineMapping,
-  type MappingFile,
-  type OsmRef,
-  type RelationPin,
-} from './mapping.ts';
-export {
   audit,
   DEFAULT_AUDIT,
   type AuditFinding,

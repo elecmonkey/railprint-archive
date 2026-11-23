@@ -1,25 +1,23 @@
 import { parseEndpoint } from './endpoint.ts';
-import type { Catalog } from './types.ts';
+import type { Catalog, LineCategory } from './types.ts';
 
 export interface CatalogSummary {
   lines: number;
-  byGroup: { label: string; lines: number }[];
+  byCategory: Record<LineCategory, number>;
   endpointKinds: Record<string, number>;
+  confirmed: number;
   withNotes: number;
 }
 
-export function groupLabel(group: Catalog['lines'][number]['group']): string {
-  return group.scope === '跨省线路'
-    ? `跨省线路/${group.class}`
-    : `省内线路/${group.province}`;
-}
-
 export function summarizeCatalog(catalog: Catalog): CatalogSummary {
-  const groups = new Map<string, number>();
+  const byCategory: Record<LineCategory, number> = {
+    emu: 0,
+    conventional: 0,
+    link: 0,
+  };
   const endpointKinds: Record<string, number> = {};
   for (const line of catalog.lines) {
-    const label = groupLabel(line.group);
-    groups.set(label, (groups.get(label) ?? 0) + 1);
+    byCategory[line.category]++;
     for (const end of [line.from, line.to]) {
       const { kind } = parseEndpoint(end);
       endpointKinds[kind] = (endpointKinds[kind] ?? 0) + 1;
@@ -27,8 +25,9 @@ export function summarizeCatalog(catalog: Catalog): CatalogSummary {
   }
   return {
     lines: catalog.lines.length,
-    byGroup: [...groups].map(([label, lines]) => ({ label, lines })),
+    byCategory,
     endpointKinds,
+    confirmed: catalog.lines.filter((l) => l.osm?.confirmed).length,
     withNotes: catalog.lines.filter((l) => l.notes?.length).length,
   };
 }
