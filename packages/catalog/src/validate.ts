@@ -1,4 +1,4 @@
-import { parseEndpoint } from './endpoint.ts';
+import { lineId, parseEndpoint } from './endpoint.ts';
 import {
   LINE_CATEGORIES,
   type Catalog,
@@ -170,6 +170,14 @@ export function parseCatalog(json: unknown): Catalog {
     }
     if (raw.from === raw.to)
       problems.push(`${label} starts and ends at the same endpoint`);
+    else {
+      try {
+        const id = lineId(raw.name, raw.from, raw.to);
+        if (raw.id !== id) problems.push(`${label}.id must be "${id}"`);
+      } catch {
+        // Already reported as an invalid endpoint.
+      }
+    }
 
     // The same line between the same endpoints twice is almost certainly a
     // duplicate entry; direction does not matter.

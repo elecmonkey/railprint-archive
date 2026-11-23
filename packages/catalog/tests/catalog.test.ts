@@ -85,6 +85,9 @@ test('collects every problem at once', () => {
     expect(problems).toMatch(/aliases repeats the name/);
     expect(problems).toMatch(/osm\.from must be "node\/<id>"/);
     expect(problems).toMatch(/confirmed line needs both endpoints/);
+    expect(problems).toMatch(
+      /lines\[3\] \(y\)\.id must be "西延高铁\/西安东-延安"/,
+    );
   }
 });
 
@@ -103,7 +106,12 @@ test('summarizes categories and endpoint kinds', () => {
           ...line,
           osm: { from: 'node/1', to: 'node/2', confirmed: '2026-11-23' },
         },
-        { ...line, id: 'b', from: '<耿镇>', category: 'link' },
+        {
+          ...line,
+          id: '西延高铁/耿镇-西安东',
+          from: '<耿镇>',
+          category: 'link',
+        },
       ],
     }),
   );

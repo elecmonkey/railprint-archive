@@ -1,5 +1,6 @@
 export {
   formatEndpoint,
+  lineId,
   parseEndpoint,
   type Endpoint,
   type EndpointKind,

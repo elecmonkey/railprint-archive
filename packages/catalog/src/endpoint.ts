@@ -49,3 +49,8 @@ export function formatEndpoint(endpoint: Endpoint): string {
   const [open, close] = WRAPPERS[endpoint.kind];
   return `${open}${endpoint.name}${close}`;
 }
+
+/** A line's id: its name and endpoint names, e.g. `西延高铁/延安-耿镇`. */
+export function lineId(name: string, from: string, to: string): string {
+  return `${name}/${parseEndpoint(from).name}-${parseEndpoint(to).name}`;
+}
