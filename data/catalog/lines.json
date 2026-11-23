@@ -3668,13 +3668,31 @@
       }
     },
     {
-      "id": "深湛线/江门-湛江西",
+      "id": "广茂线/肇庆-茂名",
+      "name": "广茂线",
+      "from": "肇庆",
+      "to": "茂名",
+      "category": "conventional",
+      "osm": {
+        "from": "node/7453106321",
+        "to": "node/1641859651",
+        "relations": [
+          {
+            "id": 2046111,
+            "name": "广茂线"
+          }
+        ],
+        "confirmed": "2026-11-23"
+      }
+    },
+    {
+      "id": "深湛线/茂名-湛江西",
       "name": "深湛线",
-      "from": "江门",
+      "from": "茂名",
       "to": "湛江西",
       "category": "conventional",
       "osm": {
-        "from": "node/2414867084",
+        "from": "node/1641859651",
         "to": "node/7285032809",
         "relations": [
           {
@@ -3716,25 +3734,6 @@
           {
             "id": 5456788,
             "name": "广珠城际铁路"
-          }
-        ],
-        "confirmed": "2026-11-23"
-      }
-    },
-    {
-      "id": "广珠城际/江门-小榄",
-      "name": "广珠城际",
-      "aliases": ["江门线"],
-      "from": "江门",
-      "to": "小榄",
-      "category": "emu",
-      "osm": {
-        "from": "node/2414867084",
-        "to": "way/154399942",
-        "relations": [
-          {
-            "id": 5496304,
-            "name": "江门线"
           }
         ],
         "confirmed": "2026-11-23"
