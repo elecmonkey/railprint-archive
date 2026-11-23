@@ -1,8 +1,10 @@
 export {
   draw,
+  ROLE_ZOOM,
+  stationRole,
   widthScale,
-  ZOOM,
   type DrawContext,
+  type StationRole,
   type DrawOptions,
   type DrawStats,
 } from './draw.ts';

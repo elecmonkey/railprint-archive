@@ -30,12 +30,8 @@ export interface Theme {
   surface: string;
   border: string;
   lines: Record<LineCategory, LineStyle>;
-  station: {
-    fill: string;
-    stroke: string;
-    radius: number;
-    endpointRadius: number;
-  };
+  /** Station symbols: ring fill and outline (termini are solid outline colour). */
+  station: { fill: string; stroke: string };
   terrain: TerrainStyle;
   water: { river: string; riverWidth: number; lakeOutline: string };
   font: string;
@@ -75,8 +71,6 @@ export const light: Theme = {
   station: {
     fill: '#ffffff',
     stroke: '#23303a',
-    radius: 1.4,
-    endpointRadius: 2.8,
   },
   terrain: {
     landLow: '#f4f1e6',
@@ -108,8 +102,6 @@ export const dark: Theme = {
   station: {
     fill: '#1d262c',
     stroke: '#e4e9ec',
-    radius: 1.4,
-    endpointRadius: 2.8,
   },
   terrain: {
     landLow: '#222c32',
