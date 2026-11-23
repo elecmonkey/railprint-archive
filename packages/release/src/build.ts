@@ -1,6 +1,7 @@
 import {
   parseEndpoint,
   type Catalog,
+  type LineCategoryName,
   type LineGroup,
 } from '@railprint/catalog';
 import {
@@ -36,6 +37,10 @@ export interface ReleaseLine {
   from: string;
   to: string;
   lengthKm: number;
+  /** Share of the path on highspeed=yes track. */
+  highSpeedShare: number;
+  /** Category chosen by the author in the catalog, if any. */
+  category?: LineCategoryName;
   relations: { id: number; name: string }[];
   /** [lon, lat] from `from` to `to`. */
   coordinates: [number, number][];
@@ -97,8 +102,9 @@ function walkPath(
   network: RailNetwork,
   id: string,
   segments: PathsFile['lines'][string],
-): number[] {
+): { nodes: number[]; ways: number[] } {
   const nodes: number[] = [];
+  const ways: number[] = [];
   for (const [wayId, fromId, toId] of segments) {
     const way = wayIndexOf(network, wayId);
     const a = nodeIndexOf(network, fromId);
@@ -110,9 +116,10 @@ function walkPath(
         `${id}: confirmed path is broken at way ${wayId}; run \`pnpm match\``,
       );
     }
+    for (let i = 1; i < walked.length; i++) ways.push(way);
     nodes.push(...(nodes.length ? walked.slice(1) : walked));
   }
-  return nodes;
+  return { nodes, ways };
 }
 
 /**
@@ -142,12 +149,16 @@ export function buildRelease(
 
   catalog.lines.forEach((line, index) => {
     const entry = mapping.lines[line.id]!;
-    const nodes = walkPath(network, line.id, paths.lines[line.id]!);
+    const { nodes, ways } = walkPath(network, line.id, paths.lines[line.id]!);
     let lengthM = 0;
+    let highSpeedM = 0;
     for (let i = 1; i < nodes.length; i++) {
       const a = nodes[i - 1]!;
       const b = nodes[i]!;
-      lengthM += haversine(lon[a]!, lat[a]!, lon[b]!, lat[b]!);
+      const edge = haversine(lon[a]!, lat[a]!, lon[b]!, lat[b]!);
+      lengthM += edge;
+      if (network.wayFlags[ways[i - 1]!]! & WayFlag.HighSpeed)
+        highSpeedM += edge;
     }
     for (const n of nodes) {
       let set = nodeLines.get(n);
@@ -163,6 +174,10 @@ export function buildRelease(
       from: parseEndpoint(line.from).name,
       to: parseEndpoint(line.to).name,
       lengthKm: Math.round(lengthM / 100) / 10,
+      highSpeedShare: lengthM
+        ? Math.round((highSpeedM / lengthM) * 1000) / 1000
+        : 0,
+      ...(line.category ? { category: line.category } : {}),
       relations: entry.relations ?? [],
       coordinates: nodes.map((n) => [round6(lon[n]!), round6(lat[n]!)]),
     });

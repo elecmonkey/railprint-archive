@@ -14,6 +14,7 @@ The catalog says _what_ to draw; how each line corresponds to OSM relations, nod
   "from": "延安", // endpoint, see notation
   "to": "西安东",
   "group": { "scope": "省内线路", "province": "陕西省" },
+  "category": "trunk", // optional: map category, overriding the automatic one
   "notes": ["…"], // optional: remarks and open questions
 }
 ```
@@ -22,6 +23,10 @@ The catalog says _what_ to draw; how each line corresponds to OSM relations, nod
 
 - `{ "scope": "跨省线路", "class": "客运专线" | "普速三横五纵" | "动分客货共线" | "其它线路" }`
 - `{ "scope": "省内线路", "province": "<省级行政区>" }`
+
+### Map category
+
+Lines are drawn in three categories: `emu` (red, lines with 动车), `trunk` (black, conventional trunk lines) and `other` (grey). The automatic rule: 客运专线, 动分客货共线 and provincial high-speed or intercity lines are `emu`; other inter-province lines are `trunk`; provincial conventional lines are `other`; 联络线 are `emu` when at least half of their track is high-speed, otherwise `other`. Set `category` on a line to override it.
 
 ### Endpoint notation
 

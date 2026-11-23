@@ -36,9 +36,17 @@ export interface CatalogLine {
   from: string;
   to: string;
   group: LineGroup;
+  /**
+   * Map category chosen by the author, overriding the automatic one:
+   * emu (lines with 动车), trunk (conventional trunk), other.
+   */
+  category?: LineCategoryName;
   /** Free-form remarks, including open questions for review. */
   notes?: string[];
 }
+
+export const LINE_CATEGORIES = ['emu', 'trunk', 'other'] as const;
+export type LineCategoryName = (typeof LINE_CATEGORIES)[number];
 
 export interface Catalog {
   version: 1;

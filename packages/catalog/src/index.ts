@@ -6,6 +6,8 @@ export {
 } from './endpoint.ts';
 export {
   INTER_PROVINCE_CLASSES,
+  LINE_CATEGORIES,
+  type LineCategoryName,
   type Catalog,
   type CatalogLine,
   type InterProvinceClass,

@@ -59,6 +59,7 @@ const lines: LinesCollection = {
         from: '甲',
         to: '乙',
         lengthKm: 100,
+        highSpeedShare: 1,
         relations: [],
         group: { scope: '跨省线路', class: '客运专线' },
         lineClass: 'high-speed',

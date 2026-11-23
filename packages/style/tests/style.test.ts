@@ -20,3 +20,15 @@ test('both themes define every token', () => {
   );
   expect(cssVariables(light)['--rp-line-emu']).toBe(light.lines.emu.color);
 });
+
+test('links follow their track; the author category wins', () => {
+  const link = {
+    group: { scope: '省内线路', province: '浙江省' },
+    lineClass: 'link',
+  } as const;
+  expect(lineCategory({ ...link, highSpeedShare: 1 })).toBe('emu');
+  expect(lineCategory({ ...link, highSpeedShare: 0.1 })).toBe('other');
+  expect(lineCategory({ ...link, highSpeedShare: 0, category: 'trunk' })).toBe(
+    'trunk',
+  );
+});

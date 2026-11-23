@@ -83,3 +83,13 @@ test('summarizes groups and endpoint kinds', () => {
   ]);
   expect(summary.endpointKinds).toEqual({ station: 3, junction: 1 });
 });
+
+test('accepts an author category and rejects unknown ones', () => {
+  expect(
+    parseCatalog({ version: 1, lines: [{ ...line, category: 'trunk' }] })
+      .lines[0]?.category,
+  ).toBe('trunk');
+  expect(() =>
+    parseCatalog({ version: 1, lines: [{ ...line, category: 'red' }] }),
+  ).toThrow(/category must be one of/);
+});

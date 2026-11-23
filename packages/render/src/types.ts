@@ -8,6 +8,7 @@ export interface ReleaseLineProperties extends CategorizableLine {
   from: string;
   to: string;
   lengthKm: number;
+  highSpeedShare: number;
   relations: { id: number; name: string }[];
 }
 

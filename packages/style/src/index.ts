@@ -132,13 +132,25 @@ export interface CategorizableLine {
     | { scope: '跨省线路'; class: string }
     | { scope: '省内线路'; province: string };
   lineClass: 'high-speed' | 'intercity' | 'link' | 'conventional';
+  /** Share of the line on high-speed track; decides 联络线. */
+  highSpeedShare?: number;
+  /** Category chosen by the author; wins over every rule. */
+  category?: LineCategory;
 }
 
 /** Inter-province groups whose lines carry EMU (动车) trains. */
 const EMU_GROUPS = new Set(['客运专线', '动分客货共线']);
 
+/** A 联络线 counts as an EMU line when at least this share is high-speed track. */
+export const LINK_HIGH_SPEED_SHARE = 0.5;
+
 export function lineCategory(line: CategorizableLine): LineCategory {
-  if (line.lineClass === 'link') return 'other';
+  if (line.category) return line.category;
+  if (line.lineClass === 'link') {
+    return (line.highSpeedShare ?? 0) >= LINK_HIGH_SPEED_SHARE
+      ? 'emu'
+      : 'other';
+  }
   if (line.group.scope === '跨省线路')
     return EMU_GROUPS.has(line.group.class) ? 'emu' : 'trunk';
   return line.lineClass === 'conventional' ? 'other' : 'emu';

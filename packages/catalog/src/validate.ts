@@ -1,6 +1,8 @@
 import { parseEndpoint } from './endpoint.ts';
 import {
   INTER_PROVINCE_CLASSES,
+  LINE_CATEGORIES,
+  type LineCategoryName,
   type Catalog,
   type InterProvinceClass,
   type CatalogLine,
@@ -29,6 +31,7 @@ const LINE_KEYS = new Set([
   'from',
   'to',
   'group',
+  'category',
   'notes',
 ]);
 
@@ -139,6 +142,16 @@ export function parseCatalog(json: unknown): Catalog {
     const group = checkGroup(raw.group, label, problems);
     const aliases = checkStringList(raw.aliases, `${label}.aliases`, problems);
     const notes = checkStringList(raw.notes, `${label}.notes`, problems);
+    let category: LineCategoryName | undefined;
+    if (raw.category !== undefined) {
+      if (LINE_CATEGORIES.includes(raw.category as LineCategoryName)) {
+        category = raw.category as LineCategoryName;
+      } else {
+        problems.push(
+          `${label}.category must be one of ${LINE_CATEGORIES.join(', ')}`,
+        );
+      }
+    }
     if (aliases?.includes(raw.name))
       problems.push(`${label}.aliases repeats the name`);
     if (!group) return;
@@ -150,6 +163,7 @@ export function parseCatalog(json: unknown): Catalog {
       from: raw.from,
       to: raw.to,
       group,
+      ...(category ? { category } : {}),
       ...(notes?.length ? { notes } : {}),
     });
   });
