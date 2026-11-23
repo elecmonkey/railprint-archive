@@ -47,6 +47,8 @@ test('reads nodes, ways and relations from a PBF file', async () => {
   expect(relations[0]?.members).toEqual([
     { type: 'way', ref: 10, role: '' },
     { type: 'way', ref: 11, role: '' },
+    { type: 'node', ref: 1, role: 'station' },
+    { type: 'node', ref: 5, role: 'station' },
   ]);
   expect(relations[0]?.tags.name).toBe('甲丙高速线');
 });

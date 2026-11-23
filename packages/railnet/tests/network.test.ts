@@ -41,6 +41,10 @@ test('maps relation members to track way indices', () => {
     wayIndexOf(net, 10),
     wayIndexOf(net, 11),
   ]);
+  expect(Array.from(r.places).map((i) => net.places[i]!.names[0])).toEqual([
+    '甲',
+    '丙',
+  ]);
 });
 
 test('routes along the cheapest ways', () => {
@@ -90,4 +94,12 @@ test('walks along a single way', async () => {
     5, 4,
   ]);
   expect(walkWay(net, w11, n(1), n(5))).toBeUndefined();
+});
+
+test('finds track nodes within a track distance', async () => {
+  const { reachable } = await import('../src/reach.ts');
+  const n = (id: number) => nodeIndexOf(net, id);
+  const near = reachable(net, [{ node: n(3), cost: 0 }], 1000);
+  expect([...near.keys()].map((i) => net.nodeIds[i]).sort()).toEqual([2, 3, 4]);
+  expect(reachable(net, [{ node: n(3), cost: 2000 }], 1000).size).toBe(0);
 });

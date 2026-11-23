@@ -8,5 +8,5 @@ n7 v1 x100.04 y30.002 Trailway=station,station=subway,name=丙
 w10 v1 Trailway=rail,highspeed=yes Nn1,n2,n3
 w11 v1 Trailway=rail,usage=main Nn3,n4,n5
 w12 v1 Trailway=rail,service=siding Nn2,n6,n4
-r100 v1 Ttype=route,route=railway,name=甲丙高速线 Mw10@,w11@
+r100 v1 Ttype=route,route=railway,name=甲丙高速线 Mw10@,w11@,n1@station,n5@station
 r101 v1 Ttype=route,route=railway,name=甲丙线 Mw12@

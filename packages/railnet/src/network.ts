@@ -69,6 +69,8 @@ export interface RailRelation {
   tags: Tags;
   /** Indices of member track ways. */
   ways: Int32Array;
+  /** Indices into `places` of member stations, junctions and other places. */
+  places: Int32Array;
 }
 
 export interface RailNetwork {
@@ -284,9 +286,16 @@ export async function loadRailNetwork(path: string): Promise<RailNetwork> {
     });
   }
 
+  const placeIndex = new Map(
+    places.map((p, i) => [`${p.osm.type}/${p.osm.id}`, i]),
+  );
   const relations: RailRelation[] = rawRelations.map((relation) => {
     const members: number[] = [];
+    const memberPlaces: number[] = [];
     for (const member of relation.members) {
+      if (member.type === 'relation') continue;
+      const place = placeIndex.get(`${member.type}/${member.ref}`);
+      if (place !== undefined) memberPlaces.push(place);
       if (member.type !== 'way') continue;
       const w = binarySearch(ways, member.ref);
       if (w >= 0) members.push(w);
@@ -296,6 +305,7 @@ export async function loadRailNetwork(path: string): Promise<RailNetwork> {
       route: relation.tags.route as 'railway' | 'train',
       tags: relation.tags,
       ways: Int32Array.from(members),
+      places: Int32Array.from(memberPlaces),
     };
   });
 
