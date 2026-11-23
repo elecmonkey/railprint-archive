@@ -12,6 +12,8 @@ interface Props {
   theme: Theme;
   global?: TerrainTexture;
   regional?: TerrainTexture;
+  /** Layer opacity, 0–1; applied in CSS so changing it needs no redraw. */
+  opacity: number;
   /** Reports whether terrain is being drawn, so the 2D layer can go transparent. */
   onReady: (ready: boolean) => void;
 }
@@ -22,6 +24,7 @@ export function TerrainCanvas({
   theme,
   global,
   regional,
+  opacity,
   onReady,
 }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -86,6 +89,7 @@ export function TerrainCanvas({
       ref={canvasRef}
       className={`${styles.canvas} ${styles.under}`}
       aria-hidden="true"
+      style={{ opacity }}
     />
   );
 }

@@ -27,6 +27,7 @@ export type DrawContext = Pick<
   | 'fillStyle'
   | 'strokeStyle'
   | 'lineWidth'
+  | 'globalAlpha'
   | 'lineJoin'
   | 'lineCap'
   | 'font'
@@ -49,6 +50,8 @@ export interface DrawOptions {
   stations?: 'endpoints' | 'all';
   /** Rivers and lake outlines drawn under the railway. */
   basemap?: BasemapData;
+  /** Opacity of rivers and lakes, matching the terrain layer (0–1, default 1). */
+  basemapOpacity?: number;
   /**
    * A terrain layer is drawn underneath: leave the background transparent
    * and only outline the globe.
@@ -94,6 +97,7 @@ export function draw({
   basemap,
   terrain,
   stations = 'endpoints',
+  basemapOpacity = 1,
 }: DrawOptions): DrawStats {
   const projection = createProjection(view, width, height);
   const path = geoPath(projection, ctx as unknown as CanvasRenderingContext2D);
@@ -122,7 +126,8 @@ export function draw({
   }
 
   // Rivers and lake outlines, most important first so they stay on top.
-  if (basemap) {
+  if (basemap && basemapOpacity > 0) {
+    ctx.globalAlpha = basemapOpacity;
     const rank = maxRank(ppd);
     const detail = ppd < 60 ? 0 : 1;
     ctx.lineJoin = 'round';
@@ -149,6 +154,7 @@ export function draw({
       }
       ctx.stroke();
     }
+    ctx.globalAlpha = 1;
   }
 
   // Lines: one path per category, drawn bottom to top.

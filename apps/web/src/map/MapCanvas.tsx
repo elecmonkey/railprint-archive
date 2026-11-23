@@ -14,6 +14,8 @@ interface Props {
   basemap?: BasemapData;
   /** A terrain layer is drawn underneath. */
   terrain: boolean;
+  /** Opacity of rivers and lakes, matching the terrain layer. */
+  basemapOpacity: number;
   theme: Theme;
   view: View | undefined;
   /** Called with the canvas size once known, to set an initial view. */
@@ -26,6 +28,7 @@ export function MapCanvas({
   data,
   basemap,
   terrain,
+  basemapOpacity,
   theme,
   view,
   onSize,
@@ -73,10 +76,11 @@ export function MapCanvas({
         theme,
         ...(basemap ? { basemap } : {}),
         terrain,
+        basemapOpacity,
       });
     });
     return () => cancelAnimationFrame(frame);
-  }, [data, basemap, terrain, theme, view, size]);
+  }, [data, basemap, terrain, basemapOpacity, theme, view, size]);
 
   // Wheel needs a non-passive listener to prevent page scrolling and the
   // browser's own pinch zoom.
