@@ -29,6 +29,12 @@ export interface LineOsm {
   to?: OsmRef;
   /** Infrastructure relations the path follows. */
   relations?: RelationRef[];
+  /**
+   * The author chose `relations` (e.g. a branch through a station instead of
+   * the main line): confirming and auditing route along them rather than by
+   * the general rules.
+   */
+  fixedRelations?: boolean;
   /** Date (YYYY-MM-DD) the author confirmed the line; its path is then in paths.json. */
   confirmed?: string;
 }

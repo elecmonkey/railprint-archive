@@ -42,9 +42,12 @@ export function audit(
     const osm = line.osm;
     if (!osm?.confirmed) continue;
     const confirmed = matcher.match(line, osm, paths.lines[line.id]);
+    // Re-route from the endpoints under the current rules; relations the
+    // author chose stay, everything else is decided afresh.
     const fresh = matcher.match(line, {
       ...(osm.from ? { from: osm.from } : {}),
       ...(osm.to ? { to: osm.to } : {}),
+      ...(osm.fixedRelations ? { relations: osm.relations ?? [] } : {}),
     });
     const reasons: string[] = [];
     const a = confirmed.path;

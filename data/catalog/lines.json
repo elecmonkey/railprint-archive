@@ -2252,7 +2252,8 @@
             "name": "笕杭线"
           }
         ],
-        "confirmed": "2026-11-23"
+        "confirmed": "2026-11-23",
+        "fixedRelations": true
       }
     },
     {
@@ -2524,7 +2525,8 @@
             "name": "长株城际线"
           }
         ],
-        "confirmed": "2026-11-23"
+        "confirmed": "2026-11-23",
+        "fixedRelations": true
       }
     },
     {

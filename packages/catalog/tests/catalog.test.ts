@@ -45,6 +45,7 @@ test('accepts an OSM block', () => {
     from: 'node/1',
     to: 'way/2',
     relations: [{ id: 3, name: '包西高速线' }],
+    fixedRelations: true,
     confirmed: '2026-11-23',
   };
   expect(

@@ -34,7 +34,13 @@ const LINE_KEYS = new Set([
   'osm',
   'notes',
 ]);
-const OSM_KEYS = new Set(['from', 'to', 'relations', 'confirmed']);
+const OSM_KEYS = new Set([
+  'from',
+  'to',
+  'relations',
+  'fixedRelations',
+  'confirmed',
+]);
 const REF = /^(node|way)\/(\d+)$/;
 
 export function parseRef(ref: string): { type: 'node' | 'way'; id: number } {
@@ -92,6 +98,10 @@ function checkOsm(
       problems.push(
         `${where}.relations must be [{ "id": number, "name": string }]`,
       );
+  }
+  if (raw.fixedRelations !== undefined) {
+    if (raw.fixedRelations === true) osm.fixedRelations = true;
+    else problems.push(`${where}.fixedRelations must be true or absent`);
   }
   if (raw.confirmed !== undefined) {
     if (

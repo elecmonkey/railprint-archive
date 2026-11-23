@@ -108,7 +108,12 @@ async function main(): Promise<number> {
         g.to,
       ]);
       const line = catalog.lines.find((l) => l.id === result.id)!;
-      line.osm = confirmMatch(result, date);
+      const fixed = line.osm?.fixedRelations ? line.osm.relations : undefined;
+      line.osm = {
+        ...confirmMatch(result, date),
+        // Relations the author chose are kept as they are.
+        ...(fixed ? { relations: fixed, fixedRelations: true } : {}),
+      };
       count++;
     }
     await saveCatalog(layout.catalog, catalog);

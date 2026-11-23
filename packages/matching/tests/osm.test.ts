@@ -89,3 +89,32 @@ test('audit flags confirmed paths that a fresh route would change', () => {
     [],
   );
 });
+
+test('audit keeps relations the author fixed', () => {
+  // The author steers the line over the siding relation 甲丙线 (way 12).
+  const osm = {
+    from: 'node/1',
+    to: 'node/5',
+    relations: [{ id: 101, name: '甲丙线' }],
+    confirmed: '2026-01-01',
+  } as const;
+  const stored: StoredSegment[] = [
+    [10, 1, 2],
+    [12, 2, 4],
+    [11, 4, 5],
+  ];
+  const paths = { version: 1 as const, lines: { x: stored } };
+  expect(
+    audit(matcher, { version: 2, lines: [{ ...line, osm }] }, paths),
+  ).toHaveLength(1);
+  expect(
+    audit(
+      matcher,
+      {
+        version: 2,
+        lines: [{ ...line, osm: { ...osm, fixedRelations: true } }],
+      },
+      paths,
+    ),
+  ).toEqual([]);
+});

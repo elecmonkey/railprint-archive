@@ -22,6 +22,7 @@ Run `pnpm catalog check` after editing.
     "from": "node/7765120777", // the OSM object the line starts at
     "to": "node/14007558344",
     "relations": [{ "id": 19529971, "name": "包西高速线" }], // relations the path follows
+    "fixedRelations": true, // optional: the author chose `relations`; routing keeps them
     "confirmed": "2026-11-23",
   },
   "notes": ["…"], // optional: remarks and open questions
@@ -55,6 +56,7 @@ Run `pnpm catalog check` after editing.
 ## Correcting a line
 
 1. Edit `name`, `from`, `to` or `category`. To re-route, remove the `osm` block (or keep only `from`/`to` to pin endpoints) and the line's entry in `paths.json`.
+   To force a route along particular OSM lines (a branch through a station rather than the main line), set `osm.relations` to them and `osm.fixedRelations: true`.
 2. `pnpm match <id>` and read `data/cache/matching/report.md`.
 3. `pnpm match confirm <id>`, then `pnpm release`.
 
