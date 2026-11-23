@@ -1,0 +1,23 @@
+{
+  "name": "@railprint/basemap",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Physical-geography basemap for data/release/basemap/: land, lakes, rivers and terrain textures.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "rs test"
+  },
+  "dependencies": {
+    "@railprint/layout": "workspace:^",
+    "@railprint/render": "workspace:^",
+    "@railprint/sources": "workspace:^",
+    "h5wasm": "^0.10.3",
+    "sharp": "^0.35.5"
+  },
+  "bin": {
+    "railprint-basemap": "./src/cli.ts"
+  }
+}

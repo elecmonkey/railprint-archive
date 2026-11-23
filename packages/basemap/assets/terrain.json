@@ -1,0 +1,35 @@
+{
+  "encoding": {
+    "r": "hillshade, 0–255",
+    "g": "sqrt(elevation / 7000 m) on land, 0–255",
+    "b": "land fraction (lakes are water), 0–255",
+    "flatShade": 180,
+    "maxElevationM": 7000
+  },
+  "textures": [
+    {
+      "name": "global",
+      "file": "terrain-global.webp",
+      "grid": {
+        "width": 3600,
+        "height": 1800,
+        "west": -180,
+        "south": -90,
+        "east": 180,
+        "north": 90
+      }
+    },
+    {
+      "name": "east-asia",
+      "file": "terrain-east-asia.webp",
+      "grid": {
+        "width": 4500,
+        "height": 2400,
+        "west": 70,
+        "south": 15,
+        "east": 145,
+        "north": 55
+      }
+    }
+  ]
+}

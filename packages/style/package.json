@@ -1,0 +1,13 @@
+{
+  "name": "@railprint/style",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Design tokens for the map: line, station and background styles in light and dark themes, plus CSS variables for the UI.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "rs test"
+  }
+}

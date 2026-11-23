@@ -1,0 +1,21 @@
+{
+  "name": "@railprint/render",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Canvas renderer for the release data, shared by the web app and image export.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "rs test"
+  },
+  "dependencies": {
+    "@railprint/style": "workspace:^",
+    "d3-geo": "^3.1.2"
+  },
+  "devDependencies": {
+    "@types/d3-geo": "^3.1.1",
+    "@types/geojson": "^7946.0.16"
+  }
+}

@@ -6,17 +6,20 @@ The line list is hand-maintained in `data/catalog/`; geometry comes from OSM; th
 
 ## Layout
 
-| Path                | Contents                                                                   |
-| ------------------- | -------------------------------------------------------------------------- |
-| `apps/web`          | Web viewer (placeholder for now)                                           |
-| `packages/layout`   | Canonical repository and data paths                                        |
-| `packages/sources`  | External data sources: download, resume, checksum, lock file               |
-| `packages/catalog`  | Line catalog types, validation and CLI                                     |
-| `packages/osm`      | OSM PBF reader, osmium-based extracts and incremental updates              |
-| `packages/railnet`  | Railway network model: track graph, places, relations, shortest paths      |
-| `packages/matching` | Catalog line ↔ OSM matching, confirmed mappings and the review report      |
-| `packages/release`  | Final line and station GeoJSON in `data/release/`                          |
-| `data/`             | Committed data and ignored downloads, see [data/README.md](data/README.md) |
+| Path                | Contents                                                                            |
+| ------------------- | ----------------------------------------------------------------------------------- |
+| `apps/web`          | Web map viewer (React, CSS Modules)                                                 |
+| `packages/layout`   | Canonical repository and data paths                                                 |
+| `packages/sources`  | External data sources: download, resume, checksum, lock file                        |
+| `packages/catalog`  | Line catalog types, validation and CLI                                              |
+| `packages/osm`      | OSM PBF reader, osmium-based extracts and incremental updates                       |
+| `packages/railnet`  | Railway network model: track graph, places, relations, shortest paths               |
+| `packages/matching` | Catalog line ↔ OSM matching, confirmed mappings and the review report               |
+| `packages/release`  | Final line and station GeoJSON in `data/release/`                                   |
+| `packages/style`    | Design tokens: line, station and background styles, light and dark                  |
+| `packages/render`   | Canvas renderer for the release data, shared by the web app and export              |
+| `packages/basemap`  | Terrain, rivers and lakes in `packages/basemap/assets/` (committed; rarely rebuilt) |
+| `data/`             | Committed data and ignored downloads, see [data/README.md](data/README.md)          |
 
 ## Requirements
 
@@ -42,9 +45,10 @@ Run from the repository root:
 | `pnpm match [line-id...]`                | Match catalog lines to OSM, write `data/cache/matching/report.{json,md}` |
 | `pnpm match confirm <line-id...\|--all>` | Fix the current result of lines in `data/mapping/`                       |
 | `pnpm release`                           | Build `data/release/` from the confirmed mappings                        |
+| `pnpm basemap`                           | Rebuild the basemap assets (see packages/basemap/README.md)              |
 | `pnpm test`                              | Run all package tests                                                    |
 | `pnpm check`                             | Lint, type check and format check                                        |
-| `pnpm dev`                               | Start the web app                                                        |
+| `pnpm dev`                               | Start the web app at http://localhost:3000, serving `data/release/`      |
 
 ## Package conventions
 

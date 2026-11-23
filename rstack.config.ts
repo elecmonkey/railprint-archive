@@ -26,6 +26,7 @@ define.fmt({
     'data/mapping/paths.json',
     'data/sources.lock.json',
     'data/release/**',
+    'packages/basemap/assets/**',
   ],
 });
 
