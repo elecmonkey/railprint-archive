@@ -26,3 +26,4 @@ pnpm sources verify [id...]
 - Proxy: run with `NODE_USE_ENV_PROXY=1` and `HTTPS_PROXY`; no proxy code.
 - Update an OSM extract incrementally: `pnpm osm update [id]` (default `osm-china`), then `pnpm osm extract` and `pnpm match`. A full `fetch --force` resets it to a fresh download.
 - `pnpm match` must end with every line `confirmed`. Lines that turn `review` or `failed` after an update need the author's decision before `pnpm match confirm <id>`; never confirm them on your own.
+- After `pnpm match confirm`, run `pnpm release` and commit `data/mapping/` and `data/release/` together.

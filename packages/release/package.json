@@ -1,0 +1,23 @@
+{
+  "name": "@railprint/release",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Build data/release/: final line and station geometry for the web app and exports.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "bin": {
+    "railprint-release": "./src/cli.ts"
+  },
+  "scripts": {
+    "test": "rs test"
+  },
+  "dependencies": {
+    "@railprint/catalog": "workspace:^",
+    "@railprint/layout": "workspace:^",
+    "@railprint/matching": "workspace:^",
+    "@railprint/osm": "workspace:^",
+    "@railprint/railnet": "workspace:^"
+  }
+}

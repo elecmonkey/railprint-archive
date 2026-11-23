@@ -1,0 +1,16 @@
+{
+  "osm": {
+    "source": "osm-china",
+    "sha256": "fe5b6faa61d73956b60f7735dca728e4e6a6a60f01335e36c88e051806775dbe",
+    "timestamp": "2026-11-22T21:20:48.000Z",
+    "sequence": 4978
+  },
+  "attribution": "© OpenStreetMap contributors",
+  "license": "ODbL-1.0",
+  "counts": {
+    "lines": 194,
+    "stations": 2102,
+    "endpoints": 242,
+    "lengthKm": 38784
+  }
+}

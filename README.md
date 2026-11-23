@@ -15,6 +15,7 @@ The line list is hand-maintained in `data/catalog/`; geometry comes from OSM; th
 | `packages/osm`      | OSM PBF reader, osmium-based extracts and incremental updates              |
 | `packages/railnet`  | Railway network model: track graph, places, relations, shortest paths      |
 | `packages/matching` | Catalog line ↔ OSM matching, confirmed mappings and the review report      |
+| `packages/release`  | Final line and station GeoJSON in `data/release/`                          |
 | `data/`             | Committed data and ignored downloads, see [data/README.md](data/README.md) |
 
 ## Requirements
@@ -40,6 +41,7 @@ Run from the repository root:
 | `pnpm osm extract`                       | Build the railway extract in `data/cache/osm/`                           |
 | `pnpm match [line-id...]`                | Match catalog lines to OSM, write `data/cache/matching/report.{json,md}` |
 | `pnpm match confirm <line-id...\|--all>` | Fix the current result of lines in `data/mapping/`                       |
+| `pnpm release`                           | Build `data/release/` from the confirmed mappings                        |
 | `pnpm test`                              | Run all package tests                                                    |
 | `pnpm check`                             | Lint, type check and format check                                        |
 | `pnpm dev`                               | Start the web app                                                        |

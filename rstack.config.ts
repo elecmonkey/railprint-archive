@@ -22,7 +22,11 @@ define.lint(({ js, ts, reactPlugin, reactHooksPlugin, rstestPlugin }) => [
 define.fmt({
   singleQuote: true,
   // Generated with one line per catalog line; keep that layout.
-  ignorePatterns: ['data/mapping/paths.json', 'data/sources.lock.json'],
+  ignorePatterns: [
+    'data/mapping/paths.json',
+    'data/sources.lock.json',
+    'data/release/**',
+  ],
 });
 
 define.staged({

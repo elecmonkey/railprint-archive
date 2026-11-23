@@ -13,7 +13,8 @@
     "sources": "node packages/sources/src/cli.ts",
     "catalog": "node packages/catalog/src/cli.ts",
     "osm": "node packages/osm/src/cli.ts",
-    "match": "node packages/matching/src/cli.ts"
+    "match": "node packages/matching/src/cli.ts",
+    "release": "node packages/release/src/cli.ts"
   },
   "devDependencies": {
     "@types/node": "^26.6.6",

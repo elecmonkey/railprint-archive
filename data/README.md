@@ -8,7 +8,7 @@ data/
 ├── sources.lock.json   committed  what was actually downloaded (generated)
 ├── catalog/            committed  the line catalog, hand-maintained
 ├── mapping/            committed  confirmed catalog line → OSM correspondence
-├── release/            committed  final geometry for web and export (planned)
+├── release/            committed  final geometry for web and export (generated)
 ├── sources/            ignored    raw downloads, never edited
 └── cache/              ignored    rebuildable intermediates
 ```
@@ -78,6 +78,18 @@ Confirmed decisions linking each catalog line to OSM, written by `pnpm match con
 - `mapping/paths.json`: per line, the exact confirmed path as `[wayId, fromNodeId, toNodeId]` segments, one line per catalog line.
 
 `pnpm match` reuses a confirmed path while every segment still exists in the current extract. If a segment breaks after an OSM update, the line becomes `review` with a freshly routed proposal; check it and run `pnpm match confirm <id>`.
+
+## Release
+
+`pnpm release` builds the files the web app and exporters read. Every catalog line must be confirmed; the output is deterministic for a given extract, catalog and mapping.
+
+| File                       | Contents                                                                                                                          |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `release/lines.geojson`    | One LineString per catalog line along its confirmed path: id, name, aliases, group, line class, endpoint names, length, relations |
+| `release/stations.geojson` | Stations and junctions on the lines: name (catalog name for endpoints), OSM object and name, kind, endpoint flag, lines served    |
+| `release/meta.json`        | OSM snapshot, attribution and counts                                                                                              |
+
+A station belongs to a line when it is a member of one of the line's relations near its path, or its node lies on the path. For lines whose relations list no stations, places connected to the path along main track within 1 km count as well. Coordinates have 6 decimals; each feature is one line of text.
 
 ## Licences
 
