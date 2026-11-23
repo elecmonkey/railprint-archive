@@ -41,7 +41,10 @@ export interface ReleaseStation {
   /** OSM object, e.g. `node/123`. */
   osm: string;
   name: string;
-  /** OSM name when it differs from `name`; endpoints use the catalog name. */
+  /**
+   * OSM name when it differs from `name`. Endpoints use the catalog name, a
+   * junction's in full: `<横山>` is shown as 横山线路所.
+   */
   osmName?: string;
   kind: StationKind;
   /** True when some line starts or ends here. */
@@ -54,6 +57,17 @@ export interface ReleaseStation {
 export interface Release {
   lines: ReleaseLine[];
   stations: ReleaseStation[];
+}
+
+/**
+ * The full name of a junction written `<横山>` in the catalog: the OSM name
+ * when it is that name with a 所 suffix (横山线路所, 茂陵东辅助所), otherwise
+ * the name with 线路所 added.
+ */
+export function junctionName(name: string, osmName?: string): string {
+  if (name.endsWith('所')) return name;
+  if (osmName?.startsWith(name) && osmName.endsWith('所')) return osmName;
+  return `${name}线路所`;
 }
 
 /** A relation's member station belongs to a line within this distance of its path. */
@@ -294,10 +308,12 @@ export function buildRelease(
       coordinates = [round6(lon[n]!), round6(lat[n]!)];
     }
     consumed.add(ref);
+    const name =
+      ep.kind === 'junction' ? junctionName(ep.name, osmName) : ep.name;
     stations.push({
       osm: ref,
-      name: ep.name,
-      ...(osmName && osmName !== ep.name ? { osmName } : {}),
+      name,
+      ...(osmName && osmName !== name ? { osmName } : {}),
       kind: ep.kind,
       endpoint: true,
       lines: [...lines].sort((a, b) => a - b).map((i) => catalog.lines[i]!.id),

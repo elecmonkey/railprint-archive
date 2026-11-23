@@ -91,16 +91,16 @@ test('collects stations from relation members, path nodes and endpoints', () => 
     endpoint: true,
     lines: ['hs'],
   });
-  // 乙线路所 lies on both paths; the link line starts there with the catalog name.
+  // 乙线路所 lies on both paths; the link line starts there as <乙>.
   expect(byRef['node/3']).toMatchObject({
-    name: '乙',
-    osmName: '乙线路所',
+    name: '乙线路所',
     kind: 'junction',
     endpoint: true,
     lines: ['hs', 'link'],
   });
+  // <丁> has no OSM name of its own: 线路所 is added.
   expect(byRef['node/4']).toMatchObject({
-    name: '丁',
+    name: '丁线路所',
     kind: 'junction',
     endpoint: true,
     lines: ['link'],
