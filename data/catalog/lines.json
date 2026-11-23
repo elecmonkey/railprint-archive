@@ -2777,11 +2777,11 @@
       "id": "芜铜线/芜湖-钟鸣",
       "name": "芜铜线",
       "from": "芜湖",
-      "to": "钟鸣",
+      "to": "铜陵",
       "category": "conventional",
       "osm": {
         "from": "node/9235207765",
-        "to": "node/8509562691",
+        "to": "node/9521958023",
         "relations": [
           {
             "id": 13418075,
