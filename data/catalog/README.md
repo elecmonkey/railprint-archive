@@ -51,7 +51,7 @@ Run `pnpm catalog check` after editing.
 
 ### IDs
 
-`id` is `<name>/<from>-<to>` without endpoint markers, set when the line is created. `paths.json` refers to lines by id, so **never change an id** once it exists, even if the name or endpoints are corrected later. A new line gets a new id.
+`id` is `<name>/<from>-<to>` without endpoint markers, and validation enforces it: when a line's name or endpoints change, its id changes too, and the line's entry in `paths.json` is renamed with it.
 
 ## Correcting a line
 
@@ -62,7 +62,7 @@ Run `pnpm catalog check` after editing.
 
 ## Rules checked by `pnpm catalog check`
 
-- ids are unique; no two lines repeat the same name and endpoints
+- ids are unique and match the name and endpoints; no two lines repeat the same name and endpoints
 - endpoints parse in the notation above, and differ from each other
 - `category` is one of the three values; no unknown fields
 - `osm` references are `node/<id>` or `way/<id>`; a confirmed line has both endpoints
