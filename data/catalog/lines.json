@@ -1009,24 +1009,6 @@
       }
     },
     {
-      "id": "兰银线/干塘-银川",
-      "name": "兰银线",
-      "from": "干塘",
-      "to": "银川",
-      "category": "conventional",
-      "osm": {
-        "from": "node/2340595334",
-        "to": "node/9118892109",
-        "relations": [
-          {
-            "id": 1106681,
-            "name": "包兰线"
-          }
-        ],
-        "confirmed": "2026-11-23"
-      }
-    },
-    {
       "id": "包兰线/干塘-银川",
       "name": "包兰线",
       "from": "干塘",
@@ -2541,8 +2523,8 @@
             "name": "长株城际线"
           }
         ],
-        "confirmed": "2026-11-23",
-        "fixedRelations": true
+        "fixedRelations": true,
+        "confirmed": "2026-11-23"
       }
     },
     {
