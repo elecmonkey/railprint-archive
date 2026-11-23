@@ -98,6 +98,8 @@ export interface LineMatch {
     serviceShare: number;
     /** Share of the path on highspeed=yes track. */
     highSpeedShare: number;
+    /** Places where the path turns back by more than 90° at a node. */
+    reversals: number;
     segments: PathSegment[];
   };
 }
@@ -491,6 +493,7 @@ export class Matcher {
     let onSteered = 0;
     let onService = 0;
     let onHighSpeed = 0;
+    let reversals = 0;
     let lengthM = 0;
     const segments: PathSegment[] = [];
     for (let i = 0; i < route.ways.length; i++) {
@@ -501,6 +504,14 @@ export class Matcher {
       lengthM += edge;
       if (wayFlags[way]! & WayFlag.Service) onService += edge;
       if (wayFlags[way]! & WayFlag.HighSpeed) onHighSpeed += edge;
+      if (i > 0) {
+        const z = route.nodes[i - 1]!;
+        const k = Math.cos((lat[a]! * Math.PI) / 180);
+        const dot =
+          (lon[a]! - lon[z]!) * k * (lon[b]! - lon[a]!) * k +
+          (lat[a]! - lat[z]!) * (lat[b]! - lat[a]!);
+        if (z === b || dot < 0) reversals++;
+      }
       const rels = this.wayRelations.get(way) ?? [];
       if (rels.some((r) => steered.has(r.id))) onSteered += edge;
       for (const r of rels) {
@@ -569,6 +580,7 @@ export class Matcher {
         .map((s) => ({ ...s, km: round(s.km) })),
       serviceShare: round(lengthM ? onService / lengthM : 0, 3),
       highSpeedShare: round(lengthM ? onHighSpeed / lengthM : 0, 3),
+      reversals,
       segments,
     });
   }

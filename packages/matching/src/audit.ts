@@ -59,6 +59,13 @@ export function audit(
           `按当前规则重新求路为 ${b.lengthKm} km，固定路径 ${a.lengthKm} km`,
         );
       }
+      // Real switchbacks (e.g. 青龙桥) stay in a fresh route too; only report
+      // reversals the current rules would remove.
+      if (a.reversals > b.reversals) {
+        reasons.push(
+          `固定路径有 ${a.reversals} 处掉头；重算${b.reversals ? `仍有 ${b.reversals} 处` : '没有掉头'}，${b.lengthKm} km`,
+        );
+      }
       if (
         speedPreference(line) === 'high-speed' &&
         b.highSpeedShare - a.highSpeedShare >= options.highSpeedGain

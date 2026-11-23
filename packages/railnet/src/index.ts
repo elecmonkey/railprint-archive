@@ -11,7 +11,13 @@ export {
   type RailPlace,
   type RailRelation,
 } from './network.ts';
-export { Router, type Anchor, type Route, type RouteOptions } from './route.ts';
+export {
+  DEFAULT_TURN_PENALTY,
+  Router,
+  type Anchor,
+  type Route,
+  type RouteOptions,
+} from './route.ts';
 export { TrackNodeIndex } from './spatial.ts';
 export { walkWay } from './walk.ts';
 export { reachable } from './reach.ts';

@@ -103,3 +103,33 @@ test('finds track nodes within a track distance', async () => {
   expect([...near.keys()].map((i) => net.nodeIds[i]).sort()).toEqual([2, 3, 4]);
   expect(reachable(net, [{ node: n(3), cost: 2000 }], 1000).size).toBe(0);
 });
+
+test('turning back at a node is penalised', () => {
+  // From node 3 to node 2 the direct way is one edge back along way 10.
+  // Arriving at 3 from 4 (way 11) and continuing to 2 means reversing.
+  const router = new Router(net);
+  const n = (id: number) => nodeIndexOf(net, id);
+  const plain = router.route(
+    [{ node: n(4), cost: 0, tag: 0 }],
+    [{ node: n(2), cost: 0, tag: 0 }],
+    {
+      wayFactor: Float32Array.from([1, 1, 1]),
+    },
+  )!;
+  // 4 → 3 → 2 runs straight through 3; no penalty, same as before.
+  expect(plain.nodes.map((i) => net.nodeIds[i])).toEqual([4, 3, 2]);
+  expect(plain.cost).toBeCloseTo(plain.lengthM, 3);
+  // With way 11 closed, 3 → 6 must go west to 2 and then back east to 6:
+  // the router pays the penalty only because there is no other way.
+  const reverse = router.route(
+    [{ node: n(3), cost: 0, tag: 0 }],
+    [{ node: n(6), cost: 0, tag: 0 }],
+    {
+      wayFactor: Float32Array.from([1, Infinity, 1]),
+      turnPenalty: 1e6,
+    },
+  )!;
+  // 3 → 2 → 6 turns back at 2 (west then east): the only way, so it is taken.
+  expect(reverse.nodes.map((i) => net.nodeIds[i])).toEqual([3, 2, 6]);
+  expect(reverse.cost).toBeGreaterThan(1e6);
+});
