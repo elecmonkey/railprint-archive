@@ -1,5 +1,5 @@
 import { fileURLToPath } from 'node:url';
-import type { CatalogLine, StoredSegment } from '@railprint/catalog';
+import type { CatalogLine, LineOsm, StoredSegment } from '@railprint/catalog';
 import { loadRailNetwork } from '@railprint/railnet';
 import { beforeAll, expect, test } from 'rstack/test';
 import { audit } from '../src/audit.ts';
@@ -92,12 +92,12 @@ test('audit flags confirmed paths that a fresh route would change', () => {
 
 test('audit keeps relations the author fixed', () => {
   // The author steers the line over the siding relation 甲丙线 (way 12).
-  const osm = {
+  const osm: LineOsm = {
     from: 'node/1',
     to: 'node/5',
     relations: [{ id: 101, name: '甲丙线' }],
     confirmed: '2026-01-01',
-  } as const;
+  };
   const stored: StoredSegment[] = [
     [10, 1, 2],
     [12, 2, 4],
