@@ -95,6 +95,8 @@ export interface LineMatch {
     onRelations: RelationShare[];
     /** Share of the path on service tracks (yards, sidings, spurs). */
     serviceShare: number;
+    /** Share of the path on highspeed=yes track. */
+    highSpeedShare: number;
     segments: PathSegment[];
   };
 }
@@ -283,12 +285,12 @@ export class Matcher {
     return anchors;
   }
 
-  private setFactors(relations: RailRelation[], cls: LineClass): void {
+  private setFactors(relations: RailRelation[], speed: SpeedPreference): void {
     const { wayFlags } = this.network;
     const onRelation = new Set<number>();
     for (const r of relations) for (const w of r.ways) onRelation.add(w);
     const base = relations.length ? FACTOR.offRelation : FACTOR.noRelationKnown;
-    const wantHighSpeed = cls === 'high-speed' || cls === 'intercity';
+    const wantHighSpeed = speed === 'high-speed';
     for (let w = 0; w < this.factor.length; w++) {
       if (onRelation.has(w)) {
         this.factor[w] = FACTOR.onRelation;
@@ -299,7 +301,7 @@ export class Matcher {
       if (flags & WayFlag.Service) f *= FACTOR.service;
       if (flags & WayFlag.Minor) f *= FACTOR.minorUsage;
       if (
-        cls !== 'link' &&
+        speed !== 'any' &&
         !(flags & WayFlag.Ferry) &&
         Boolean(flags & WayFlag.HighSpeed) !== wantHighSpeed
       ) {
@@ -473,7 +475,7 @@ export class Matcher {
       fromPlace = fromResolved.candidates[0]!;
       toPlace = toResolved.candidates[0]!;
     } else {
-      this.setFactors(relations, cls);
+      this.setFactors(relations, speedPreference(line));
       const found = this.router.route(
         this.anchors(fromResolved.candidates),
         this.anchors(toResolved.candidates),
@@ -495,6 +497,7 @@ export class Matcher {
     const shares = new Map<number, RelationShare>();
     let onSteered = 0;
     let onService = 0;
+    let onHighSpeed = 0;
     let lengthM = 0;
     const segments: PathSegment[] = [];
     for (let i = 0; i < route.ways.length; i++) {
@@ -504,6 +507,7 @@ export class Matcher {
       const edge = haversine(lon[a]!, lat[a]!, lon[b]!, lat[b]!);
       lengthM += edge;
       if (wayFlags[way]! & WayFlag.Service) onService += edge;
+      if (wayFlags[way]! & WayFlag.HighSpeed) onHighSpeed += edge;
       const rels = this.wayRelations.get(way) ?? [];
       if (rels.some((r) => steered.has(r.id))) onSteered += edge;
       for (const r of rels) {
@@ -571,6 +575,7 @@ export class Matcher {
         .sort((a, b) => b.km - a.km)
         .map((s) => ({ ...s, km: round(s.km) })),
       serviceShare: round(lengthM ? onService / lengthM : 0, 3),
+      highSpeedShare: round(lengthM ? onHighSpeed / lengthM : 0, 3),
       segments,
     });
   }
@@ -585,6 +590,26 @@ function placeRef(place: RailPlace): PlaceRef {
     lon: place.lon,
     lat: place.lat,
   };
+}
+
+/** Which kind of track a line should prefer when routing. */
+export type SpeedPreference = 'high-speed' | 'conventional' | 'any';
+
+/**
+ * The author's group decides first: 客运专线 are high-speed whatever their
+ * name ends with (宁蓉线 runs on the high-speed 沪蓉线), 动分客货共线 and
+ * links may use either. Otherwise the name suffix decides.
+ */
+export function speedPreference(line: CatalogLine): SpeedPreference {
+  const cls: LineClass = lineKey(line.name).class;
+  if (cls === 'link') return 'any';
+  if (line.group.scope === '跨省线路') {
+    if (line.group.class === '客运专线') return 'high-speed';
+    if (line.group.class === '动分客货共线') return 'any';
+  }
+  return cls === 'high-speed' || cls === 'intercity'
+    ? 'high-speed'
+    : 'conventional';
 }
 
 /** Share of a path a relation must cover to be pinned when confirming. */

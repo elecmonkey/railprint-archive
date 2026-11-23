@@ -44,6 +44,7 @@ Run from the repository root:
 | `pnpm osm extract`                       | Build the railway extract in `data/cache/osm/`                           |
 | `pnpm match [line-id...]`                | Match catalog lines to OSM, write `data/cache/matching/report.{json,md}` |
 | `pnpm match confirm <line-id...\|--all>` | Fix the current result of lines in `data/mapping/`                       |
+| `pnpm match audit`                       | Re-route confirmed lines under the current rules and list differences    |
 | `pnpm release`                           | Build `data/release/` from the confirmed mappings                        |
 | `pnpm basemap`                           | Rebuild the basemap assets (see packages/basemap/README.md)              |
 | `pnpm test`                              | Run all package tests                                                    |

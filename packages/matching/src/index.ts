@@ -11,6 +11,8 @@ export {
   DEFAULT_THRESHOLDS,
   Matcher,
   PIN_RELATION_SHARE,
+  speedPreference,
+  type SpeedPreference,
   type EndpointResult,
   type Issue,
   type IssueCode,
@@ -41,3 +43,9 @@ export {
   type OsmRef,
   type RelationPin,
 } from './mapping.ts';
+export {
+  audit,
+  DEFAULT_AUDIT,
+  type AuditFinding,
+  type AuditOptions,
+} from './audit.ts';

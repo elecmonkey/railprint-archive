@@ -11,6 +11,7 @@ import { dataLayout } from '@railprint/layout';
 import { readExtractMeta, requireFreshRailExtract } from '@railprint/osm';
 import { loadRailNetwork } from '@railprint/railnet';
 import { loadMapping, loadPaths, saveMapping, savePaths } from './mapping.ts';
+import { audit } from './audit.ts';
 import { confirmMatch, Matcher } from './match.ts';
 import { buildReport, renderMarkdown } from './report.ts';
 
@@ -18,6 +19,8 @@ const USAGE = `Usage:
   railprint-match [line-id...]          Match lines (all by default) and write the report
   railprint-match confirm <line-id...>  Fix the current result of these lines in the mapping
   railprint-match confirm --all         Fix every line that is not failed
+  railprint-match audit                 Re-route confirmed lines under the current
+                                        rules and list those that differ
 
 The report goes to data/cache/matching/report.{json,md}. Confirming writes the
 endpoints and relations to data/mapping/lines.json and the exact track path to
@@ -45,8 +48,9 @@ async function main(): Promise<number> {
     console.log(USAGE);
     return 0;
   }
+  const auditing = positionals[0] === 'audit';
   const confirming = positionals[0] === 'confirm';
-  const ids = confirming ? positionals.slice(1) : positionals;
+  const ids = confirming || auditing ? positionals.slice(1) : positionals;
   if (confirming && !ids.length && !values.all) {
     console.error(USAGE);
     return 1;
@@ -63,6 +67,25 @@ async function main(): Promise<number> {
   const meta = (await readExtractMeta(extract))!;
   const started = Date.now();
   const matcher = new Matcher(await loadRailNetwork(extract));
+  if (auditing) {
+    const findings = audit(matcher, { version: 1, lines }, mapping, paths);
+    for (const f of findings) {
+      const rel = (m: typeof f.fresh) =>
+        m.path?.onRelations
+          .slice(0, 3)
+          .map((r) => `${r.name} ${r.km}`)
+          .join('、') ?? '';
+      console.log(`\n${f.id}`);
+      for (const reason of f.reasons) console.log(`  - ${reason}`);
+      console.log(`  固定：${rel(f.confirmed)}`);
+      console.log(`  重算：${rel(f.fresh)}`);
+    }
+    console.log(
+      `\n${findings.length} of ${lines.length} confirmed line(s) need a look`,
+    );
+    return 0;
+  }
+
   const results = lines.map((line) =>
     matcher.match(line, mapping.lines[line.id], paths.lines[line.id]),
   );

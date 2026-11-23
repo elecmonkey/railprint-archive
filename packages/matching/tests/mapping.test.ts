@@ -98,3 +98,36 @@ test('a missing pinned object fails the line', () => {
   expect(m.status).toBe('failed');
   expect(m.issues.map((i) => i.code)).toEqual(['pin-missing']);
 });
+
+test('audit flags confirmed paths that a fresh route would change', async () => {
+  const { audit } = await import('../src/audit.ts');
+  const mapping = {
+    version: 1 as const,
+    lines: { x: confirmMatch(matcher.match(line), {}, '2026-01-01') },
+  };
+  // Confirmed over the siding; the current rules take the main line.
+  const detour = {
+    version: 1 as const,
+    lines: {
+      x: [
+        [10, 1, 2],
+        [12, 2, 4],
+        [11, 4, 5],
+      ] as StoredSegment[],
+    },
+  };
+  const direct = {
+    version: 1 as const,
+    lines: {
+      x: [
+        [10, 1, 3],
+        [11, 3, 5],
+      ] as StoredSegment[],
+    },
+  };
+  const catalog = { version: 1 as const, lines: [line] };
+  const flagged = audit(matcher, catalog, mapping, detour);
+  expect(flagged.map((f) => f.id)).toEqual(['x']);
+  expect(flagged[0]!.reasons.join()).toMatch(/重新求路/);
+  expect(audit(matcher, catalog, mapping, direct)).toEqual([]);
+});
