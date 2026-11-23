@@ -1148,7 +1148,7 @@
 {"type":"Feature","properties":{"osm":"node/7276313969","name":"茂陵东辅助所","kind":"junction","endpoint":false,"lines":["徐兰高铁/徐州东-兰州西"]},"geometry":{"type":"Point","coordinates":[108.616946,34.319394]}},
 {"type":"Feature","properties":{"osm":"node/7276651835","name":"浩门","kind":"station","endpoint":false,"lines":["兰新客专/兰州西-柳沟南"]},"geometry":{"type":"Point","coordinates":[101.440233,37.569808]}},
 {"type":"Feature","properties":{"osm":"node/7276773543","name":"柳沟","kind":"station","endpoint":true,"lines":["兰新线/兰州-柳沟","敦煌线/柳沟-敦煌"]},"geometry":{"type":"Point","coordinates":[96.443889,40.673835]}},
-{"type":"Feature","properties":{"osm":"node/7276774510","name":"双塔","kind":"station","endpoint":false,"lines":["敦煌线/柳沟-敦煌"]},"geometry":{"type":"Point","coordinates":[96.369146,40.649072]}},
+{"type":"Feature","properties":{"osm":"node/7276774510","name":"双塔","kind":"station","endpoint":true,"lines":["敦煌线/柳沟-敦煌","柳沟南联络线/柳沟南-双塔"]},"geometry":{"type":"Point","coordinates":[96.369146,40.649072]}},
 {"type":"Feature","properties":{"osm":"node/7276779887","name":"伊塘湖","kind":"station","endpoint":false,"lines":["敦煌线/柳沟-敦煌"]},"geometry":{"type":"Point","coordinates":[95.009304,40.194471]}},
 {"type":"Feature","properties":{"osm":"node/7276779888","name":"芦草河","kind":"station","endpoint":false,"lines":["敦煌线/柳沟-敦煌"]},"geometry":{"type":"Point","coordinates":[95.378645,40.331227]}},
 {"type":"Feature","properties":{"osm":"node/7276779889","name":"四工农场","kind":"station","endpoint":false,"lines":["敦煌线/柳沟-敦煌"]},"geometry":{"type":"Point","coordinates":[95.578271,40.484209]}},
@@ -2073,5 +2073,5 @@
 {"type":"Feature","properties":{"osm":"way/973585033","name":"长沙","osmName":"长沙站","kind":"station","endpoint":true,"lines":["京广线/广州-郑州","长株潭城际线/长沙-株洲","长株潭城际线/开福寺-株洲","石长线/石门县北-长沙"]},"geometry":{"type":"Point","coordinates":[113.008866,28.197141]}},
 {"type":"Feature","properties":{"osm":"way/1074877632","name":"老河口东","kind":"station","endpoint":true,"lines":["襄渝线/老河口东-安康","襄渝线/老河口东-磨心坡","汉丹线/襄阳北-老河口东"]},"geometry":{"type":"Point","coordinates":[111.736069,32.221194]}},
 {"type":"Feature","properties":{"osm":"way/1356670981","name":"云梦东","osmName":"云梦东站","kind":"station","endpoint":true,"lines":["汉孝城际/云梦东-汉口"]},"geometry":{"type":"Point","coordinates":[113.778885,31.047892]}},
-{"type":"Feature","properties":{"osm":"way/1466334497","name":"柳沟南","kind":"station","endpoint":true,"lines":["兰新客专/兰州西-柳沟南"]},"geometry":{"type":"Point","coordinates":[96.416209,40.645027]}}
+{"type":"Feature","properties":{"osm":"way/1466334497","name":"柳沟南","kind":"station","endpoint":true,"lines":["兰新客专/兰州西-柳沟南","柳沟南联络线/柳沟南-双塔"]},"geometry":{"type":"Point","coordinates":[96.416209,40.645027]}}
 ]}
