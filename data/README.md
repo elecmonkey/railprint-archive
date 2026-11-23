@@ -50,9 +50,20 @@ NODE_USE_ENV_PROXY=1 HTTPS_PROXY=http://127.0.0.1:10802 pnpm sources fetch
 
 ### Updating a source
 
+- OSM extracts: `pnpm osm update [id]` reads the replication sequence from the PBF header, downloads the provider's change files after it, applies them with `osmium apply-changes`, and writes the new sequence back into the header. The lock entry then describes the updated file and keeps the original download under `osmUpdate.base`.
 - Any source: `pnpm sources fetch <id> --force` downloads it again and replaces the lock entry.
 
 Rebuild everything derived from an updated source and commit the lock with it.
+
+## Cache
+
+Everything in `cache/` is rebuilt from `sources/` and can be deleted at any time.
+
+| Path                           | Built by           | Contents                                                                                                    |
+| ------------------------------ | ------------------ | ----------------------------------------------------------------------------------------------------------- |
+| `cache/osm/china-rail.osm.pbf` | `pnpm osm extract` | Railway objects of the China extract (osmium `tags-filter`), with a `.meta.json` naming the source snapshot |
+
+`.meta.json` records the source sha256, so later steps can refuse a stale extract.
 
 ## Catalog
 

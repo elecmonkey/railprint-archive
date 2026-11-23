@@ -215,6 +215,15 @@ importers:
 
   packages/layout: {}
 
+  packages/osm:
+    dependencies:
+      '@railprint/layout':
+        specifier: workspace:^
+        version: link:../layout
+      '@railprint/sources':
+        specifier: workspace:^
+        version: link:../sources
+
   packages/sources:
     dependencies:
       '@railprint/layout':

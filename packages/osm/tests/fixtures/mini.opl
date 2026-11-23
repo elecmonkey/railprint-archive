@@ -1,0 +1,12 @@
+n1 v1 x100 y30 Tpublic_transport=station,railway=station,name=甲
+n2 v1 x100.01 y30
+n3 v1 x100.02 y30 Trailway=junction,name=乙线路所
+n4 v1 x100.03 y30
+n5 v1 x100.04 y30 Trailway=station,name=丙,old_name=丁
+n6 v1 x100.02 y30.005
+n7 v1 x100.04 y30.002 Trailway=station,station=subway,name=丙
+w10 v1 Trailway=rail,highspeed=yes Nn1,n2,n3
+w11 v1 Trailway=rail,usage=main Nn3,n4,n5
+w12 v1 Trailway=rail,service=siding Nn2,n6,n4
+r100 v1 Ttype=route,route=railway,name=甲丙高速线 Mw10@,w11@
+r101 v1 Ttype=route,route=railway,name=甲丙线 Mw12@
