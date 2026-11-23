@@ -65,48 +65,19 @@ export interface DrawStats {
   labels: number;
 }
 
-/**
- * Role of a station on the map. Endpoints are graded by how many catalog
- * lines meet there: a hub (3+), a terminus (1) or a join (2, usually just
- * where the author split a line into sections). Junctions (线路所) and
- * intermediate stations come last.
- */
-export type StationRole =
-  'hub' | 'terminus' | 'join' | 'junction' | 'intermediate';
-
-export function stationRole(s: RenderStation): StationRole {
-  if (s.properties.kind === 'junction') return 'junction';
-  if (!s.properties.endpoint) return 'intermediate';
-  const n = s.properties.lines.length;
-  return n >= 3 ? 'hub' : n === 1 ? 'terminus' : 'join';
-}
-
-/** Pixels per degree at which each role's symbol and label appear. */
-export const ROLE_ZOOM: Record<StationRole, { symbol: number; label: number }> =
-  {
-    hub: { symbol: 50, label: 60 },
-    terminus: { symbol: 80, label: 100 },
-    join: { symbol: 130, label: 150 },
-    junction: { symbol: 180, label: Infinity },
-    intermediate: { symbol: 160, label: 220 },
-  };
-
-const ROLE_ORDER: StationRole[] = [
-  'hub',
-  'terminus',
-  'join',
-  'intermediate',
-  'junction',
-];
+/** Zoom thresholds in pixels per degree. */
+export const ZOOM = {
+  /** Endpoint names appear, written on the station before symbols show. */
+  endpointLabels: 30,
+  /** Endpoint symbols appear; names move beside them. */
+  endpointSymbols: 90,
+  /** Intermediate stations (when drawn at all). */
+  stations: 160,
+  stationLabels: 220,
+} as const;
 
 /** Symbol radius in CSS pixels at full size. */
-const ROLE_RADIUS: Record<StationRole, number> = {
-  hub: 3.2,
-  terminus: 2.2,
-  join: 2.4,
-  junction: 2.4,
-  intermediate: 1.8,
-};
+const RADIUS = { endpoint: 2.8, intermediate: 1.8 } as const;
 
 /** Line widths grow gently with zoom around this reference. */
 const REFERENCE_PIXELS_PER_DEGREE = 20;
@@ -204,8 +175,9 @@ export function draw({
     ctx.stroke();
   }
 
-  // Stations. Endpoints are graded by role and appear as the map zooms in,
-  // so the overview shows the network itself rather than a field of dots.
+  // Stations. All line endpoints are treated alike: names appear first,
+  // written on the station; symbols follow when zoomed in and the names move
+  // beside them. Junctions (线路所) get a symbol but no name.
   const visible = (s: RenderStation) =>
     view.kind !== 'globe' ||
     geoDistance(s.coordinates, view.center) < Math.PI / 2 - 0.01;
@@ -213,12 +185,17 @@ export function draw({
     x: number;
     y: number;
     s: RenderStation;
-    role: StationRole;
+    symbol: boolean;
+    label: boolean;
   }[] = [];
   for (const s of data.stations) {
-    const role = stationRole(s);
-    if (role === 'intermediate' && stations !== 'all') continue;
-    if (ppd < ROLE_ZOOM[role].symbol || !visible(s)) continue;
+    const endpoint = s.properties.endpoint;
+    if (!endpoint && stations !== 'all') continue;
+    const symbol = ppd >= (endpoint ? ZOOM.endpointSymbols : ZOOM.stations);
+    const label =
+      s.properties.kind !== 'junction' &&
+      ppd >= (endpoint ? ZOOM.endpointLabels : ZOOM.stationLabels);
+    if ((!symbol && !label) || !visible(s)) continue;
     const p = projection(s.coordinates);
     if (
       !p ||
@@ -228,19 +205,22 @@ export function draw({
       p[1] > height + 20
     )
       continue;
-    placed.push({ x: p[0], y: p[1], s, role });
+    placed.push({ x: p[0], y: p[1], s, symbol, label });
   }
-  // Important roles first: they draw on top and win label space.
+  // When names collide, stations where more lines meet keep theirs.
   placed.sort(
-    (a, b) => ROLE_ORDER.indexOf(a.role) - ROLE_ORDER.indexOf(b.role),
+    (a, b) => b.s.properties.lines.length - a.s.properties.lines.length,
   );
 
   const symbolScale = Math.min(1.3, Math.max(0.6, Math.sqrt(ppd / 120)));
-  const { fill, stroke } = theme.station;
-  for (const { x, y, role } of [...placed].reverse()) {
-    const r = ROLE_RADIUS[role] * symbolScale;
+  ctx.lineWidth = 1.2;
+  for (const { x, y, s, symbol } of placed) {
+    if (!symbol) continue;
+    const r =
+      (s.properties.endpoint ? RADIUS.endpoint : RADIUS.intermediate) *
+      symbolScale;
     ctx.beginPath();
-    if (role === 'junction') {
+    if (s.properties.kind === 'junction') {
       ctx.moveTo(x - r, y);
       ctx.lineTo(x, y - r);
       ctx.lineTo(x + r, y);
@@ -249,29 +229,28 @@ export function draw({
     } else {
       ctx.arc(x, y, r, 0, Math.PI * 2);
     }
-    // Termini are solid dots; everything else is a ring.
-    ctx.fillStyle = role === 'terminus' ? stroke : fill;
+    ctx.fillStyle = theme.station.fill;
     ctx.fill();
-    ctx.lineWidth = role === 'hub' ? 1.3 : 1;
-    ctx.strokeStyle = stroke;
+    ctx.strokeStyle = theme.station.stroke;
     ctx.stroke();
   }
 
-  // Labels with greedy collision avoidance; junctions are not labelled.
+  // Labels with greedy collision avoidance.
   const size = LABEL_SIZE;
   ctx.font = `500 ${size}px ${theme.font}`;
-  ctx.textAlign = 'left';
   ctx.textBaseline = 'middle';
   const boxes: [number, number, number, number][] = [];
   let labels = 0;
-  for (const { x, y, s, role } of placed) {
-    if (role === 'junction' || ppd < ROLE_ZOOM[role].label) continue;
+  for (const { x, y, s, symbol, label } of placed) {
+    if (!label) continue;
     const text = s.properties.name;
     const w = ctx.measureText(text).width;
+    // Beside the symbol, or centred on the station when there is none.
+    const left = symbol ? x + 6 : x - w / 2;
     const box: [number, number, number, number] = [
-      x + 5,
+      left - 1,
       y - size / 2 - 1,
-      x + 7 + w,
+      left + w + 1,
       y + size / 2 + 1,
     ];
     if (
@@ -281,11 +260,12 @@ export function draw({
     )
       continue;
     boxes.push(box);
+    ctx.textAlign = 'left';
     ctx.strokeStyle = theme.halo;
     ctx.lineWidth = 3;
-    ctx.strokeText(text, x + 6, y);
+    ctx.strokeText(text, left, y);
     ctx.fillStyle = theme.text;
-    ctx.fillText(text, x + 6, y);
+    ctx.fillText(text, left, y);
     labels++;
   }
 

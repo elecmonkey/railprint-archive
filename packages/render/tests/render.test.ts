@@ -199,34 +199,36 @@ test('terrain inverse projection is undefined off the globe', async () => {
   expect(invertPoint(view, 1000, 1000, 5, 5)).toBeUndefined();
 });
 
-test('endpoints are graded by role and appear as the map zooms in', async () => {
-  const { stationRole, ROLE_ZOOM } = await import('../src/draw.ts');
-  const station = (
-    lines: string[],
-    kind: 'station' | 'junction' = 'station',
-  ) => ({
-    properties: { osm: 'node/1', name: 'x', kind, endpoint: true, lines },
+test('endpoint names appear before symbols, all endpoints alike', () => {
+  const station = (lines: string[]) => ({
+    properties: {
+      osm: 'node/1',
+      name: 'x',
+      kind: 'station' as const,
+      endpoint: true,
+      lines,
+    },
     coordinates: [104, 34] as [number, number],
   });
-  expect(stationRole(station(['a', 'b', 'c']))).toBe('hub');
-  expect(stationRole(station(['a']))).toBe('terminus');
-  expect(stationRole(station(['a', 'b']))).toBe('join');
-  expect(stationRole(station(['a', 'b'], 'junction'))).toBe('junction');
-  expect(ROLE_ZOOM.hub.symbol).toBeLessThan(ROLE_ZOOM.terminus.symbol);
-  expect(ROLE_ZOOM.terminus.symbol).toBeLessThan(ROLE_ZOOM.join.symbol);
-
   const data = prepareData(lines, { type: 'FeatureCollection', features: [] });
-  data.stations.push(station(['a', 'b', 'c']), station(['a']));
-  const at = (pixelsPerDegree: number) =>
-    draw({
-      context: recorder().ctx,
+  data.stations.push(station(['a', 'b', 'c']), {
+    ...station(['a']),
+    coordinates: [106, 34],
+  });
+  const at = (pixelsPerDegree: number) => {
+    const { ctx, calls } = recorder();
+    const stats = draw({
+      context: ctx,
       width: 800,
       height: 600,
       view: { kind: 'conic', center: [105, 34], pixelsPerDegree },
       data,
       theme: light,
-    }).stations;
-  expect(at(30)).toBe(0);
-  expect(at(60)).toBe(1);
-  expect(at(90)).toBe(2);
+    });
+    return { ...stats, arcs: calls.filter((c) => c.startsWith('arc')).length };
+  };
+  expect(at(20)).toMatchObject({ labels: 0, arcs: 0 });
+  // Names on their own at overview scale, for every endpoint.
+  expect(at(40)).toMatchObject({ labels: 2, arcs: 0 });
+  expect(at(100)).toMatchObject({ labels: 2, arcs: 2 });
 });
