@@ -1,0 +1,23 @@
+{
+  "name": "railprint",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "pnpm -r build",
+    "dev": "pnpm --filter web dev",
+    "test": "pnpm -r test",
+    "check": "rs check --type-check",
+    "lint": "rs lint",
+    "format": "rs fmt",
+    "prepare": "rs hooks"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "rstack": "^0.9.3",
+    "typescript": "^7.0.2"
+  },
+  "packageManager": "pnpm@12.18.0",
+  "engines": {
+    "node": ">=24"
+  }
+}

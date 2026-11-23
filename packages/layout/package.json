@@ -1,0 +1,13 @@
+{
+  "name": "@railprint/layout",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Canonical on-disk layout of the railprint repository and its data directory.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "rs test"
+  }
+}
