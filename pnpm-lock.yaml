@@ -224,6 +224,12 @@ importers:
         specifier: workspace:^
         version: link:../sources
 
+  packages/railnet:
+    dependencies:
+      '@railprint/osm':
+        specifier: workspace:^
+        version: link:../osm
+
   packages/sources:
     dependencies:
       '@railprint/layout':

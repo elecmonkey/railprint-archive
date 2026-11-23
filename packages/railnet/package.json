@@ -1,0 +1,16 @@
+{
+  "name": "@railprint/railnet",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Railway network model built from the OSM railway extract: track graph, stations, route relations and shortest paths.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "rs test"
+  },
+  "dependencies": {
+    "@railprint/osm": "workspace:^"
+  }
+}

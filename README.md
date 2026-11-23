@@ -13,6 +13,7 @@ The line list is hand-maintained in `data/catalog/`; geometry comes from OSM; th
 | `packages/sources` | External data sources: download, resume, checksum, lock file               |
 | `packages/catalog` | Line catalog types, validation and CLI                                     |
 | `packages/osm`     | OSM PBF reader, osmium-based extracts and incremental updates              |
+| `packages/railnet` | Railway network model: track graph, places, relations, shortest paths      |
 | `data/`            | Committed data and ignored downloads, see [data/README.md](data/README.md) |
 
 ## Requirements
