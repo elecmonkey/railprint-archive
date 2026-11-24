@@ -56,7 +56,7 @@ export interface TerrainStyle {
 }
 
 const FONT =
-  '"PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", system-ui, sans-serif';
+  '"Noto Sans SC Variable", "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", system-ui, sans-serif';
 
 export const light: Theme = {
   name: 'light',

@@ -72,6 +72,23 @@ export function MapCanvas({
   } | null>(null);
   const hoverFrame = useRef(0);
   const picker = useMemo(() => new Picker(data), [data]);
+  // Canvas text does not fetch web fonts, and the bundled one is split by
+  // character range: load the pieces the station names need, then redraw.
+  const [fontsLoaded, setFontsLoaded] = useState(0);
+  useEffect(() => {
+    if (!('fonts' in document)) return;
+    const text = [
+      ...new Set(data.stations.map((s) => s.properties.name).join('')),
+    ].join('');
+    let live = true;
+    document.fonts
+      .load(`500 12px ${theme.font}`, `${text}0123456789`)
+      .then(() => live && setFontsLoaded((n) => n + 1))
+      .catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, [data, theme.font]);
   // Latest view, so several input events within one frame build on each
   // other instead of all starting from the last rendered view.
   const latest = useRef(view);
@@ -171,7 +188,17 @@ export function MapCanvas({
       });
     });
     return () => cancelAnimationFrame(frame);
-  }, [data, basemap, terrain, basemapOpacity, theme, view, size, highlight]);
+  }, [
+    data,
+    basemap,
+    terrain,
+    basemapOpacity,
+    theme,
+    view,
+    size,
+    highlight,
+    fontsLoaded,
+  ]);
 
   // Wheel needs a non-passive listener to prevent page scrolling and the
   // browser's own pinch zoom.
