@@ -23,6 +23,8 @@ export interface ReleaseMeta {
     endpoints: number;
     lengthKm: number;
   };
+  /** Size of each data file in bytes, so a page can show loading progress. */
+  bytes?: { lines: number; stations: number };
 }
 
 /** GeoJSON FeatureCollection with one feature per line of text. */
@@ -77,16 +79,16 @@ export async function writeRelease(
   meta: ReleaseMeta,
 ): Promise<void> {
   await mkdir(dir, { recursive: true });
-  await atomicWrite(
-    join(dir, RELEASE_FILES.lines),
-    featureCollection(release.lines.map(lineFeature)),
-  );
-  await atomicWrite(
-    join(dir, RELEASE_FILES.stations),
-    featureCollection(release.stations.map(stationFeature)),
-  );
+  const lines = featureCollection(release.lines.map(lineFeature));
+  const stations = featureCollection(release.stations.map(stationFeature));
+  const bytes = {
+    lines: Buffer.byteLength(lines),
+    stations: Buffer.byteLength(stations),
+  };
+  await atomicWrite(join(dir, RELEASE_FILES.lines), lines);
+  await atomicWrite(join(dir, RELEASE_FILES.stations), stations);
   await atomicWrite(
     join(dir, RELEASE_FILES.meta),
-    `${JSON.stringify(meta, null, 2)}\n`,
+    `${JSON.stringify({ ...meta, bytes }, null, 2)}\n`,
   );
 }
