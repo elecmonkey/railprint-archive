@@ -9,7 +9,6 @@ export interface ReleaseLineProperties {
   from: string;
   to: string;
   lengthKm: number;
-  highSpeedShare: number;
   relations: { id: number; name: string }[];
 }
 

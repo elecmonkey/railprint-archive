@@ -57,7 +57,6 @@ const lines: LinesCollection = {
         from: '甲',
         to: '乙',
         lengthKm: 100,
-        highSpeedShare: 1,
         relations: [],
         category: 'emu',
       },

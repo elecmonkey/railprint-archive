@@ -30,8 +30,6 @@ export interface ReleaseLine {
   from: string;
   to: string;
   lengthKm: number;
-  /** Share of the path on highspeed=yes track. */
-  highSpeedShare: number;
   relations: { id: number; name: string }[];
   /** [lon, lat] from `from` to `to`. */
   coordinates: [number, number][];
@@ -163,9 +161,8 @@ function walkPath(
   network: RailNetwork,
   id: string,
   segments: PathsFile['lines'][string],
-): { nodes: number[]; ways: number[] } {
+): number[] {
   const nodes: number[] = [];
-  const ways: number[] = [];
   for (const [wayId, fromId, toId] of segments) {
     const way = wayIndexOf(network, wayId);
     const a = nodeIndexOf(network, fromId);
@@ -177,10 +174,9 @@ function walkPath(
         `${id}: confirmed path is broken at way ${wayId}; run \`pnpm match\``,
       );
     }
-    for (let i = 1; i < walked.length; i++) ways.push(way);
     nodes.push(...(nodes.length ? walked.slice(1) : walked));
   }
-  return { nodes, ways };
+  return nodes;
 }
 
 /**
@@ -234,16 +230,12 @@ export function buildRelease(
 
   catalog.lines.forEach((line, index) => {
     const osm = line.osm!;
-    const { nodes, ways } = walkPath(network, line.id, paths.lines[line.id]!);
+    const nodes = walkPath(network, line.id, paths.lines[line.id]!);
     let lengthM = 0;
-    let highSpeedM = 0;
     for (let i = 1; i < nodes.length; i++) {
       const a = nodes[i - 1]!;
       const b = nodes[i]!;
-      const edge = haversine(lon[a]!, lat[a]!, lon[b]!, lat[b]!);
-      lengthM += edge;
-      if (network.wayFlags[ways[i - 1]!]! & WayFlag.HighSpeed)
-        highSpeedM += edge;
+      lengthM += haversine(lon[a]!, lat[a]!, lon[b]!, lat[b]!);
     }
     for (const n of nodes) {
       let set = nodeLines.get(n);
@@ -258,9 +250,6 @@ export function buildRelease(
       from: parseEndpoint(line.from).name,
       to: parseEndpoint(line.to).name,
       lengthKm: Math.round(lengthM / 100) / 10,
-      highSpeedShare: lengthM
-        ? Math.round((highSpeedM / lengthM) * 1000) / 1000
-        : 0,
       relations: osm.relations ?? [],
       coordinates: drawn(nodes, osm.from!, osm.to!),
     });

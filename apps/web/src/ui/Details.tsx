@@ -85,12 +85,6 @@ function LineDetails({
             }
           </dd>
         </div>
-        {p.highSpeedShare > 0 && (
-          <div>
-            <dt>高铁轨道</dt>
-            <dd>{Math.round(p.highSpeedShare * 100)}%</dd>
-          </div>
-        )}
       </dl>
       <div className={styles.actions}>
         <button type="button" onClick={() => onFocusLine(line)}>
