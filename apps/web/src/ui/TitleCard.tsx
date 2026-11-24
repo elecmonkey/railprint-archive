@@ -37,35 +37,34 @@ function Mark() {
 export function TitleCard({ counts, attribution }: Props) {
   const figures: [string, string][] = [
     [counts.lines.toLocaleString(), '条线路'],
-    [`${counts.lengthKm.toLocaleString()} km`, ''],
+    [counts.lengthKm.toLocaleString(), 'km'],
     [counts.stations.toLocaleString(), '个车站'],
   ];
   return (
     <header className={styles.card}>
-      <div className={styles.brand}>
-        <Mark />
-        <div>
-          <h1>railprint</h1>
-          <p className={styles.figures}>
-            {figures.map(([value, unit], i) => (
-              <span key={i}>
-                <strong>{value}</strong>
-                {unit && ` ${unit}`}
-              </span>
-            ))}
-          </p>
-        </div>
+      <Mark />
+      <div className={styles.body}>
+        <h1>
+          <span className={styles.owner}>Elecmonkey’s</span> Railprint
+        </h1>
+        <p className={styles.figures}>
+          {figures.map(([value, unit]) => (
+            <span key={unit}>
+              <strong>{value}</strong> {unit}
+            </span>
+          ))}
+        </p>
+        <p className={styles.credit}>
+          地图数据{' '}
+          <a
+            href="https://www.openstreetmap.org/copyright"
+            target="_blank"
+            rel="noreferrer"
+          >
+            {attribution}
+          </a>
+        </p>
       </div>
-      <p className={styles.credit}>
-        数据{' '}
-        <a
-          href="https://www.openstreetmap.org/copyright"
-          target="_blank"
-          rel="noreferrer"
-        >
-          {attribution}
-        </a>
-      </p>
     </header>
   );
 }
