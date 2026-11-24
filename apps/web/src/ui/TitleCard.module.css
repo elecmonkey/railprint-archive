@@ -15,12 +15,12 @@
 .mark {
   flex: none;
   /*
-   * The text block is 60px of line boxes (20 + 2 + 18 + 2 + 4 + 14); the
+   * The text block is 56px of line boxes (20 + 2 + 18 + 2 + 14); the
    * mark runs from the top of the title's letters to the bottom of the
    * credit's characters.
    */
-  width: 59px;
-  height: 59px;
+  width: 55px;
+  height: 55px;
   margin-top: 2px;
 }
 
@@ -59,7 +59,7 @@
 }
 
 .credit {
-  margin: 4px 0 0;
+  margin: 0;
   color: var(--rp-text-muted);
   font-size: 11px;
   line-height: 14px;
