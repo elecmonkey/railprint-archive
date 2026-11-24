@@ -2,7 +2,7 @@ import { fileURLToPath } from 'node:url';
 import type { Catalog, PathsFile } from '@railprint/catalog';
 import { loadRailNetwork, type RailNetwork } from '@railprint/railnet';
 import { beforeAll, expect, test } from 'rstack/test';
-import { buildRelease, ReleaseError } from '../src/build.ts';
+import { buildRelease, projectOnSegment, ReleaseError } from '../src/build.ts';
 import { featureCollection, lineFeature, releaseMeta } from '../src/write.ts';
 
 const fixture = fileURLToPath(
@@ -145,4 +145,15 @@ test('writes one feature per text line', () => {
   expect(
     releaseMeta(release, { source: 's', sha256: 'x' }).counts,
   ).toMatchObject({ lines: 2, stations: 4, endpoints: 4 });
+});
+
+test('projects a station onto the inside of a track edge', () => {
+  const hit = projectOnSegment([100.005, 30.001], [100, 30], [100.01, 30])!;
+  expect(hit.point[0]).toBeCloseTo(100.005, 6);
+  expect(hit.point[1]).toBeCloseTo(30, 6);
+  expect(hit.distance).toBeCloseTo(111, 0);
+  // Beyond either end of the edge there is nothing to extend to.
+  expect(
+    projectOnSegment([100.02, 30], [100, 30], [100.01, 30]),
+  ).toBeUndefined();
 });

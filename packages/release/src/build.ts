@@ -102,6 +102,62 @@ export class ReleaseError extends Error {
   }
 }
 
+/**
+ * The point on segment a→b closest to p, as [lon, lat] and its distance in
+ * metres, or undefined when that point is an end of the segment. Uses a local
+ * flat projection, fine for the few hundred metres of a station.
+ */
+export function projectOnSegment(
+  p: [number, number],
+  a: [number, number],
+  b: [number, number],
+): { point: [number, number]; distance: number } | undefined {
+  const k = Math.cos((p[1] * Math.PI) / 180);
+  const ax = (a[0] - p[0]) * k;
+  const ay = a[1] - p[1];
+  const dx = (b[0] - a[0]) * k;
+  const dy = b[1] - a[1];
+  const len2 = dx * dx + dy * dy;
+  if (!len2) return undefined;
+  const t = -(ax * dx + ay * dy) / len2;
+  if (t <= 0 || t >= 1) return undefined;
+  const point: [number, number] = [a[0] + t * (b[0] - a[0]), a[1] + t * dy];
+  return { point, distance: haversine(p[0], p[1], point[0], point[1]) };
+}
+
+/**
+ * Where a line drawn to an off-track station should end. Paths end at a
+ * track node, but in a station crossed by one long edge the nearest node can
+ * lie hundreds of metres away, and two lines ending there stop short on
+ * either side. When an edge leaving the end node passes closer to the station,
+ * the line continues along it to the point nearest the station.
+ */
+function stationEnd(
+  network: RailNetwork,
+  end: number,
+  previous: number,
+  place: RailPlace,
+): [number, number] | undefined {
+  const { lon, lat } = network;
+  const p: [number, number] = [place.lon, place.lat];
+  let best = haversine(place.lon, place.lat, lon[end]!, lat[end]!);
+  let point: [number, number] | undefined;
+  for (let s = network.adjOffset[end]!; s < network.adjOffset[end + 1]!; s++) {
+    const next = network.adjNode[s]!;
+    if (next === previous) continue;
+    const hit = projectOnSegment(
+      p,
+      [lon[end]!, lat[end]!],
+      [lon[next]!, lat[next]!],
+    );
+    if (hit && hit.distance < best) {
+      best = hit.distance;
+      point = hit.point;
+    }
+  }
+  return point;
+}
+
 /** Node indices of a stored path; throws when it no longer resolves. */
 function walkPath(
   network: RailNetwork,
@@ -147,9 +203,34 @@ export function buildRelease(
   }
 
   const { lon, lat } = network;
+  const placeByRef = new Map(
+    network.places.map((p) => [`${p.osm.type}/${p.osm.id}`, p]),
+  );
   const lines: ReleaseLine[] = [];
   /** Lines through each path node. */
   const nodeLines = new Map<number, Set<number>>();
+
+  /** A path's coordinates, reaching its off-track end stations. */
+  const drawn = (nodes: number[], from: string, to: string) => {
+    const coordinates: [number, number][] = nodes.map((n) => [
+      lon[n]!,
+      lat[n]!,
+    ]);
+    const start = placeByRef.get(from);
+    const end = placeByRef.get(to);
+    if (start && start.trackNode === undefined) {
+      const point = stationEnd(network, nodes[0]!, nodes[1]!, start);
+      if (point) coordinates.unshift(point);
+    }
+    if (end && end.trackNode === undefined) {
+      const point = stationEnd(network, nodes.at(-1)!, nodes.at(-2)!, end);
+      if (point) coordinates.push(point);
+    }
+    return coordinates.map(([x, y]): [number, number] => [
+      round6(x),
+      round6(y),
+    ]);
+  };
 
   catalog.lines.forEach((line, index) => {
     const osm = line.osm!;
@@ -181,7 +262,7 @@ export function buildRelease(
         ? Math.round((highSpeedM / lengthM) * 1000) / 1000
         : 0,
       relations: osm.relations ?? [],
-      coordinates: nodes.map((n) => [round6(lon[n]!), round6(lat[n]!)]),
+      coordinates: drawn(nodes, osm.from!, osm.to!),
     });
   });
 
@@ -284,9 +365,6 @@ export function buildRelease(
     }
   });
 
-  const placeByRef = new Map(
-    network.places.map((p) => [`${p.osm.type}/${p.osm.id}`, p]),
-  );
   const stations: ReleaseStation[] = [];
   const consumed = new Set<string>();
   for (const [ref, ep] of endpoints) {
