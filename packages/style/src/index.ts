@@ -46,6 +46,11 @@ export interface TerrainStyle {
   shade: number;
   /** 0–1: hillshade on the sea floor. */
   seaShade: number;
+  /**
+   * 0–1: opacity of the terrain, rivers and lakes over the background. The
+   * dark theme needs more for the relief to show.
+   */
+  opacity: number;
 }
 
 const FONT =
@@ -77,6 +82,7 @@ export const light: Theme = {
     landHigh: '#d9cfb8',
     shade: 0.6,
     seaShade: 0.12,
+    opacity: 0.5,
   },
   water: { river: '#9dbac4', riverWidth: 0.9, lakeOutline: '#9dbac4' },
   font: FONT,
@@ -108,6 +114,7 @@ export const dark: Theme = {
     landHigh: '#3a4248',
     shade: 0.65,
     seaShade: 0.15,
+    opacity: 0.7,
   },
   water: { river: '#2f4c58', riverWidth: 0.9, lakeOutline: '#2f4c58' },
   font: FONT,

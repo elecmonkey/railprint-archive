@@ -5,8 +5,6 @@ interface Props {
   onTheme: (theme: 'light' | 'dark') => void;
   onZoom: (factor: number) => void;
   onReset: () => void;
-  basemapOpacity: number;
-  onBasemapOpacity: (opacity: number) => void;
 }
 
 interface Option<T> {
@@ -43,14 +41,7 @@ function Segmented<T extends string>({
   );
 }
 
-export function Toolbar({
-  theme,
-  onTheme,
-  onZoom,
-  onReset,
-  basemapOpacity,
-  onBasemapOpacity,
-}: Props) {
+export function Toolbar({ theme, onTheme, onZoom, onReset }: Props) {
   return (
     <div className={styles.toolbar}>
       <Segmented
@@ -62,21 +53,6 @@ export function Toolbar({
           { value: 'dark', label: '深色' },
         ]}
       />
-      <label className={styles.slider}>
-        底图
-        <input
-          type="range"
-          min={0}
-          max={100}
-          step={5}
-          value={Math.round(basemapOpacity * 100)}
-          aria-label="底图透明度"
-          onChange={(event) =>
-            onBasemapOpacity(Number(event.target.value) / 100)
-          }
-        />
-        <span>{Math.round(basemapOpacity * 100)}%</span>
-      </label>
       <div className={styles.group}>
         <button type="button" aria-label="放大" onClick={() => onZoom(1.6)}>
           +

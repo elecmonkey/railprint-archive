@@ -60,7 +60,6 @@ export function App() {
   const release = useRelease();
   const basemap = useBasemap();
   const [terrainReady, setTerrainReady] = useState(false);
-  const [basemapOpacity, setBasemapOpacity] = useState(0.5);
   const [themeName, setThemeName] = useState<'light' | 'dark'>(preferredTheme);
   const [view, setView] = useState<View>();
   const size = useRef<{ width: number; height: number }>(undefined);
@@ -193,14 +192,14 @@ export function App() {
             theme={theme}
             {...(basemap.global ? { global: basemap.global } : {})}
             regional={basemap.regional}
-            opacity={basemapOpacity}
+            opacity={theme.terrain.opacity}
             onReady={setTerrainReady}
           />
           <MapCanvas
             data={release.data}
             {...(basemap.vectors ? { basemap: basemap.vectors } : {})}
             terrain={terrainReady}
-            basemapOpacity={basemapOpacity}
+            basemapOpacity={theme.terrain.opacity}
             theme={theme}
             view={view}
             onSize={onSize}
@@ -257,8 +256,6 @@ export function App() {
                   );
               }}
               onReset={reset}
-              basemapOpacity={basemapOpacity}
-              onBasemapOpacity={setBasemapOpacity}
             />
           )}
         </>
