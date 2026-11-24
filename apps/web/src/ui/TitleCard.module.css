@@ -1,0 +1,77 @@
+.card {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  padding: 10px 14px 8px 10px;
+  border: 1px solid var(--rp-border);
+  border-radius: 12px;
+  background: var(--rp-surface);
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mark {
+  flex: none;
+  width: 32px;
+  height: 32px;
+}
+
+.card h1 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0.02em;
+}
+
+.figures {
+  display: flex;
+  gap: 10px;
+  margin: 1px 0 0;
+  color: var(--rp-text-muted);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.figures strong {
+  color: var(--rp-text);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.credit {
+  margin: 8px 0 0;
+  padding-top: 6px;
+  border-top: 1px solid var(--rp-border);
+  color: var(--rp-text-muted);
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.credit a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--rp-border);
+  text-underline-offset: 2px;
+  pointer-events: auto;
+}
+
+.credit a:hover {
+  color: var(--rp-text);
+  text-decoration-color: currentColor;
+}
+
+@media (max-width: 600px) {
+  .card {
+    top: auto;
+    bottom: 16px;
+    left: auto;
+    right: 16px;
+  }
+}

@@ -125,6 +125,8 @@ export function cssVariables(theme: Theme): Record<string, string> {
     '--rp-surface': theme.surface,
     '--rp-border': theme.border,
     '--rp-font': theme.font,
+    '--rp-station-fill': theme.station.fill,
+    '--rp-station-stroke': theme.station.stroke,
   };
   for (const [category, style] of Object.entries(theme.lines)) {
     vars[`--rp-line-${category}`] = style.color;

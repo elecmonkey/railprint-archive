@@ -25,6 +25,7 @@ import {
 } from './map/selection';
 import { TerrainCanvas } from './map/TerrainCanvas';
 import { Details } from './ui/Details';
+import { TitleCard } from './ui/TitleCard';
 import { Toolbar } from './ui/Toolbar';
 import { Tooltip } from './ui/Tooltip';
 import styles from './App.module.css';
@@ -236,14 +237,10 @@ export function App() {
             onFocusStation={focusStation}
             onClose={() => select({})}
           />
-          <header className={styles.title}>
-            <h1>railprint</h1>
-            <p>
-              {release.meta.counts.lines} 条线路 ·{' '}
-              {release.meta.counts.lengthKm.toLocaleString()} km ·{' '}
-              {release.meta.counts.stations} 个车站
-            </p>
-          </header>
+          <TitleCard
+            counts={release.meta.counts}
+            attribution={release.meta.attribution}
+          />
           {view && (
             <Toolbar
               projection={view.kind}
@@ -268,12 +265,6 @@ export function App() {
               onBasemapOpacity={setBasemapOpacity}
             />
           )}
-          <footer className={styles.attribution}>
-            地图数据 {release.meta.attribution}
-            {release.meta.osm.timestamp
-              ? ` · ${release.meta.osm.timestamp.slice(0, 10)}`
-              : ''}
-          </footer>
         </>
       ) : (
         <p className={styles.status}>
