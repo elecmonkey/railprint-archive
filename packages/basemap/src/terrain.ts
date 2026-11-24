@@ -1,8 +1,10 @@
 import h5wasm from 'h5wasm/node';
 import type { Grid } from './raster.ts';
 
-/** ETOPO 2022 60″ grid: cell-centred, rows south to north, columns from 180°W. */
-const ETOPO_CELLS_PER_DEGREE = 60;
+/**
+ * ETOPO 2022 grids (60″ or 30″): cell-centred, rows south to north, columns
+ * from 180°W. The resolution is read from the file.
+ */
 const ETOPO_FILL = -99999;
 
 /**
@@ -13,19 +15,20 @@ export async function readElevation(
   etopoFile: string,
   grid: Grid,
 ): Promise<Float32Array> {
-  const block = ((grid.east - grid.west) / grid.width) * ETOPO_CELLS_PER_DEGREE;
-  if (Math.abs(block - Math.round(block)) > 1e-9 || Math.round(block) < 1) {
-    throw new Error(
-      `Grid cell must be a whole number of ETOPO cells (got ${block})`,
-    );
-  }
-  const b = Math.round(block);
-  const col0 = Math.round((grid.west + 180) * ETOPO_CELLS_PER_DEGREE);
-  const rowNorth = Math.round((grid.north + 90) * ETOPO_CELLS_PER_DEGREE);
   await h5wasm.ready;
   const file = new h5wasm.File(etopoFile, 'r');
   try {
     const z = file.get('z') as InstanceType<typeof h5wasm.Dataset>;
+    const cellsPerDegree = z.shape![1]! / 360;
+    const block = ((grid.east - grid.west) / grid.width) * cellsPerDegree;
+    if (Math.abs(block - Math.round(block)) > 1e-9 || Math.round(block) < 1) {
+      throw new Error(
+        `Grid cell must be a whole number of ETOPO cells (got ${block})`,
+      );
+    }
+    const b = Math.round(block);
+    const col0 = Math.round((grid.west + 180) * cellsPerDegree);
+    const rowNorth = Math.round((grid.north + 90) * cellsPerDegree);
     const out = new Float32Array(grid.width * grid.height);
     const bandRows = Math.max(1, Math.floor(2048 / b));
     for (let y0 = 0; y0 < grid.height; y0 += bandRows) {

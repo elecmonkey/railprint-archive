@@ -29,18 +29,27 @@ export const ASSETS_DIR = fileURLToPath(new URL('../assets/', import.meta.url));
 
 export interface TerrainSpec {
   name: string;
+  /** ETOPO source the texture is built from. */
+  elevation: keyof typeof ELEVATION;
   grid: Grid;
   /** Height exaggeration for the hillshade; coarser grids need more. */
   exaggeration: number;
 }
 
+const ELEVATION = {
+  '60s': 'etopo-2022-60s',
+  '30s': 'etopo-2022-30s',
+} as const;
+
 /**
  * A global texture small enough for any WebGL device, and a sharper one for
- * East Asia where the network is.
+ * East Asia where the network is: ETOPO's full 30″ resolution, bounded so
+ * that it stays within an 8192 px texture (China, Korea and most of Japan).
  */
 export const TERRAIN: TerrainSpec[] = [
   {
     name: 'global',
+    elevation: '60s',
     grid: {
       width: 3600,
       height: 1800,
@@ -53,15 +62,16 @@ export const TERRAIN: TerrainSpec[] = [
   },
   {
     name: 'east-asia',
+    elevation: '30s',
     grid: {
-      width: 4500,
-      height: 2400,
-      west: 70,
-      south: 15,
-      east: 145,
+      width: 8160,
+      height: 4560,
+      west: 74,
+      south: 17,
+      east: 142,
       north: 55,
     },
-    exaggeration: 4,
+    exaggeration: 3,
   },
 ];
 
@@ -69,8 +79,10 @@ const SOURCES = {
   land: 'ne-10m-land',
   lakes: 'ne-10m-lakes',
   rivers: 'ne-10m-rivers-lake-centerlines',
-  elevation: 'etopo-2022-60s',
-} as const;
+  ...Object.fromEntries(
+    Object.entries(ELEVATION).map(([k, id]) => [`etopo${k}`, id]),
+  ),
+} as Record<string, string>;
 
 export interface TerrainIndex {
   encoding: {
@@ -85,14 +97,11 @@ export interface TerrainIndex {
 
 async function sourcePaths(
   layout: DataLayout,
-): Promise<Record<keyof typeof SOURCES, string>> {
+): Promise<Record<string, string>> {
   const manifest = await loadManifest(layout.sourcesManifest);
   const lock = await readLock(layout.sourcesLock);
-  const out = {} as Record<keyof typeof SOURCES, string>;
-  for (const [key, id] of Object.entries(SOURCES) as [
-    keyof typeof SOURCES,
-    string,
-  ][]) {
+  const out: Record<string, string> = {};
+  for (const [key, id] of Object.entries(SOURCES)) {
     const source = manifest.sources.find(
       (s) => s.id === id,
     ) as SourceDefinition;
@@ -128,14 +137,18 @@ export async function buildBasemap(
   const out = ASSETS_DIR;
   await mkdir(out, { recursive: true });
 
-  const land = await loadShapes(paths.land, join(cache, 'land'), 'ne_10m_land');
+  const land = await loadShapes(
+    paths.land!,
+    join(cache, 'land'),
+    'ne_10m_land',
+  );
   const lakes = await loadShapes(
-    paths.lakes,
+    paths.lakes!,
     join(cache, 'lakes'),
     'ne_10m_lakes',
   );
   const rivers = await loadShapes(
-    paths.rivers,
+    paths.rivers!,
     join(cache, 'rivers'),
     'ne_10m_rivers_lake_centerlines',
   );
@@ -157,7 +170,10 @@ export async function buildBasemap(
   };
   for (const spec of TERRAIN) {
     const started = Date.now();
-    const elevation = await readElevation(paths.elevation, spec.grid);
+    const elevation = await readElevation(
+      paths[`etopo${spec.elevation}`]!,
+      spec.grid,
+    );
     const shade = hillshade(elevation, spec.grid, spec.exaggeration);
     const landCover = rasterizeCoverage(landRings, spec.grid);
     const lakeCover = rasterizeCoverage(lakeRings, spec.grid);

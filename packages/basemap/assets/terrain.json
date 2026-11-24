@@ -23,11 +23,11 @@
       "name": "east-asia",
       "file": "terrain-east-asia.webp",
       "grid": {
-        "width": 4500,
-        "height": 2400,
-        "west": 70,
-        "south": 15,
-        "east": 145,
+        "width": 8160,
+        "height": 4560,
+        "west": 74,
+        "south": 17,
+        "east": 142,
         "north": 55
       }
     }

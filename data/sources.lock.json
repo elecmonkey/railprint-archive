@@ -1,6 +1,15 @@
 {
   "version": 1,
   "entries": {
+    "etopo-2022-30s": {
+      "id": "etopo-2022-30s",
+      "url": "https://www.ngdc.noaa.gov/thredds/fileServer/global/ETOPO2022/30s/30s_surface_elev_netcdf/ETOPO_2022_v1_30s_N90W180_surface.nc",
+      "path": "etopo/ETOPO_2022_v1_30s_N90W180_surface.nc",
+      "bytes": 1642335281,
+      "sha256": "3d76cea4fca0a056b6d8c4bcf7f4073465b975489849235309e65d44ed4ed404",
+      "lastModified": "Tue, 04 Oct 2022 21:56:57 GMT",
+      "fetchedAt": "2026-11-24T04:16:52.174Z"
+    },
     "etopo-2022-60s": {
       "id": "etopo-2022-60s",
       "url": "https://www.ngdc.noaa.gov/thredds/fileServer/global/ETOPO2022/60s/60s_surface_elev_netcdf/ETOPO_2022_v1_60s_N90W180_surface.nc",
@@ -65,6 +74,21 @@
       "lastModified": "Sun, 22 Nov 2026 23:35:11 GMT",
       "fetchedAt": "2026-11-23T12:00:45.965Z"
     },
+    "osm-japan": {
+      "id": "osm-japan",
+      "url": "https://download.geofabrik.de/asia/japan-latest.osm.pbf",
+      "resolvedUrl": "https://download.geofabrik.de/asia/japan/japan-261122.osm.pbf",
+      "path": "osm/japan-latest.osm.pbf",
+      "bytes": 2579639449,
+      "sha256": "22a867a915f63f6439333881f598919c7f2c7cb7c74a88212bad12f095aa92f9",
+      "upstreamChecksum": {
+        "algorithm": "md5",
+        "value": "22c52a9c09c1a072fe1d2f2adda22020"
+      },
+      "etag": "\"99c22c99-660e69bcff2bd\"",
+      "lastModified": "Mon, 23 Nov 2026 00:23:53 GMT",
+      "fetchedAt": "2026-11-24T03:47:00.751Z"
+    },
     "osm-land-polygons": {
       "id": "osm-land-polygons",
       "url": "https://osmdata.openstreetmap.de/download/land-polygons-split-4326.zip",
@@ -84,6 +108,21 @@
       "etag": "\"6b039e90-1752174\"",
       "lastModified": "Mon, 23 Nov 2026 02:01:52 GMT",
       "fetchedAt": "2026-11-23T11:36:20.866Z"
+    },
+    "osm-south-korea": {
+      "id": "osm-south-korea",
+      "url": "https://download.geofabrik.de/asia/south-korea-latest.osm.pbf",
+      "resolvedUrl": "https://download.geofabrik.de/asia/south-korea/south-korea-261122.osm.pbf",
+      "path": "osm/south-korea-latest.osm.pbf",
+      "bytes": 292540110,
+      "sha256": "224b7245499ec1c29aa5d0da06daf249a5793cfa85f7327667bb92f570357096",
+      "upstreamChecksum": {
+        "algorithm": "md5",
+        "value": "8a64edd1915649f2c79f428a534530c1"
+      },
+      "etag": "\"116fcece-660eb73696bd0\"",
+      "lastModified": "Mon, 23 Nov 2026 06:10:30 GMT",
+      "fetchedAt": "2026-11-23T17:59:41.279Z"
     }
   }
 }
