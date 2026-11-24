@@ -18,7 +18,6 @@ import { MapCanvas } from './map/MapCanvas';
 import {
   readHash,
   selectFromHit,
-  sharedAt,
   writeHash,
   type Selection,
 } from './map/selection';
@@ -66,7 +65,6 @@ export function App() {
   const [selection, setSelection] = useState<Selection>(() =>
     readHash(window.location.hash),
   );
-  const [shared, setShared] = useState<string[]>([]);
   const [hover, setHover] = useState<{ hit: Hit; x: number; y: number }>();
   const theme = themes[themeName];
   const bounds = useMemo<Bounds | undefined>(
@@ -101,10 +99,7 @@ export function App() {
     return result;
   }, [known, hover]);
 
-  const select = useCallback((next: Selection, sharedIds: string[] = []) => {
-    setSelection(next);
-    setShared(sharedIds);
-  }, []);
+  const select = useCallback((next: Selection) => setSelection(next), []);
 
   // The selection is in the URL, so a link opens the same line or station.
   useEffect(() => {
@@ -126,10 +121,7 @@ export function App() {
     return () => window.removeEventListener('keydown', onKey);
   }, [select]);
 
-  const onPick = (hit: Hit) => {
-    const next = selectFromHit(known, hit);
-    select(next, next.station ? [] : sharedAt(hit));
-  };
+  const onPick = (hit: Hit) => select(selectFromHit(known, hit));
 
   const focusLine = (line: RenderLine) => {
     const s = size.current;
@@ -223,13 +215,7 @@ export function App() {
             selection={known}
             lines={index.lines}
             stations={index.stations}
-            shared={shared}
-            onSelect={(next) =>
-              select(
-                next,
-                next.line && shared.includes(next.line) ? shared : [],
-              )
-            }
+            onSelect={select}
             onFocusLine={focusLine}
             onFocusStation={focusStation}
             onClose={() => select({})}

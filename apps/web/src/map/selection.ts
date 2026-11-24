@@ -17,20 +17,8 @@ export function selectFromHit(current: Selection, hit: Hit): Selection {
       ? { line: current.line, station: osm }
       : { station: osm };
   }
-  if (hit.here > 0) {
-    const ids = hit.lines.slice(0, hit.here).map((l) => l.line.properties.id);
-    // Clicking shared track again moves on to the next line there.
-    const at = current.line ? ids.indexOf(current.line) : -1;
-    return { line: ids[(at + 1) % ids.length]! };
-  }
-  return {};
-}
-
-/** Lines sharing the clicked place, when there is more than one. */
-export function sharedAt(hit: Hit): string[] {
-  return hit.here > 1
-    ? hit.lines.slice(0, hit.here).map((l) => l.line.properties.id)
-    : [];
+  const top = hit.lines[0];
+  return top ? { line: top.line.properties.id } : {};
 }
 
 export function readHash(hash: string): Selection {

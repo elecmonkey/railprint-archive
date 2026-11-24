@@ -270,7 +270,7 @@ test('picks nothing on the far side of the globe', async () => {
       tolerance: 8,
       stations: () => true,
     });
-    expect(hit).toEqual({ lines: [], here: 0 });
+    expect(hit).toEqual({ lines: [] });
   }
 });
 

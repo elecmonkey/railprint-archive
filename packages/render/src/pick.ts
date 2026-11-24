@@ -103,12 +103,10 @@ export interface LineHit {
 export interface Hit {
   station?: RenderStation;
   /**
-   * Lines near the pointer. Lines sharing the nearest place come first, the
-   * one drawn on top leading; farther lines follow by distance.
+   * Lines near the pointer, nearest first. Where lines overlap on screen, the
+   * one drawn on top comes first, as that is the one the reader sees.
    */
   lines: LineHit[];
-  /** How many leading `lines` share the nearest place, as on shared track. */
-  here: number;
 }
 
 export interface PickOptions {
@@ -160,7 +158,7 @@ export class Picker {
     const projection = createProjection(view, width, height);
     const visible = (c: [number, number]) =>
       geoDistance(c, view.center) < Math.PI / 2 - 0.01;
-    const hit: Hit = { lines: [], here: 0 };
+    const hit: Hit = { lines: [] };
 
     if (stations) {
       let best = tolerance + 2;
@@ -248,7 +246,6 @@ export class Picker {
         a.distance - b.distance,
     );
     hit.lines = lines;
-    hit.here = lines.filter(here).length;
     return hit;
   }
 }

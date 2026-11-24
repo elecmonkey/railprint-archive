@@ -13,8 +13,6 @@ interface Props {
   selection: Selection;
   lines: Map<string, RenderLine>;
   stations: Map<string, RenderStation>;
-  /** Other lines on the track that was clicked, including the selected one. */
-  shared: string[];
   onSelect: (selection: Selection) => void;
   onFocusLine: (line: RenderLine) => void;
   onFocusStation: (station: RenderStation) => void;
@@ -53,14 +51,11 @@ export function Details(props: Props) {
 function LineDetails({
   data,
   line,
-  lines,
-  shared,
   onSelect,
   onFocusLine,
 }: Props & { line: RenderLine }) {
   const p = line.properties;
   const stops = lineStops(data, line);
-  const others = shared.filter((id) => id !== p.id && lines.has(id));
   return (
     <>
       <header className={styles.header}>
@@ -115,20 +110,6 @@ function LineDetails({
           </a>
         ))}
       </div>
-      {others.length > 0 && (
-        <section>
-          <h3>同一线位的其他线路</h3>
-          <ul className={styles.links}>
-            {others.map((id) => (
-              <LineRow
-                key={id}
-                line={lines.get(id)!}
-                onClick={() => onSelect({ line: id })}
-              />
-            ))}
-          </ul>
-        </section>
-      )}
       <section>
         <h3>沿线车站</h3>
         <ol className={styles.stops}>

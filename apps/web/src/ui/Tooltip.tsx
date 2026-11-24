@@ -17,8 +17,6 @@ interface Props {
   height: number;
 }
 
-/** Most other lines named in the tooltip before "等 n 条". */
-const NAMED = 2;
 const OFFSET = 14;
 
 /** Summary of what is under the mouse; the detail panel has the rest. */
@@ -59,9 +57,6 @@ function LineSummary({ data, hit }: { data: RenderData; hit: Hit }) {
   const top = hit.lines[0]!;
   const line = top.line.properties;
   const section = sectionAt(lineStops(data, top.line), top.km);
-  const others = hit.lines
-    .slice(1, hit.here)
-    .map((l) => l.line.properties.name);
   return (
     <>
       <p className={styles.name}>
@@ -80,12 +75,6 @@ function LineSummary({ data, hit }: { data: RenderData; hit: Hit }) {
           <span className={styles.muted}>区间</span>{' '}
           {section[0].station.properties.name}—
           {section[1].station.properties.name}
-        </p>
-      )}
-      {others.length > 0 && (
-        <p className={styles.muted}>
-          同线位还有 {others.slice(0, NAMED).join('、')}
-          {others.length > NAMED ? ` 等 ${others.length} 条` : ''}
         </p>
       )}
     </>
