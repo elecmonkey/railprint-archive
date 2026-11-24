@@ -9,27 +9,16 @@ export const MAX_CENTER_LAT = 80;
  * latitude, with longitude scaled so horizontal motion feels even at any
  * latitude.
  */
-export function panView(
-  view: View,
-  dx: number,
-  dy: number,
-  width: number,
-  height: number,
-): View {
-  if (view.kind === 'globe') {
-    const ppd = view.pixelsPerDegree;
-    const cos = Math.max(0.2, Math.cos((view.center[1] * Math.PI) / 180));
-    const lat = Math.max(
-      -MAX_CENTER_LAT,
-      Math.min(MAX_CENTER_LAT, view.center[1] + dy / ppd),
-    );
-    let lon = view.center[0] - dx / (ppd * cos);
-    lon = ((((lon + 180) % 360) + 360) % 360) - 180;
-    return { ...view, center: [lon, lat] };
-  }
-  const projection = createProjection(view, width, height);
-  const center = projection.invert?.([width / 2 - dx, height / 2 - dy]);
-  return center ? { ...view, center: [center[0], center[1]] } : view;
+export function panView(view: View, dx: number, dy: number): View {
+  const ppd = view.pixelsPerDegree;
+  const cos = Math.max(0.2, Math.cos((view.center[1] * Math.PI) / 180));
+  const lat = Math.max(
+    -MAX_CENTER_LAT,
+    Math.min(MAX_CENTER_LAT, view.center[1] + dy / ppd),
+  );
+  let lon = view.center[0] - dx / (ppd * cos);
+  lon = ((((lon + 180) % 360) + 360) % 360) - 180;
+  return { ...view, center: [lon, lat] };
 }
 
 /** Wheel input, normalised to CSS pixels. */
@@ -68,7 +57,7 @@ export function wheelView(
       height,
     );
   }
-  return panView(view, -dx, -dy, width, height);
+  return panView(view, -dx, -dy);
 }
 
 /**
@@ -89,8 +78,7 @@ export function zoomView(
     pixelsPerDegree: clampZoom(view.pixelsPerDegree * factor),
   };
   if (!target || !Number.isFinite(target[0])) return zoomed;
-  // On the flat map moving the centre is a translation and one step is exact;
-  // on the globe it is a rotation, so refine a few times.
+  // Moving the centre rotates the globe, so refine a few times.
   for (let i = 0; i < 6; i++) {
     const after = createProjection(zoomed, width, height);
     const moved = after(target);

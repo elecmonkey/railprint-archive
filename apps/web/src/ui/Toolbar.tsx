@@ -1,10 +1,7 @@
-import type { ProjectionKind } from '@railprint/render';
 import styles from './Toolbar.module.css';
 
 interface Props {
-  projection: ProjectionKind;
   theme: 'light' | 'dark';
-  onProjection: (kind: ProjectionKind) => void;
   onTheme: (theme: 'light' | 'dark') => void;
   onZoom: (factor: number) => void;
   onReset: () => void;
@@ -47,9 +44,7 @@ function Segmented<T extends string>({
 }
 
 export function Toolbar({
-  projection,
   theme,
-  onProjection,
   onTheme,
   onZoom,
   onReset,
@@ -58,15 +53,6 @@ export function Toolbar({
 }: Props) {
   return (
     <div className={styles.toolbar}>
-      <Segmented
-        label="投影"
-        value={projection}
-        onChange={onProjection}
-        options={[
-          { value: 'globe', label: '球体' },
-          { value: 'conic', label: '平面' },
-        ]}
-      />
       <Segmented
         label="主题"
         value={theme}

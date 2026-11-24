@@ -160,20 +160,15 @@ export function draw({
     ctx.fillStyle = theme.background;
     ctx.fillRect(0, 0, width, height);
   }
-  if (view.kind === 'globe') {
-    ctx.beginPath();
-    path({ type: 'Sphere' });
-    if (!terrain) {
-      ctx.fillStyle = theme.sea;
-      ctx.fill();
-    }
-    ctx.strokeStyle = theme.sphere;
-    ctx.lineWidth = 1;
-    ctx.stroke();
-  } else if (!terrain) {
+  ctx.beginPath();
+  path({ type: 'Sphere' });
+  if (!terrain) {
     ctx.fillStyle = theme.sea;
-    ctx.fillRect(0, 0, width, height);
+    ctx.fill();
   }
+  ctx.strokeStyle = theme.sphere;
+  ctx.lineWidth = 1;
+  ctx.stroke();
 
   // Rivers and lake outlines, most important first so they stay on top.
   if (basemap && basemapOpacity > 0) {
@@ -248,7 +243,6 @@ export function draw({
   // written on the station; symbols follow when zoomed in and the names move
   // beside them. Junctions (线路所) get a symbol but no name.
   const visible = (s: RenderStation) =>
-    view.kind !== 'globe' ||
     geoDistance(s.coordinates, view.center) < Math.PI / 2 - 0.01;
   const placed: {
     x: number;

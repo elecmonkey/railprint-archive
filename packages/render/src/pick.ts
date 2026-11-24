@@ -159,7 +159,7 @@ export class Picker {
   ): Hit {
     const projection = createProjection(view, width, height);
     const visible = (c: [number, number]) =>
-      view.kind !== 'globe' || geoDistance(c, view.center) < Math.PI / 2 - 0.01;
+      geoDistance(c, view.center) < Math.PI / 2 - 0.01;
     const hit: Hit = { lines: [], here: 0 };
 
     if (stations) {

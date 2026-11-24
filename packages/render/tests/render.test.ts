@@ -36,16 +36,14 @@ test('levelFor picks finer geometry as the map zooms in', () => {
   expect(levelFor(1e6)).toBe(LEVEL_TOLERANCES.length - 1);
 });
 
-test('projections put the view centre in the middle of the viewport', () => {
-  for (const kind of ['globe', 'conic'] as const) {
-    const view = {
-      ...fitView(kind, 800, 600),
-      center: [116.4, 39.9] as [number, number],
-    };
-    const [x, y] = createProjection(view, 800, 600)(view.center)!;
-    expect(x).toBeCloseTo(400, 6);
-    expect(y).toBeCloseTo(300, 6);
-  }
+test('the projection puts the view centre in the middle of the viewport', () => {
+  const view = {
+    ...fitView(800, 600),
+    center: [116.4, 39.9] as [number, number],
+  };
+  const [x, y] = createProjection(view, 800, 600)(view.center)!;
+  expect(x).toBeCloseTo(400, 6);
+  expect(y).toBeCloseTo(300, 6);
 });
 
 const lines: LinesCollection = {
@@ -120,7 +118,7 @@ test('draws lines in their category colour, then stations and labels', () => {
     context: ctx,
     width: 800,
     height: 600,
-    view: { kind: 'conic', center: [105, 34], pixelsPerDegree: 120 },
+    view: { center: [105, 34], pixelsPerDegree: 120 },
     data,
     theme: light,
   });
@@ -135,7 +133,7 @@ test('hides stations on the far side of the globe', () => {
     context: ctx,
     width: 800,
     height: 600,
-    view: { kind: 'globe', center: [-75, -34], pixelsPerDegree: 50 },
+    view: { center: [-75, -34], pixelsPerDegree: 50 },
     data: prepareData(lines, stations),
     theme: light,
   });
@@ -159,40 +157,35 @@ test('prepares the real release without errors', () => {
 });
 
 test('fitView fits the bounds into the padded viewport', () => {
-  const view = fitView('conic', 1000, 500, [100, 20, 120, 40], 50);
+  const view = fitView(1000, 500, [100, 20, 120, 40], 50);
   expect(view.center).toEqual([110, 30]);
   // Height is the limit: 400 px for 20 degrees of latitude.
   expect(view.pixelsPerDegree).toBeCloseTo(20, 6);
 });
 
-test.each(['globe', 'conic'] as const)(
-  'terrain inverse projection matches d3 (%s)',
-  async (kind) => {
-    const { invertPoint } = await import('../src/terrain.ts');
-    const view = {
-      kind,
-      center: [112.5, 31] as [number, number],
-      pixelsPerDegree: 37,
-    };
-    const projection = createProjection(view, 1200, 800);
-    for (const [sx, sy] of [
-      [600, 400],
-      [10, 20],
-      [1190, 790],
-      [300, 700],
-    ] as const) {
-      const ours = invertPoint(view, 1200, 800, sx, sy)!;
-      const d3 = projection.invert!([sx, sy])!;
-      expect(ours[0]).toBeCloseTo(d3[0], 6);
-      expect(ours[1]).toBeCloseTo(d3[1], 6);
-    }
-  },
-);
+test('terrain inverse projection matches d3', async () => {
+  const { invertPoint } = await import('../src/terrain.ts');
+  const view = {
+    center: [112.5, 31] as [number, number],
+    pixelsPerDegree: 37,
+  };
+  const projection = createProjection(view, 1200, 800);
+  for (const [sx, sy] of [
+    [600, 400],
+    [10, 20],
+    [1190, 790],
+    [300, 700],
+  ] as const) {
+    const ours = invertPoint(view, 1200, 800, sx, sy)!;
+    const d3 = projection.invert!([sx, sy])!;
+    expect(ours[0]).toBeCloseTo(d3[0], 6);
+    expect(ours[1]).toBeCloseTo(d3[1], 6);
+  }
+});
 
 test('terrain inverse projection is undefined off the globe', async () => {
   const { invertPoint } = await import('../src/terrain.ts');
   const view = {
-    kind: 'globe' as const,
     center: [0, 0] as [number, number],
     pixelsPerDegree: 1,
   };
@@ -221,7 +214,7 @@ test('endpoint names appear before symbols, all endpoints alike', () => {
       context: ctx,
       width: 800,
       height: 600,
-      view: { kind: 'conic', center: [105, 34], pixelsPerDegree },
+      view: { center: [105, 34], pixelsPerDegree },
       data,
       theme: light,
     });
@@ -237,7 +230,6 @@ test('picks the line and station under the pointer', async () => {
   const { Picker } = await import('../src/pick.ts');
   const data = prepareData(lines, stations);
   const view = {
-    kind: 'conic' as const,
     center: [105, 34] as [number, number],
     pixelsPerDegree: 100,
   };
@@ -266,7 +258,6 @@ test('picks nothing on the far side of the globe', async () => {
   const { Picker } = await import('../src/pick.ts');
   const data = prepareData(lines, stations);
   const view = {
-    kind: 'globe' as const,
     center: [-75, -34] as [number, number],
     pixelsPerDegree: 50,
   };
@@ -328,7 +319,6 @@ test('orders stops along a line and finds the section between them', async () =>
 test('a selected line is drawn on top with its stations named', () => {
   const { ctx, calls } = recorder();
   const view = {
-    kind: 'conic' as const,
     center: [105, 34] as [number, number],
     pixelsPerDegree: 40,
   };

@@ -5,23 +5,23 @@ import { panView, wheelView, zoomView } from '../src/map/interaction';
 const W = 800;
 const H = 600;
 
-test('dragging the flat map moves the centre opposite to the drag', () => {
-  const view: View = { kind: 'conic', center: [110, 30], pixelsPerDegree: 40 };
-  const moved = panView(view, 40, 0, W, H);
+test('dragging moves the centre opposite to the drag', () => {
+  const view: View = { center: [110, 30], pixelsPerDegree: 40 };
+  const moved = panView(view, 40, 0);
   expect(moved.center[0]).toBeLessThan(110);
   expect(moved.center[0]).toBeGreaterThan(108);
 });
 
 test('dragging the globe keeps north up and clamps latitude', () => {
-  const view: View = { kind: 'globe', center: [179, 60], pixelsPerDegree: 10 };
-  const moved = panView(view, -30, 300, W, H);
+  const view: View = { center: [179, 60], pixelsPerDegree: 10 };
+  const moved = panView(view, -30, 300);
   // 3° of screen motion is 6° of longitude at 60°N; wraps past 180°.
   expect(moved.center[0]).toBeCloseTo(-175, 6);
   expect(moved.center[1]).toBe(80);
 });
 
 test('scrolling pans and pinching zooms', () => {
-  const view: View = { kind: 'conic', center: [110, 30], pixelsPerDegree: 40 };
+  const view: View = { center: [110, 30], pixelsPerDegree: 40 };
   const input = {
     deltaX: 0,
     deltaY: 80,
@@ -43,16 +43,13 @@ test('scrolling pans and pinching zooms', () => {
   expect(pinched.center[0]).toBeCloseTo(110, 6);
 });
 
-test.each(['globe', 'conic'] as const)(
-  'zooming keeps the point under the cursor (%s)',
-  (kind) => {
-    const view: View = { kind, center: [110, 30], pixelsPerDegree: 40 };
-    const anchor: [number, number] = [600, 200];
-    const before = createProjection(view, W, H).invert!(anchor)!;
-    const zoomed = zoomView(view, 2, anchor, W, H);
-    expect(zoomed.pixelsPerDegree).toBe(80);
-    const [x, y] = createProjection(zoomed, W, H)(before)!;
-    expect(x).toBeCloseTo(anchor[0], 3);
-    expect(y).toBeCloseTo(anchor[1], 3);
-  },
-);
+test('zooming keeps the point under the cursor', () => {
+  const view: View = { center: [110, 30], pixelsPerDegree: 40 };
+  const anchor: [number, number] = [600, 200];
+  const before = createProjection(view, W, H).invert!(anchor)!;
+  const zoomed = zoomView(view, 2, anchor, W, H);
+  expect(zoomed.pixelsPerDegree).toBe(80);
+  const [x, y] = createProjection(zoomed, W, H)(before)!;
+  expect(x).toBeCloseTo(anchor[0], 3);
+  expect(y).toBeCloseTo(anchor[1], 3);
+});

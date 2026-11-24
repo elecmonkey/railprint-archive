@@ -1,5 +1,5 @@
 import type { Theme } from '@railprint/style';
-import { CONIC, createProjection, type View } from './projection.ts';
+import { createProjection, type View } from './projection.ts';
 
 /**
  * Terrain layer drawn with WebGL: every pixel is inverse-projected to
@@ -25,24 +25,6 @@ export interface TerrainTexture {
 }
 
 const DEG = Math.PI / 180;
-const HALF_PI = Math.PI / 2;
-
-/** n and F of d3's conic conformal raw projection for the standard parallels. */
-export function conicConstants(parallels = CONIC.parallels): {
-  n: number;
-  f: number;
-} {
-  const y0 = parallels[0] * DEG;
-  const y1 = parallels[1] * DEG;
-  const tany = (y: number) => Math.tan((HALF_PI + y) / 2);
-  const cy0 = Math.cos(y0);
-  const n =
-    y0 === y1
-      ? Math.sin(y0)
-      : Math.log(cy0 / Math.cos(y1)) / Math.log(tany(y1) / tany(y0));
-  const f = (cy0 * Math.pow(tany(y0), n)) / n;
-  return { n, f };
-}
 
 /**
  * Screen point (CSS pixels) to [lon, lat] in degrees, or undefined outside
@@ -60,36 +42,26 @@ export function invertPoint(
   const [tx, ty] = projection.translate();
   const x = (sx - tx) / k;
   const y = (ty - sy) / k;
-  if (view.kind === 'globe') {
-    const z = Math.hypot(x, y);
-    if (z > 1) return undefined;
-    const c = Math.asin(z);
-    const sc = Math.sin(c);
-    const cc = Math.cos(c);
-    const lambda = Math.atan2(x * sc, z * cc);
-    const phi = Math.asin(z ? (y * sc) / z : 0);
-    // Undo the rotation [-lon0, -lat0].
-    const dPhi = -view.center[1] * DEG;
-    const cosPhi = Math.cos(phi);
-    const px = Math.cos(lambda) * cosPhi;
-    const py = Math.sin(lambda) * cosPhi;
-    const pz = Math.sin(phi);
-    const lon =
-      Math.atan2(py, px * Math.cos(dPhi) + pz * Math.sin(dPhi)) / DEG +
-      view.center[0];
-    const lat =
-      Math.asin(
-        Math.max(-1, Math.min(1, pz * Math.cos(dPhi) - px * Math.sin(dPhi))),
-      ) / DEG;
-    return [((((lon + 180) % 360) + 360) % 360) - 180, lat];
-  }
-  const { n, f } = conicConstants();
-  const fy = f - y;
-  const r = Math.sign(n) * Math.hypot(x, fy);
-  let l = Math.atan2(x, Math.abs(fy)) * Math.sign(fy);
-  if (fy * n < 0) l -= Math.PI * Math.sign(x) * Math.sign(fy);
-  const lon = l / n / DEG + CONIC.meridian;
-  const lat = (2 * Math.atan(Math.pow(f / r, 1 / n)) - HALF_PI) / DEG;
+  const z = Math.hypot(x, y);
+  if (z > 1) return undefined;
+  const c = Math.asin(z);
+  const sc = Math.sin(c);
+  const cc = Math.cos(c);
+  const lambda = Math.atan2(x * sc, z * cc);
+  const phi = Math.asin(z ? (y * sc) / z : 0);
+  // Undo the rotation [-lon0, -lat0].
+  const dPhi = -view.center[1] * DEG;
+  const cosPhi = Math.cos(phi);
+  const px = Math.cos(lambda) * cosPhi;
+  const py = Math.sin(lambda) * cosPhi;
+  const pz = Math.sin(phi);
+  const lon =
+    Math.atan2(py, px * Math.cos(dPhi) + pz * Math.sin(dPhi)) / DEG +
+    view.center[0];
+  const lat =
+    Math.asin(
+      Math.max(-1, Math.min(1, pz * Math.cos(dPhi) - px * Math.sin(dPhi))),
+    ) / DEG;
   return [((((lon + 180) % 360) + 360) % 360) - 180, lat];
 }
 
@@ -126,13 +98,9 @@ out vec4 outColor;
 
 uniform vec2 u_size;          // CSS pixels
 uniform float u_ratio;        // device pixel ratio
-uniform int u_kind;           // 0 globe, 1 conic
 uniform float u_k;            // d3 scale
 uniform vec2 u_translate;     // d3 translate
 uniform vec2 u_center;        // globe centre, radians
-uniform float u_n;            // conic n
-uniform float u_f;            // conic F
-uniform float u_meridian;     // conic central meridian, radians
 
 uniform sampler2D u_global;
 uniform vec4 u_globalBox;     // west, south, east, north (degrees)
@@ -147,32 +115,23 @@ uniform float u_seaShade;
 uniform float u_flatShade;
 
 const float PI = 3.141592653589793;
-const float HALF_PI = 1.5707963267948966;
 
 bool invert(vec2 s, out vec2 lonlat) {
   float x = (s.x - u_translate.x) / u_k;
   float y = (u_translate.y - s.y) / u_k;
-  if (u_kind == 0) {
-    float z = length(vec2(x, y));
-    if (z > 1.0) return false;
-    float c = asin(z);
-    float sc = sin(c);
-    float cc = cos(c);
-    float lambda = atan(x * sc, z * cc);
-    float phi = asin(z > 0.0 ? y * sc / z : 0.0);
-    float dPhi = -u_center.y;
-    float cosPhi = cos(phi);
-    vec3 p = vec3(cos(lambda) * cosPhi, sin(lambda) * cosPhi, sin(phi));
-    float lon = atan(p.y, p.x * cos(dPhi) + p.z * sin(dPhi)) + u_center.x;
-    float lat = asin(clamp(p.z * cos(dPhi) - p.x * sin(dPhi), -1.0, 1.0));
-    lonlat = vec2(lon, lat);
-    return true;
-  }
-  float fy = u_f - y;
-  float r = sign(u_n) * length(vec2(x, fy));
-  float l = atan(x, abs(fy)) * sign(fy);
-  if (fy * u_n < 0.0) l -= PI * sign(x) * sign(fy);
-  lonlat = vec2(l / u_n + u_meridian, 2.0 * atan(pow(u_f / r, 1.0 / u_n)) - HALF_PI);
+  float z = length(vec2(x, y));
+  if (z > 1.0) return false;
+  float c = asin(z);
+  float sc = sin(c);
+  float cc = cos(c);
+  float lambda = atan(x * sc, z * cc);
+  float phi = asin(z > 0.0 ? y * sc / z : 0.0);
+  float dPhi = -u_center.y;
+  float cosPhi = cos(phi);
+  vec3 p = vec3(cos(lambda) * cosPhi, sin(lambda) * cosPhi, sin(phi));
+  float lon = atan(p.y, p.x * cos(dPhi) + p.z * sin(dPhi)) + u_center.x;
+  float lat = asin(clamp(p.z * cos(dPhi) - p.x * sin(dPhi), -1.0, 1.0));
+  lonlat = vec2(lon, lat);
   return true;
 }
 
@@ -335,10 +294,8 @@ export class TerrainRenderer {
     gl.useProgram(this.program);
 
     const projection = createProjection(view, width, height);
-    const { n, f } = conicConstants();
     gl.uniform2f(this.uniform('u_size'), width, height);
     gl.uniform1f(this.uniform('u_ratio'), ratio);
-    gl.uniform1i(this.uniform('u_kind'), view.kind === 'globe' ? 0 : 1);
     gl.uniform1f(this.uniform('u_k'), projection.scale());
     gl.uniform2f(this.uniform('u_translate'), ...projection.translate());
     gl.uniform2f(
@@ -346,9 +303,6 @@ export class TerrainRenderer {
       view.center[0] * DEG,
       view.center[1] * DEG,
     );
-    gl.uniform1f(this.uniform('u_n'), n);
-    gl.uniform1f(this.uniform('u_f'), f);
-    gl.uniform1f(this.uniform('u_meridian'), CONIC.meridian * DEG);
 
     const box = (g: TerrainGrid) => [g.west, g.south, g.east, g.north] as const;
     gl.activeTexture(gl.TEXTURE0);

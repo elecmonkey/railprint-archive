@@ -203,8 +203,6 @@ export function MapCanvas({
           start.view,
           event.clientX - start.x,
           event.clientY - start.y,
-          size.width,
-          size.height,
         );
         latest.current = next;
         onViewChange(next);

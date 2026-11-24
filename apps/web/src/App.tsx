@@ -6,7 +6,6 @@ import {
   type Bounds,
   type Highlight,
   type Hit,
-  type ProjectionKind,
   type RenderLine,
   type RenderStation,
   type View,
@@ -141,7 +140,6 @@ export function App() {
     const coveredX = wide ? PANEL.width : 0;
     const coveredY = wide ? 0 : Math.round(s.height * PANEL.sheet) + 8;
     const fitted = fitView(
-      view.kind,
       s.width - coveredX,
       s.height - coveredY,
       lineBounds(line),
@@ -151,7 +149,7 @@ export function App() {
       ...fitted,
       pixelsPerDegree: Math.min(fitted.pixelsPerDegree, FOCUS_ZOOM.line),
     };
-    setView(panView(zoomed, -coveredX / 2, -coveredY / 2, s.width, s.height));
+    setView(panView(zoomed, -coveredX / 2, -coveredY / 2));
   };
 
   const focusStation = (station: RenderStation) => {
@@ -175,14 +173,14 @@ export function App() {
   const onSize = useCallback(
     (width: number, height: number) => {
       size.current = { width, height };
-      setView((current) => current ?? fitView('globe', width, height, bounds));
+      setView((current) => current ?? fitView(width, height, bounds));
     },
     [bounds],
   );
 
-  const reset = (kind: ProjectionKind) => {
+  const reset = () => {
     if (size.current) {
-      setView(fitView(kind, size.current.width, size.current.height, bounds));
+      setView(fitView(size.current.width, size.current.height, bounds));
     }
   };
 
@@ -243,9 +241,7 @@ export function App() {
           />
           {view && (
             <Toolbar
-              projection={view.kind}
               theme={themeName}
-              onProjection={(kind) => setView({ ...view, kind })}
               onTheme={setThemeName}
               onZoom={(factor) => {
                 const s = size.current;
@@ -260,7 +256,7 @@ export function App() {
                     ),
                   );
               }}
-              onReset={() => reset(view.kind)}
+              onReset={reset}
               basemapOpacity={basemapOpacity}
               onBasemapOpacity={setBasemapOpacity}
             />

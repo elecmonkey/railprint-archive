@@ -16,14 +16,12 @@ export {
 } from './prepare.ts';
 export {
   clampZoom,
-  CONIC,
   createProjection,
   DEFAULT_BOUNDS,
   fitView,
   type Bounds,
   MAX_PIXELS_PER_DEGREE,
   MIN_PIXELS_PER_DEGREE,
-  type ProjectionKind,
   type View,
 } from './projection.ts';
 export {
@@ -54,7 +52,6 @@ export {
   type BasemapLine,
 } from './basemap.ts';
 export {
-  conicConstants,
   invertPoint,
   TerrainRenderer,
   type TerrainGrid,
