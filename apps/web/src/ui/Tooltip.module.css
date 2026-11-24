@@ -1,16 +1,18 @@
 .tooltip {
   position: absolute;
   z-index: 3;
+  display: grid;
+  grid-template-columns: 16px auto;
+  column-gap: 8px;
+  align-items: center;
   max-width: 280px;
-  padding: 8px 10px;
+  padding: 7px 12px 8px 10px;
   border: 1px solid var(--rp-border);
   border-radius: 8px;
   color: var(--rp-text);
   background: var(--rp-surface);
   backdrop-filter: blur(8px);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  font-size: 12px;
-  line-height: 18px;
   pointer-events: none;
 }
 
@@ -18,32 +20,64 @@
   margin: 0;
 }
 
+/* The icon sits beside the name; the second line lines up under the name. */
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+}
+
 .name {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 0 6px;
+  gap: 6px;
   font-size: 13px;
   font-weight: 600;
+  line-height: 20px;
 }
 
-.name .muted {
-  font-weight: 400;
-}
-
-.muted {
+.detail {
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   color: var(--rp-text-muted);
+  font-size: 12px;
+  line-height: 18px;
 }
 
-.swatch {
-  display: inline-block;
-  width: 14px;
-  height: 3px;
+.bar {
+  width: 16px;
+  height: 4px;
   border-radius: 2px;
 }
 
-.hint {
-  margin-top: 4px !important;
+.station {
+  width: 12px;
+  height: 12px;
+  fill: var(--rp-station-fill);
+  stroke: var(--rp-station-stroke);
+  stroke-width: 1.6;
+}
+
+.bars {
+  display: flex;
+  gap: 2px;
+}
+
+.bars span {
+  width: 3px;
+  height: 10px;
+  border-radius: 1.5px;
+}
+
+.tag {
+  padding: 0 4px;
+  border: 1px solid var(--rp-border);
+  border-radius: 4px;
   color: var(--rp-text-muted);
   font-size: 11px;
+  font-weight: 400;
+  line-height: 15px;
 }

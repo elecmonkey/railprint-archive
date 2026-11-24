@@ -27,7 +27,6 @@ export {
 export {
   lineStops,
   Picker,
-  sectionAt,
   type Hit,
   type LineHit,
   type LineStop,

@@ -274,8 +274,8 @@ test('picks nothing on the far side of the globe', async () => {
   }
 });
 
-test('orders stops along a line and finds the section between them', async () => {
-  const { lineStops, sectionAt } = await import('../src/pick.ts');
+test('orders stops along a line', async () => {
+  const { lineStops } = await import('../src/pick.ts');
   const more: StationsCollection = {
     type: 'FeatureCollection',
     features: [
@@ -312,8 +312,6 @@ test('orders stops along a line and finds the section between them', async () =>
     '乙',
   ]);
   expect(stops[2]!.km).toBeCloseTo(184.4, 0);
-  const section = sectionAt(stops, 100);
-  expect(section?.map((s) => s.station.properties.name)).toEqual(['甲', '丙']);
 });
 
 test('a selected line is drawn on top with its stations named', () => {

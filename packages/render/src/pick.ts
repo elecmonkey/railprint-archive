@@ -81,17 +81,6 @@ export function lineStops(data: RenderData, line: RenderLine): LineStop[] {
   return stops;
 }
 
-/** The two stops either side of `km` along a line, if any. */
-export function sectionAt(
-  stops: LineStop[],
-  km: number,
-): [LineStop, LineStop] | undefined {
-  for (let i = 1; i < stops.length; i++) {
-    if (km <= stops[i]!.km) return [stops[i - 1]!, stops[i]!];
-  }
-  return undefined;
-}
-
 export interface LineHit {
   line: RenderLine;
   /** Distance from the pointer in CSS pixels. */

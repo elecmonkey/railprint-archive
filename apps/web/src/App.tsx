@@ -202,8 +202,8 @@ export function App() {
           />
           {hover && size.current && (
             <Tooltip
-              data={release.data}
               hit={hover.hit}
+              lines={index.lines}
               x={hover.x}
               y={hover.y}
               width={size.current.width}
