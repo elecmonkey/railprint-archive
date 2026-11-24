@@ -3,44 +3,50 @@
   top: 16px;
   right: 16px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: flex-end;
-}
-
-.segmented,
-.group {
-  display: flex;
-  padding: 3px;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
   border: 1px solid var(--rp-border);
-  border-radius: 10px;
+  border-radius: 12px;
   background: var(--rp-surface);
   backdrop-filter: blur(8px);
 }
 
-.segmented button,
-.group button {
-  min-width: 36px;
-  padding: 6px 12px;
+.toolbar button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
   border: 0;
-  border-radius: 7px;
+  border-radius: 8px;
   color: var(--rp-text);
   background: transparent;
-  font: inherit;
-  font-size: 13px;
   cursor: pointer;
 }
 
-.segmented button:hover,
-.group button:hover {
+.toolbar button:hover {
   background: var(--rp-border);
 }
 
-.segmented .selected {
-  color: var(--rp-background);
-  background: var(--rp-text);
+.toolbar button:focus-visible {
+  outline: 2px solid var(--rp-text);
+  outline-offset: -2px;
 }
 
-.segmented .selected:hover {
-  background: var(--rp-text);
+.toolbar svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.divider {
+  width: 1px;
+  height: 18px;
+  margin: 0 4px;
+  background: var(--rp-border);
 }
