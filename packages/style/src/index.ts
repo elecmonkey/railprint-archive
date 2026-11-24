@@ -22,6 +22,8 @@ export interface Theme {
   land: string;
   /** Outline of the globe disc. */
   sphere: string;
+  /** Soft shadow around the globe that sets it off from the background. */
+  glow: { color: string; blur: number };
   text: string;
   textMuted: string;
   /** Halo behind labels and line casing. */
@@ -62,6 +64,7 @@ export const light: Theme = {
   sea: '#dbe6ea',
   land: '#f6f3ea',
   sphere: '#c6d3d8',
+  glow: { color: 'rgba(35, 60, 75, 0.22)', blur: 28 },
   text: '#23303a',
   textMuted: '#62707a',
   halo: '#f6f3ea',
@@ -94,6 +97,7 @@ export const dark: Theme = {
   sea: '#131c22',
   land: '#1d262c',
   sphere: '#2a363e',
+  glow: { color: 'rgba(120, 165, 185, 0.16)', blur: 32 },
   text: '#e4e9ec',
   textMuted: '#93a1aa',
   halo: '#1d262c',

@@ -16,6 +16,10 @@ export type DrawContext = Pick<
   | 'lineTo'
   | 'arc'
   | 'closePath'
+  | 'rect'
+  | 'clip'
+  | 'shadowColor'
+  | 'shadowBlur'
   | 'fill'
   | 'stroke'
   | 'fillRect'
@@ -160,6 +164,20 @@ export function draw({
     ctx.fillStyle = theme.background;
     ctx.fillRect(0, 0, width, height);
   }
+  // The glow is cast by the disc but only shows outside it, so the terrain
+  // layer underneath is not covered.
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(0, 0, width, height);
+  path({ type: 'Sphere' });
+  ctx.clip('evenodd');
+  ctx.beginPath();
+  path({ type: 'Sphere' });
+  ctx.shadowColor = theme.glow.color;
+  ctx.shadowBlur = theme.glow.blur;
+  ctx.fillStyle = theme.sphere;
+  ctx.fill();
+  ctx.restore();
   ctx.beginPath();
   path({ type: 'Sphere' });
   if (!terrain) {
