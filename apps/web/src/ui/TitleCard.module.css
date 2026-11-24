@@ -56,12 +56,3 @@
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
-
-@media (max-width: 600px) {
-  .card {
-    top: auto;
-    bottom: 32px;
-    left: auto;
-    right: 16px;
-  }
-}

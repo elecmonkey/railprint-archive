@@ -42,3 +42,29 @@
     opacity 0.5s ease,
     visibility 0s linear 0.5s;
 }
+
+/*
+ * On a phone the title card sits in the bottom-right corner with the OSM
+ * credit above it, so the card stays put when the credit fades. On wider
+ * screens the two keep their own corners.
+ */
+.corner {
+  display: contents;
+}
+
+@media (max-width: 600px) {
+  .corner {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
+
+  /* Doubled to outrank each child's own position rule. */
+  .corner.corner > * {
+    position: static;
+  }
+}

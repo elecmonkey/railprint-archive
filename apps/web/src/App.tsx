@@ -225,16 +225,18 @@ export function App() {
             onFocusStation={focusStation}
             onClose={() => select({})}
           />
-          <TitleCard counts={release.meta.counts} />
-          <p className={`${styles.attribution} ${moved ? styles.faded : ''}`}>
-            <a
-              href="https://www.openstreetmap.org/copyright"
-              target="_blank"
-              rel="noreferrer"
-            >
-              {release.meta.attribution}
-            </a>
-          </p>
+          <div className={styles.corner}>
+            <p className={`${styles.attribution} ${moved ? styles.faded : ''}`}>
+              <a
+                href="https://www.openstreetmap.org/copyright"
+                target="_blank"
+                rel="noreferrer"
+              >
+                {release.meta.attribution}
+              </a>
+            </p>
+            <TitleCard counts={release.meta.counts} />
+          </div>
           {view && (
             <Toolbar
               theme={themeName}

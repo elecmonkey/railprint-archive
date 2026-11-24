@@ -10,7 +10,7 @@ import {
   type View,
 } from '@railprint/render';
 import type { Theme } from '@railprint/style';
-import { panView, wheelView } from './interaction';
+import { panView, wheelView, zoomView } from './interaction';
 import styles from './MapCanvas.module.css';
 
 interface Props {
@@ -62,6 +62,14 @@ export function MapCanvas({
     view: View;
     moved: boolean;
   } | null>(null);
+  /** Pointers currently down, by id, in client coordinates. */
+  const pointers = useRef(new Map<number, { x: number; y: number }>());
+  /** A two-finger pinch: finger spread and midpoint when it began. */
+  const pinch = useRef<{
+    distance: number;
+    mid: [number, number];
+    view: View;
+  } | null>(null);
   const hoverFrame = useRef(0);
   const picker = useMemo(() => new Picker(data), [data]);
   // Latest view, so several input events within one frame build on each
@@ -89,6 +97,33 @@ export function MapCanvas({
     },
     [picker, size, highlight, theme],
   );
+
+  /** Spread and canvas-relative midpoint of the first two pointers. */
+  const fingers = () => {
+    const canvas = canvasRef.current;
+    const [a, b] = [...pointers.current.values()];
+    if (!canvas || !a || !b) return undefined;
+    const rect = canvas.getBoundingClientRect();
+    return {
+      distance: Math.max(1, Math.hypot(a.x - b.x, a.y - b.y)),
+      mid: [(a.x + b.x) / 2 - rect.left, (a.y + b.y) / 2 - rect.top] as [
+        number,
+        number,
+      ],
+    };
+  };
+
+  const release = (pointerId: number) => {
+    pointers.current.delete(pointerId);
+    if (!pinch.current) return;
+    pinch.current = null;
+    // Lifting one finger of a pinch carries on as a drag with the other,
+    // never as a click.
+    const [rest] = [...pointers.current.values()];
+    const current = latest.current;
+    drag.current =
+      rest && current ? { ...rest, view: current, moved: true } : null;
+  };
 
   const hover = (found: { hit: Hit; x: number; y: number } | undefined) => {
     const hit = found && !empty(found.hit) ? found : undefined;
@@ -171,6 +206,21 @@ export function MapCanvas({
       onPointerDown={(event) => {
         if (!view) return;
         event.currentTarget.setPointerCapture(event.pointerId);
+        pointers.current.set(event.pointerId, {
+          x: event.clientX,
+          y: event.clientY,
+        });
+        if (pointers.current.size === 2) {
+          const start = fingers();
+          const current = latest.current;
+          if (start && current) {
+            pinch.current = { ...start, view: current };
+            drag.current = null;
+            hover(undefined);
+          }
+          return;
+        }
+        if (pointers.current.size > 2) return;
         drag.current = {
           x: event.clientX,
           y: event.clientY,
@@ -179,6 +229,31 @@ export function MapCanvas({
         };
       }}
       onPointerMove={(event) => {
+        if (pointers.current.has(event.pointerId))
+          pointers.current.set(event.pointerId, {
+            x: event.clientX,
+            y: event.clientY,
+          });
+        const pinching = pinch.current;
+        if (pinching) {
+          const now = fingers();
+          if (!now || !size) return;
+          // Follow the midpoint, then scale by the change in spread around it.
+          const next = zoomView(
+            panView(
+              pinching.view,
+              now.mid[0] - pinching.mid[0],
+              now.mid[1] - pinching.mid[1],
+            ),
+            now.distance / pinching.distance,
+            now.mid,
+            size.width,
+            size.height,
+          );
+          latest.current = next;
+          onViewChange(next);
+          return;
+        }
         const start = drag.current;
         if (!start) {
           if (event.pointerType !== 'mouse') return;
@@ -208,6 +283,11 @@ export function MapCanvas({
         onViewChange(next);
       }}
       onPointerUp={(event) => {
+        if (pinch.current) {
+          release(event.pointerId);
+          return;
+        }
+        pointers.current.delete(event.pointerId);
         const start = drag.current;
         drag.current = null;
         if (!start || start.moved) return;
@@ -218,7 +298,10 @@ export function MapCanvas({
         );
         if (found) onPick(found.hit);
       }}
-      onPointerCancel={() => (drag.current = null)}
+      onPointerCancel={(event) => {
+        release(event.pointerId);
+        drag.current = null;
+      }}
       onPointerLeave={() => {
         cancelAnimationFrame(hoverFrame.current);
         if (!drag.current) hover(undefined);
