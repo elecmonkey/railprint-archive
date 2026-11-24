@@ -9,7 +9,7 @@ export {
   type DrawStats,
 } from './draw.ts';
 export {
-  dataBounds,
+  dataPoints,
   LEVEL_TOLERANCES,
   levelFor,
   prepareData,
@@ -18,8 +18,10 @@ export {
   clampZoom,
   createProjection,
   DEFAULT_BOUNDS,
+  fitPoints,
   fitView,
   type Bounds,
+  type Padding,
   MAX_PIXELS_PER_DEGREE,
   MIN_PIXELS_PER_DEGREE,
   type View,

@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   clampZoom,
-  dataBounds,
+  dataPoints,
+  fitPoints,
   fitView,
   type Bounds,
+  type Padding,
   type Highlight,
   type Hit,
   type RenderLine,
@@ -44,6 +46,17 @@ const FOCUS_ZOOM = { line: 1200, station: 400 } as const;
  */
 const PANEL = { width: 332, narrow: 600, sheet: 0.45 } as const;
 
+/**
+ * Room the overview leaves around the network: clear of the title card and
+ * toolbar at the top, or on a phone of the toolbar above and the title card
+ * below (see TitleCard.module.css and App.module.css).
+ */
+function overviewPadding(width: number): Padding {
+  return width > PANEL.narrow
+    ? { top: 96, right: 48, bottom: 48, left: 48 }
+    : { top: 72, right: 24, bottom: 120, left: 24 };
+}
+
 function lineBounds(line: RenderLine): Bounds {
   const bounds: Bounds = [Infinity, Infinity, -Infinity, -Infinity];
   for (const [lon, lat] of line.levels[0]!) {
@@ -73,8 +86,9 @@ export function App() {
   );
   const [hover, setHover] = useState<{ hit: Hit; x: number; y: number }>();
   const theme = themes[themeName];
-  const bounds = useMemo<Bounds | undefined>(
-    () => (release.status === 'ready' ? dataBounds(release.data) : undefined),
+  // The whole network, whatever this release contains.
+  const extent = useMemo(
+    () => (release.status === 'ready' ? dataPoints(release.data) : []),
     [release],
   );
 
@@ -170,14 +184,18 @@ export function App() {
   const onSize = useCallback(
     (width: number, height: number) => {
       size.current = { width, height };
-      setView((current) => current ?? fitView(width, height, bounds));
+      setView(
+        (current) =>
+          current ?? fitPoints(width, height, extent, overviewPadding(width)),
+      );
     },
-    [bounds],
+    [extent],
   );
 
   const reset = () => {
     if (size.current) {
-      moveView(fitView(size.current.width, size.current.height, bounds));
+      const { width, height } = size.current;
+      moveView(fitPoints(width, height, extent, overviewPadding(width)));
     }
   };
 

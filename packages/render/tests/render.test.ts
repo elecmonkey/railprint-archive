@@ -4,7 +4,7 @@ import { light } from '@railprint/style';
 import { expect, test } from 'rstack/test';
 import { draw, type DrawContext } from '../src/draw.ts';
 import { levelFor, prepareData, LEVEL_TOLERANCES } from '../src/prepare.ts';
-import { createProjection, fitView } from '../src/projection.ts';
+import { createProjection, fitPoints, fitView } from '../src/projection.ts';
 import { simplify } from '../src/simplify.ts';
 import type { LinesCollection, StationsCollection } from '../src/types.ts';
 
@@ -160,6 +160,33 @@ test('fitView fits the bounds into the padded viewport', () => {
   expect(view.center).toEqual([110, 30]);
   // Height is the limit: 400 px for 20 degrees of latitude.
   expect(view.pixelsPerDegree).toBeCloseTo(20, 6);
+});
+
+test('fitPoints keeps a wide network inside the padded viewport', () => {
+  // From Xinjiang to Hokkaido: far enough east that a box in degrees,
+  // corrected only at the middle latitude, would push the corners off screen.
+  const points: [number, number][] = [
+    [87, 43],
+    [109, 18],
+    [121, 31],
+    [144.3, 44],
+    [140.7, 40.8],
+  ];
+  const padding = { top: 96, right: 48, bottom: 48, left: 48 };
+  const view = fitPoints(1400, 900, points, padding);
+  const projection = createProjection(view, 1400, 900);
+  const xs = points.map((p) => projection(p)![0]);
+  const ys = points.map((p) => projection(p)![1]);
+  for (const x of xs) expect(x).toBeGreaterThanOrEqual(48 - 0.5);
+  for (const x of xs) expect(x).toBeLessThanOrEqual(1400 - 48 + 0.5);
+  for (const y of ys) expect(y).toBeGreaterThanOrEqual(96 - 0.5);
+  for (const y of ys) expect(y).toBeLessThanOrEqual(900 - 48 + 0.5);
+  // It fills the padded area along at least one axis.
+  const filled = Math.max(
+    (Math.max(...xs) - Math.min(...xs)) / (1400 - 96),
+    (Math.max(...ys) - Math.min(...ys)) / (900 - 144),
+  );
+  expect(filled).toBeCloseTo(1, 2);
 });
 
 test('terrain inverse projection matches d3', async () => {

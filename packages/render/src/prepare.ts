@@ -1,5 +1,4 @@
 import { light } from '@railprint/style';
-import type { Bounds } from './projection.ts';
 import { simplify } from './simplify.ts';
 import type {
   LinesCollection,
@@ -44,16 +43,7 @@ export function levelFor(pixelsPerDegree: number): number {
   return index < 0 ? LEVEL_TOLERANCES.length - 1 : index;
 }
 
-/** Extent of all line geometry. */
-export function dataBounds(data: RenderData): Bounds {
-  const bounds: Bounds = [Infinity, Infinity, -Infinity, -Infinity];
-  for (const line of data.lines) {
-    for (const [lon, lat] of line.levels[0]!) {
-      bounds[0] = Math.min(bounds[0], lon);
-      bounds[1] = Math.min(bounds[1], lat);
-      bounds[2] = Math.max(bounds[2], lon);
-      bounds[3] = Math.max(bounds[3], lat);
-    }
-  }
-  return bounds;
+/** Every line's coarse geometry, for fitting the whole network on screen. */
+export function dataPoints(data: RenderData): [number, number][] {
+  return data.lines.flatMap((line) => line.levels[0]!);
 }
