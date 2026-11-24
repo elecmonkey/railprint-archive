@@ -1,3 +1,4 @@
+import { chunk, type Chunk } from './chunks.ts';
 import { simplify } from './simplify.ts';
 
 /** Feature in data/release/basemap/{rivers,lakes}.geojson. */
@@ -15,8 +16,8 @@ export interface BasemapCollection {
 export interface BasemapLine {
   /** Natural Earth scale rank: lower is more important. */
   rank: number;
-  /** [coarse, full] geometry. */
-  levels: [number, number][][][];
+  /** [coarse, full] geometry, every part cut into chunks. */
+  levels: [Chunk[], Chunk[]];
 }
 
 export interface BasemapData {
@@ -30,8 +31,10 @@ function prepare(collection: BasemapCollection): BasemapLine[] {
   return collection.features.map((f) => ({
     rank: f.properties.rank,
     levels: [
-      f.geometry.coordinates.map((part) => simplify(part, COARSE_TOLERANCE)),
-      f.geometry.coordinates,
+      f.geometry.coordinates.flatMap((part) =>
+        chunk(simplify(part, COARSE_TOLERANCE)),
+      ),
+      f.geometry.coordinates.flatMap(chunk),
     ],
   }));
 }

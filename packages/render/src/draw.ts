@@ -1,6 +1,7 @@
 import { geoDistance, geoPath } from 'd3-geo';
 import type { LineCategory, Theme } from '@railprint/style';
 import { maxRank, type BasemapData } from './basemap.ts';
+import { chunkVisible, viewRadius, type Chunk } from './chunks.ts';
 import { levelFor } from './prepare.ts';
 import { createProjection, type View } from './projection.ts';
 import type { RenderData, RenderLine, RenderStation } from './types.ts';
@@ -158,6 +159,13 @@ export function draw({
   const ppd = view.pixelsPerDegree;
   const level = levelFor(ppd);
   const scale = widthScale(ppd);
+  // Only the parts of lines near the viewport are projected and drawn.
+  const reach = viewRadius(view, width, height);
+  const trace = (chunks: Chunk[]) => {
+    for (const c of chunks)
+      if (chunkVisible(c, view.center, reach))
+        path({ type: 'LineString', coordinates: c.points });
+  };
 
   ctx.save();
   if (!terrain) {
@@ -165,19 +173,23 @@ export function draw({
     ctx.fillRect(0, 0, width, height);
   }
   // The glow is cast by the disc but only shows outside it, so the terrain
-  // layer underneath is not covered.
-  ctx.save();
-  ctx.beginPath();
-  ctx.rect(0, 0, width, height);
-  path({ type: 'Sphere' });
-  ctx.clip('evenodd');
-  ctx.beginPath();
-  path({ type: 'Sphere' });
-  ctx.shadowColor = theme.glow.color;
-  ctx.shadowBlur = theme.glow.blur;
-  ctx.fillStyle = theme.sphere;
-  ctx.fill();
-  ctx.restore();
+  // layer underneath is not covered. Once the globe fills the viewport there
+  // is no edge to glow.
+  const edgeShown = reach >= Math.PI / 2;
+  if (edgeShown) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(0, 0, width, height);
+    path({ type: 'Sphere' });
+    ctx.clip('evenodd');
+    ctx.beginPath();
+    path({ type: 'Sphere' });
+    ctx.shadowColor = theme.glow.color;
+    ctx.shadowBlur = theme.glow.blur;
+    ctx.fillStyle = theme.sphere;
+    ctx.fill();
+    ctx.restore();
+  }
   ctx.beginPath();
   path({ type: 'Sphere' });
   if (!terrain) {
@@ -200,7 +212,7 @@ export function draw({
     ctx.beginPath();
     for (const lake of basemap.lakes) {
       if (lake.rank > rank) break;
-      path({ type: 'MultiLineString', coordinates: lake.levels[detail]! });
+      trace(lake.levels[detail]);
     }
     ctx.stroke();
     ctx.strokeStyle = theme.water.river;
@@ -213,7 +225,7 @@ export function draw({
       for (const river of basemap.rivers) {
         if (river.rank > high) break;
         if (river.rank < low) continue;
-        path({ type: 'MultiLineString', coordinates: river.levels[detail]! });
+        trace(river.levels[detail]);
       }
       ctx.stroke();
     }
@@ -229,7 +241,7 @@ export function draw({
     const category: LineCategory = data.lines[i]!.category;
     ctx.beginPath();
     for (; i < data.lines.length && data.lines[i]!.category === category; i++) {
-      path({ type: 'LineString', coordinates: data.lines[i]!.levels[level]! });
+      trace(data.lines[i]!.chunks[level]!);
     }
     const style = theme.lines[category];
     ctx.strokeStyle = style.color;
@@ -242,7 +254,7 @@ export function draw({
     const style = theme.lines[line.category];
     const width = Math.max(2, style.width * scale * factor);
     ctx.beginPath();
-    path({ type: 'LineString', coordinates: line.levels[level]! });
+    trace(line.chunks[level]!);
     ctx.strokeStyle = theme.halo;
     ctx.lineWidth = width + 3;
     ctx.stroke();

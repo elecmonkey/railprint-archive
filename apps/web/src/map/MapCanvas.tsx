@@ -169,10 +169,17 @@ export function MapCanvas({
     if (!canvas || !size || !view) return;
     const frame = requestAnimationFrame(() => {
       const ratio = window.devicePixelRatio || 1;
-      canvas.width = Math.round(size.width * ratio);
-      canvas.height = Math.round(size.height * ratio);
+      const w = Math.round(size.width * ratio);
+      const h = Math.round(size.height * ratio);
+      // Resizing reallocates the canvas; clearing is much cheaper.
+      if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w;
+        canvas.height = h;
+      }
       const context = canvas.getContext('2d');
       if (!context) return;
+      context.setTransform(1, 0, 0, 1, 0, 0);
+      context.clearRect(0, 0, w, h);
       context.setTransform(ratio, 0, 0, ratio, 0, 0);
       draw({
         context,

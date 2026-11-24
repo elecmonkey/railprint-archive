@@ -1,4 +1,5 @@
 import { light } from '@railprint/style';
+import { chunk } from './chunks.ts';
 import { simplify } from './simplify.ts';
 import type {
   LinesCollection,
@@ -16,13 +17,17 @@ export function prepareData(
   lines: LinesCollection,
   stations: StationsCollection,
 ): RenderData {
-  const prepared = lines.features.map((feature) => ({
-    properties: feature.properties,
-    category: feature.properties.category,
-    levels: LEVEL_TOLERANCES.map((t) =>
+  const prepared = lines.features.map((feature) => {
+    const levels = LEVEL_TOLERANCES.map((t) =>
       simplify(feature.geometry.coordinates, t),
-    ),
-  }));
+    );
+    return {
+      properties: feature.properties,
+      category: feature.properties.category,
+      levels,
+      chunks: levels.map(chunk),
+    };
+  });
   // Draw order is a property of the category, identical in every theme.
   prepared.sort(
     (a, b) => light.lines[a.category].z - light.lines[b.category].z,

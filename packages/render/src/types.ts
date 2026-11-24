@@ -1,4 +1,5 @@
 import type { LineCategory } from '@railprint/style';
+import type { Chunk } from './chunks.ts';
 
 /** Properties of a feature in data/release/lines.geojson. */
 export interface ReleaseLineProperties {
@@ -42,6 +43,8 @@ export interface RenderLine {
   category: LineCategory;
   /** One coordinate list per `LEVEL_TOLERANCES` entry, coarsest first. */
   levels: [number, number][][];
+  /** The same levels cut into chunks, for drawing only what is on screen. */
+  chunks: Chunk[][];
 }
 
 export interface RenderStation {
