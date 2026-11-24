@@ -25,7 +25,6 @@ import {
 } from './map/selection';
 import { TerrainCanvas } from './map/TerrainCanvas';
 import { Details } from './ui/Details';
-import { Legend } from './ui/Legend';
 import { Toolbar } from './ui/Toolbar';
 import { Tooltip } from './ui/Tooltip';
 import styles from './App.module.css';
@@ -269,7 +268,6 @@ export function App() {
               onBasemapOpacity={setBasemapOpacity}
             />
           )}
-          <Legend theme={theme} />
           <footer className={styles.attribution}>
             地图数据 {release.meta.attribution}
             {release.meta.osm.timestamp
