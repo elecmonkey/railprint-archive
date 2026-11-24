@@ -62,16 +62,31 @@
   background: var(--rp-border);
 }
 
+/* Icon beside the name; the lines below line up under the name. */
 .header {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  column-gap: 8px;
   padding-right: 24px;
 }
 
-.kicker {
+.header > :not(.icon) {
+  grid-column: 2;
+}
+
+.header h2 {
   display: flex;
   align-items: center;
-  gap: 6px;
-  color: var(--rp-text-muted);
-  font-size: 12px;
+  gap: 8px;
+}
+
+.icon {
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 26px;
+  --icon: 19px;
 }
 
 .route {

@@ -1,4 +1,5 @@
 import type { Hit, RenderLine, RenderStation } from '@railprint/render';
+import { LineIcon, StationIcon } from './Icons';
 import styles from './Tooltip.module.css';
 
 interface Props {
@@ -37,10 +38,7 @@ function LineSummary({ line }: { line: RenderLine }) {
   return (
     <>
       <span className={styles.icon}>
-        <span
-          className={styles.bar}
-          style={{ background: `var(--rp-line-${p.category})` }}
-        />
+        <LineIcon line={line} />
       </span>
       <p className={styles.name}>{p.name}</p>
       <p className={styles.detail}>
@@ -50,33 +48,12 @@ function LineSummary({ line }: { line: RenderLine }) {
   );
 }
 
-/** A train seen from the front, for stations. */
-function TrainIcon() {
-  return (
-    <svg viewBox="0 0 16 16" className={styles.pictogram} aria-hidden="true">
-      <rect x="3" y="1.5" width="10" height="10" rx="2.5" />
-      <rect x="5" y="3.5" width="6" height="3" rx="0.8" />
-      <path d="M5.5 9.2h.01M10.5 9.2h.01" strokeWidth="1.8" />
-      <path d="M5.5 11.5 4 14.5M10.5 11.5 12 14.5" />
-    </svg>
-  );
-}
-
-/** Track splitting in two, for junctions (线路所). */
-function SwitchIcon() {
-  return (
-    <svg viewBox="0 0 16 16" className={styles.pictogram} aria-hidden="true">
-      <path d="M5.5 15V1.5M5.5 10.5c0-3.5 5-4 5-7.5V1.5" />
-    </svg>
-  );
-}
-
 function StationSummary({ station }: { station: RenderStation }) {
   const p = station.properties;
   return (
     <>
       <span className={styles.icon}>
-        {p.kind === 'junction' ? <SwitchIcon /> : <TrainIcon />}
+        <StationIcon station={station} />
       </span>
       <p className={styles.name}>
         {p.name}

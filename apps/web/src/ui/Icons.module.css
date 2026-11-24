@@ -1,0 +1,17 @@
+/* Set --icon to the ink height of the text beside it. */
+.pictogram {
+  width: var(--icon, 14px);
+  height: var(--icon, 14px);
+  fill: none;
+  stroke: var(--rp-text);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.bar {
+  display: block;
+  width: calc(var(--icon, 14px) + 2px);
+  height: calc(var(--icon, 14px) * 0.28);
+  border-radius: 2px;
+}

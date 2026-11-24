@@ -5,7 +5,8 @@ import {
   type RenderStation,
 } from '@railprint/render';
 import type { Selection } from '../map/selection';
-import { CATEGORY_LABEL, formatKm, STATION_KIND_LABEL } from './labels';
+import { LineIcon, StationIcon } from './Icons';
+import { formatKm, STATION_KIND_LABEL } from './labels';
 import styles from './Details.module.css';
 
 interface Props {
@@ -59,13 +60,9 @@ function LineDetails({
   return (
     <>
       <header className={styles.header}>
-        <p className={styles.kicker}>
-          <span
-            className={styles.swatch}
-            style={{ background: `var(--rp-line-${p.category})` }}
-          />
-          {CATEGORY_LABEL[p.category]}
-        </p>
+        <span className={styles.icon}>
+          <LineIcon line={line} />
+        </span>
         <h2>{p.name}</h2>
         <p className={styles.route}>
           {p.from} — {p.to}
@@ -165,8 +162,15 @@ function StationDetails({
         </button>
       )}
       <header className={styles.header}>
-        <p className={styles.kicker}>{STATION_KIND_LABEL[p.kind]}</p>
-        <h2>{p.name}</h2>
+        <span className={styles.icon}>
+          <StationIcon station={station} />
+        </span>
+        <h2>
+          {p.name}
+          {p.kind === 'non-passenger' && (
+            <span className={styles.tag}>无客运</span>
+          )}
+        </h2>
         {p.osmName && <p className={styles.muted}>OSM 名称 {p.osmName}</p>}
       </header>
       <div className={styles.actions}>
