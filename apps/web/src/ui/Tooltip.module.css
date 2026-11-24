@@ -3,7 +3,7 @@
   z-index: 3;
   display: grid;
   grid-template-columns: 16px auto;
-  column-gap: 8px;
+  column-gap: 6px;
   align-items: center;
   max-width: 280px;
   padding: 7px 12px 8px 10px;
@@ -53,23 +53,15 @@
   border-radius: 2px;
 }
 
-.station {
-  width: 12px;
-  height: 12px;
-  fill: var(--rp-station-fill);
-  stroke: var(--rp-station-stroke);
-  stroke-width: 1.6;
-}
-
-.bars {
-  display: flex;
-  gap: 2px;
-}
-
-.bars span {
-  width: 3px;
-  height: 10px;
-  border-radius: 1.5px;
+/* Ink the height of the name's characters, centred on them. */
+.pictogram {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: var(--rp-text);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .tag {

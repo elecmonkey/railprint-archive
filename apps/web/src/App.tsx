@@ -61,6 +61,12 @@ export function App() {
   const [terrainReady, setTerrainReady] = useState(false);
   const [themeName, setThemeName] = useState<'light' | 'dark'>(preferredTheme);
   const [view, setView] = useState<View>();
+  // The OSM credit fades once the reader first moves the map.
+  const [moved, setMoved] = useState(false);
+  const moveView = useCallback((next: View) => {
+    setMoved(true);
+    setView(next);
+  }, []);
   const size = useRef<{ width: number; height: number }>(undefined);
   const [selection, setSelection] = useState<Selection>(() =>
     readHash(window.location.hash),
@@ -140,12 +146,12 @@ export function App() {
       ...fitted,
       pixelsPerDegree: Math.min(fitted.pixelsPerDegree, FOCUS_ZOOM.line),
     };
-    setView(panView(zoomed, -coveredX / 2, -coveredY / 2));
+    moveView(panView(zoomed, -coveredX / 2, -coveredY / 2));
   };
 
   const focusStation = (station: RenderStation) => {
     if (!view) return;
-    setView({
+    moveView({
       ...view,
       center: station.coordinates,
       pixelsPerDegree: clampZoom(
@@ -171,7 +177,7 @@ export function App() {
 
   const reset = () => {
     if (size.current) {
-      setView(fitView(size.current.width, size.current.height, bounds));
+      moveView(fitView(size.current.width, size.current.height, bounds));
     }
   };
 
@@ -195,7 +201,7 @@ export function App() {
             theme={theme}
             view={view}
             onSize={onSize}
-            onViewChange={setView}
+            onViewChange={moveView}
             highlight={highlight}
             onHover={setHover}
             onPick={onPick}
@@ -203,7 +209,6 @@ export function App() {
           {hover && size.current && (
             <Tooltip
               hit={hover.hit}
-              lines={index.lines}
               x={hover.x}
               y={hover.y}
               width={size.current.width}
@@ -220,10 +225,16 @@ export function App() {
             onFocusStation={focusStation}
             onClose={() => select({})}
           />
-          <TitleCard
-            counts={release.meta.counts}
-            attribution={release.meta.attribution}
-          />
+          <TitleCard counts={release.meta.counts} />
+          <p className={`${styles.attribution} ${moved ? styles.faded : ''}`}>
+            <a
+              href="https://www.openstreetmap.org/copyright"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {release.meta.attribution}
+            </a>
+          </p>
           {view && (
             <Toolbar
               theme={themeName}
@@ -231,7 +242,7 @@ export function App() {
               onZoom={(factor) => {
                 const s = size.current;
                 if (s)
-                  setView(
+                  moveView(
                     zoomView(
                       view,
                       factor,

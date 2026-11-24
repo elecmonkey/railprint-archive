@@ -2,8 +2,6 @@ import styles from './TitleCard.module.css';
 
 interface Props {
   counts: { lines: number; stations: number; lengthKm: number };
-  /** Data credit, linked to the OSM copyright page. */
-  attribution: string;
 }
 
 /** The favicon's crossing, in the map's own colours. */
@@ -34,7 +32,7 @@ function Mark() {
   );
 }
 
-export function TitleCard({ counts, attribution }: Props) {
+export function TitleCard({ counts }: Props) {
   const figures: [string, string][] = [
     [counts.lines.toLocaleString(), '条线路'],
     [counts.lengthKm.toLocaleString(), 'km'],
@@ -53,15 +51,6 @@ export function TitleCard({ counts, attribution }: Props) {
               <strong>{value}</strong> {unit}
             </span>
           ))}
-        </p>
-        <p className={styles.credit}>
-          <a
-            href="https://www.openstreetmap.org/copyright"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {attribution}
-          </a>
         </p>
       </div>
     </header>
