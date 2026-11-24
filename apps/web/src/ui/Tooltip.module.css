@@ -1,0 +1,49 @@
+.tooltip {
+  position: absolute;
+  z-index: 3;
+  max-width: 280px;
+  padding: 8px 10px;
+  border: 1px solid var(--rp-border);
+  border-radius: 8px;
+  color: var(--rp-text);
+  background: var(--rp-surface);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  font-size: 12px;
+  line-height: 18px;
+  pointer-events: none;
+}
+
+.tooltip p {
+  margin: 0;
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.name .muted {
+  font-weight: 400;
+}
+
+.muted {
+  color: var(--rp-text-muted);
+}
+
+.swatch {
+  display: inline-block;
+  width: 14px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.hint {
+  margin-top: 4px !important;
+  color: var(--rp-text-muted);
+  font-size: 11px;
+}

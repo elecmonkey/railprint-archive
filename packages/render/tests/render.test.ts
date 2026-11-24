@@ -232,3 +232,129 @@ test('endpoint names appear before symbols, all endpoints alike', () => {
   expect(at(40)).toMatchObject({ labels: 2, arcs: 0 });
   expect(at(100)).toMatchObject({ labels: 2, arcs: 2 });
 });
+
+test('picks the line and station under the pointer', async () => {
+  const { Picker } = await import('../src/pick.ts');
+  const data = prepareData(lines, stations);
+  const view = {
+    kind: 'conic' as const,
+    center: [105, 34] as [number, number],
+    pixelsPerDegree: 100,
+  };
+  const projection = createProjection(view, 800, 600);
+  const picker = new Picker(data);
+  const [x, y] = projection([105, 34])!;
+
+  const onLine = picker.pick(view, 800, 600, [x, y + 3], { tolerance: 6 });
+  expect(onLine.lines.map((l) => l.line.properties.id)).toEqual(['a']);
+  // Halfway along a 2° line at 34°N.
+  expect(onLine.lines[0]!.km).toBeCloseTo(92.2, 0);
+
+  expect(
+    picker.pick(view, 800, 600, [x, y + 20], { tolerance: 6 }).lines,
+  ).toEqual([]);
+
+  const [sx, sy] = projection([104, 34])!;
+  const atStation = picker.pick(view, 800, 600, [sx + 2, sy], {
+    tolerance: 6,
+    stations: () => true,
+  });
+  expect(atStation.station?.properties.name).toBe('甲');
+});
+
+test('picks nothing on the far side of the globe', async () => {
+  const { Picker } = await import('../src/pick.ts');
+  const data = prepareData(lines, stations);
+  const view = {
+    kind: 'globe' as const,
+    center: [-75, -34] as [number, number],
+    pixelsPerDegree: 50,
+  };
+  const picker = new Picker(data);
+  for (const point of [
+    [400, 300],
+    [10, 10],
+  ] as [number, number][]) {
+    const hit = picker.pick(view, 800, 600, point, {
+      tolerance: 8,
+      stations: () => true,
+    });
+    expect(hit).toEqual({ lines: [], here: 0 });
+  }
+});
+
+test('orders stops along a line and finds the section between them', async () => {
+  const { lineStops, sectionAt } = await import('../src/pick.ts');
+  const more: StationsCollection = {
+    type: 'FeatureCollection',
+    features: [
+      ...stations.features,
+      {
+        type: 'Feature',
+        properties: {
+          osm: 'node/3',
+          name: '乙',
+          kind: 'station',
+          endpoint: true,
+          lines: ['a'],
+        },
+        geometry: { type: 'Point', coordinates: [106, 34] },
+      },
+      {
+        type: 'Feature',
+        properties: {
+          osm: 'node/2',
+          name: '丙',
+          kind: 'junction',
+          endpoint: false,
+          lines: ['a'],
+        },
+        geometry: { type: 'Point', coordinates: [105.5, 34.001] },
+      },
+    ],
+  };
+  const data = prepareData(lines, more);
+  const stops = lineStops(data, data.lines[0]!);
+  expect(stops.map((s) => s.station.properties.name)).toEqual([
+    '甲',
+    '丙',
+    '乙',
+  ]);
+  expect(stops[2]!.km).toBeCloseTo(184.4, 0);
+  const section = sectionAt(stops, 100);
+  expect(section?.map((s) => s.station.properties.name)).toEqual(['甲', '丙']);
+});
+
+test('a selected line is drawn on top with its stations named', () => {
+  const { ctx, calls } = recorder();
+  const view = {
+    kind: 'conic' as const,
+    center: [105, 34] as [number, number],
+    pixelsPerDegree: 40,
+  };
+  const data = prepareData(lines, stations);
+  const plain = draw({
+    context: ctx,
+    width: 800,
+    height: 600,
+    view,
+    data,
+    theme: light,
+  });
+  calls.length = 0;
+  const selected = draw({
+    context: ctx,
+    width: 800,
+    height: 600,
+    view,
+    data,
+    theme: light,
+    highlight: { line: 'a' },
+  });
+  expect(calls).toContain('globalAlpha=0.3');
+  expect(calls.filter((c) => c === 'stroke(0)').length).toBeGreaterThan(2);
+  // At this zoom endpoints only get names; the selected line's get symbols.
+  expect(plain.stations).toBe(1);
+  expect(selected.stations).toBe(1);
+  expect(calls.filter((c) => c.startsWith('arc'))).toHaveLength(1);
+});

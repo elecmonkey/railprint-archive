@@ -1,11 +1,8 @@
 import type { LineCategory, Theme } from '@railprint/style';
+import { CATEGORY_LABEL } from './labels';
 import styles from './Legend.module.css';
 
-const ENTRIES: [LineCategory, string][] = [
-  ['emu', '动车线路'],
-  ['conventional', '普速线路'],
-  ['link', '联络线'],
-];
+const ENTRIES = Object.entries(CATEGORY_LABEL) as [LineCategory, string][];
 
 export function Legend({ theme }: { theme: Theme }) {
   return (

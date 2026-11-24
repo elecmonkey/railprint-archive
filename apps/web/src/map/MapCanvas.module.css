@@ -6,6 +6,10 @@
   cursor: grab;
 }
 
+.canvas.pointing {
+  cursor: pointer;
+}
+
 .canvas:active {
   cursor: grabbing;
 }

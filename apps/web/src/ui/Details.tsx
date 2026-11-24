@@ -1,0 +1,233 @@
+import {
+  lineStops,
+  type RenderData,
+  type RenderLine,
+  type RenderStation,
+} from '@railprint/render';
+import type { Selection } from '../map/selection';
+import { CATEGORY_LABEL, formatKm, STATION_KIND_LABEL } from './labels';
+import styles from './Details.module.css';
+
+interface Props {
+  data: RenderData;
+  selection: Selection;
+  lines: Map<string, RenderLine>;
+  stations: Map<string, RenderStation>;
+  /** Other lines on the track that was clicked, including the selected one. */
+  shared: string[];
+  onSelect: (selection: Selection) => void;
+  onFocusLine: (line: RenderLine) => void;
+  onFocusStation: (station: RenderStation) => void;
+  onClose: () => void;
+}
+
+const OSM = 'https://www.openstreetmap.org';
+
+/** Side panel for the selected line or station. */
+export function Details(props: Props) {
+  const { selection, lines, stations, onClose } = props;
+  const station = selection.station
+    ? stations.get(selection.station)
+    : undefined;
+  const line = selection.line ? lines.get(selection.line) : undefined;
+  if (!station && !line) return null;
+  return (
+    <aside className={styles.panel} aria-label="详情">
+      <button
+        type="button"
+        className={styles.close}
+        onClick={onClose}
+        aria-label="关闭"
+      >
+        ×
+      </button>
+      {station ? (
+        <StationDetails {...props} station={station} from={line} />
+      ) : (
+        <LineDetails {...props} line={line!} />
+      )}
+    </aside>
+  );
+}
+
+function LineDetails({
+  data,
+  line,
+  lines,
+  shared,
+  onSelect,
+  onFocusLine,
+}: Props & { line: RenderLine }) {
+  const p = line.properties;
+  const stops = lineStops(data, line);
+  const others = shared.filter((id) => id !== p.id && lines.has(id));
+  return (
+    <>
+      <header className={styles.header}>
+        <p className={styles.kicker}>
+          <span
+            className={styles.swatch}
+            style={{ background: `var(--rp-line-${p.category})` }}
+          />
+          {CATEGORY_LABEL[p.category]}
+        </p>
+        <h2>{p.name}</h2>
+        <p className={styles.route}>
+          {p.from} — {p.to}
+        </p>
+        {p.aliases && p.aliases.length > 0 && (
+          <p className={styles.muted}>又名 {p.aliases.join('、')}</p>
+        )}
+      </header>
+      <dl className={styles.facts}>
+        <div>
+          <dt>里程</dt>
+          <dd>{formatKm(p.lengthKm)} km</dd>
+        </div>
+        <div>
+          <dt>车站</dt>
+          <dd>
+            {
+              stops.filter((s) => s.station.properties.kind === 'station')
+                .length
+            }
+          </dd>
+        </div>
+        {p.highSpeedShare > 0 && (
+          <div>
+            <dt>高铁轨道</dt>
+            <dd>{Math.round(p.highSpeedShare * 100)}%</dd>
+          </div>
+        )}
+      </dl>
+      <div className={styles.actions}>
+        <button type="button" onClick={() => onFocusLine(line)}>
+          缩放至线路
+        </button>
+        {p.relations.map((r) => (
+          <a
+            key={r.id}
+            href={`${OSM}/relation/${r.id}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            OSM：{r.name}
+          </a>
+        ))}
+      </div>
+      {others.length > 0 && (
+        <section>
+          <h3>同一线位的其他线路</h3>
+          <ul className={styles.links}>
+            {others.map((id) => (
+              <LineRow
+                key={id}
+                line={lines.get(id)!}
+                onClick={() => onSelect({ line: id })}
+              />
+            ))}
+          </ul>
+        </section>
+      )}
+      <section>
+        <h3>沿线车站</h3>
+        <ol className={styles.stops}>
+          {stops.map(({ station, km }) => (
+            <li key={station.properties.osm}>
+              <button
+                type="button"
+                onClick={() =>
+                  onSelect({ line: p.id, station: station.properties.osm })
+                }
+              >
+                <span className={styles.km}>{formatKm(km)}</span>
+                <span
+                  className={
+                    station.properties.kind === 'station'
+                      ? undefined
+                      : styles.muted
+                  }
+                >
+                  {station.properties.name}
+                </span>
+                {station.properties.kind !== 'station' && (
+                  <span className={styles.tag}>
+                    {STATION_KIND_LABEL[station.properties.kind]}
+                  </span>
+                )}
+              </button>
+            </li>
+          ))}
+        </ol>
+      </section>
+    </>
+  );
+}
+
+function StationDetails({
+  station,
+  from,
+  lines,
+  onSelect,
+  onFocusStation,
+}: Props & { station: RenderStation; from: RenderLine | undefined }) {
+  const p = station.properties;
+  return (
+    <>
+      {from && (
+        <button
+          type="button"
+          className={styles.back}
+          onClick={() => onSelect({ line: from.properties.id })}
+        >
+          ‹ {from.properties.name} {from.properties.from}—{from.properties.to}
+        </button>
+      )}
+      <header className={styles.header}>
+        <p className={styles.kicker}>{STATION_KIND_LABEL[p.kind]}</p>
+        <h2>{p.name}</h2>
+        {p.osmName && <p className={styles.muted}>OSM 名称 {p.osmName}</p>}
+      </header>
+      <div className={styles.actions}>
+        <button type="button" onClick={() => onFocusStation(station)}>
+          定位到车站
+        </button>
+        <a href={`${OSM}/${p.osm}`} target="_blank" rel="noreferrer">
+          OSM 节点
+        </a>
+      </div>
+      <section>
+        <h3>经过的线路</h3>
+        <ul className={styles.links}>
+          {p.lines
+            .filter((id) => lines.has(id))
+            .map((id) => (
+              <LineRow
+                key={id}
+                line={lines.get(id)!}
+                onClick={() => onSelect({ line: id })}
+              />
+            ))}
+        </ul>
+      </section>
+    </>
+  );
+}
+
+function LineRow({ line, onClick }: { line: RenderLine; onClick: () => void }) {
+  const p = line.properties;
+  return (
+    <li>
+      <button type="button" onClick={onClick}>
+        <span
+          className={styles.swatch}
+          style={{ background: `var(--rp-line-${p.category})` }}
+        />
+        <span>{p.name}</span>
+        <span className={styles.muted}>
+          {p.from}—{p.to}
+        </span>
+      </button>
+    </li>
+  );
+}

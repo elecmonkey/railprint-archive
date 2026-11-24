@@ -1,6 +1,8 @@
 export {
   draw,
+  stationDisplay,
   widthScale,
+  type Highlight,
   ZOOM,
   type DrawContext,
   type DrawOptions,
@@ -24,6 +26,15 @@ export {
   type ProjectionKind,
   type View,
 } from './projection.ts';
+export {
+  lineStops,
+  Picker,
+  sectionAt,
+  type Hit,
+  type LineHit,
+  type LineStop,
+  type PickOptions,
+} from './pick.ts';
 export { simplify } from './simplify.ts';
 export type {
   LinesCollection,

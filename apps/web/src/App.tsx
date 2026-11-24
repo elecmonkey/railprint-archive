@@ -1,25 +1,60 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  clampZoom,
   dataBounds,
   fitView,
   type Bounds,
+  type Highlight,
+  type Hit,
   type ProjectionKind,
+  type RenderLine,
+  type RenderStation,
   type View,
 } from '@railprint/render';
 import { cssVariables, themes } from '@railprint/style';
 import { useBasemap } from './data/useBasemap';
 import { useRelease } from './data/useRelease';
-import { zoomView } from './map/interaction';
+import { panView, zoomView } from './map/interaction';
 import { MapCanvas } from './map/MapCanvas';
+import {
+  readHash,
+  selectFromHit,
+  sharedAt,
+  writeHash,
+  type Selection,
+} from './map/selection';
 import { TerrainCanvas } from './map/TerrainCanvas';
+import { Details } from './ui/Details';
 import { Legend } from './ui/Legend';
 import { Toolbar } from './ui/Toolbar';
+import { Tooltip } from './ui/Tooltip';
 import styles from './App.module.css';
 
 function preferredTheme(): 'light' | 'dark' {
   return window.matchMedia?.('(prefers-color-scheme: dark)').matches
     ? 'dark'
     : 'light';
+}
+
+/** Closest zoom when focusing a line or station, in pixels per degree. */
+const FOCUS_ZOOM = { line: 1200, station: 400 } as const;
+
+/**
+ * Room the detail panel takes, with its margin: a column on the right, or
+ * below `narrow` window width a sheet over part of the bottom (see
+ * Details.module.css).
+ */
+const PANEL = { width: 332, narrow: 600, sheet: 0.45 } as const;
+
+function lineBounds(line: RenderLine): Bounds {
+  const bounds: Bounds = [Infinity, Infinity, -Infinity, -Infinity];
+  for (const [lon, lat] of line.levels[0]!) {
+    bounds[0] = Math.min(bounds[0], lon);
+    bounds[1] = Math.min(bounds[1], lat);
+    bounds[2] = Math.max(bounds[2], lon);
+    bounds[3] = Math.max(bounds[3], lat);
+  }
+  return bounds;
 }
 
 export function App() {
@@ -30,11 +65,105 @@ export function App() {
   const [themeName, setThemeName] = useState<'light' | 'dark'>(preferredTheme);
   const [view, setView] = useState<View>();
   const size = useRef<{ width: number; height: number }>(undefined);
+  const [selection, setSelection] = useState<Selection>(() =>
+    readHash(window.location.hash),
+  );
+  const [shared, setShared] = useState<string[]>([]);
+  const [hover, setHover] = useState<{ hit: Hit; x: number; y: number }>();
   const theme = themes[themeName];
   const bounds = useMemo<Bounds | undefined>(
     () => (release.status === 'ready' ? dataBounds(release.data) : undefined),
     [release],
   );
+
+  const index = useMemo(() => {
+    const lines = new Map<string, RenderLine>();
+    const stations = new Map<string, RenderStation>();
+    if (release.status === 'ready') {
+      for (const l of release.data.lines) lines.set(l.properties.id, l);
+      for (const s of release.data.stations) stations.set(s.properties.osm, s);
+    }
+    return { lines, stations };
+  }, [release]);
+
+  // Keep only ids the release knows, e.g. from an old link.
+  const known = useMemo<Selection>(() => {
+    const result: Selection = {};
+    if (selection.line && index.lines.has(selection.line))
+      result.line = selection.line;
+    if (selection.station && index.stations.has(selection.station))
+      result.station = selection.station;
+    return result;
+  }, [selection, index]);
+
+  const highlight = useMemo<Highlight>(() => {
+    const result: Highlight = { ...known };
+    const top = hover?.hit.station ? undefined : hover?.hit.lines[0];
+    if (top) result.hover = top.line.properties.id;
+    return result;
+  }, [known, hover]);
+
+  const select = useCallback((next: Selection, sharedIds: string[] = []) => {
+    setSelection(next);
+    setShared(sharedIds);
+  }, []);
+
+  // The selection is in the URL, so a link opens the same line or station.
+  useEffect(() => {
+    if (release.status !== 'ready') return;
+    const hash = writeHash(known);
+    if (hash !== window.location.hash)
+      window.history.replaceState(
+        null,
+        '',
+        `${window.location.pathname}${window.location.search}${hash}`,
+      );
+  }, [known, release.status]);
+
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') select({});
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [select]);
+
+  const onPick = (hit: Hit) => {
+    const next = selectFromHit(known, hit);
+    select(next, next.station ? [] : sharedAt(hit));
+  };
+
+  const focusLine = (line: RenderLine) => {
+    const s = size.current;
+    if (!s || !view) return;
+    // Fit the line into the part of the map the panel leaves free.
+    const wide = s.width > PANEL.narrow;
+    const coveredX = wide ? PANEL.width : 0;
+    const coveredY = wide ? 0 : Math.round(s.height * PANEL.sheet) + 8;
+    const fitted = fitView(
+      view.kind,
+      s.width - coveredX,
+      s.height - coveredY,
+      lineBounds(line),
+      wide ? 64 : 32,
+    );
+    const zoomed = {
+      ...fitted,
+      pixelsPerDegree: Math.min(fitted.pixelsPerDegree, FOCUS_ZOOM.line),
+    };
+    setView(panView(zoomed, -coveredX / 2, -coveredY / 2, s.width, s.height));
+  };
+
+  const focusStation = (station: RenderStation) => {
+    if (!view) return;
+    setView({
+      ...view,
+      center: station.coordinates,
+      pixelsPerDegree: clampZoom(
+        Math.max(view.pixelsPerDegree, FOCUS_ZOOM.station),
+      ),
+    });
+  };
 
   useEffect(() => {
     const root = document.documentElement;
@@ -78,6 +207,35 @@ export function App() {
             view={view}
             onSize={onSize}
             onViewChange={setView}
+            highlight={highlight}
+            onHover={setHover}
+            onPick={onPick}
+          />
+          {hover && size.current && (
+            <Tooltip
+              data={release.data}
+              hit={hover.hit}
+              x={hover.x}
+              y={hover.y}
+              width={size.current.width}
+              height={size.current.height}
+            />
+          )}
+          <Details
+            data={release.data}
+            selection={known}
+            lines={index.lines}
+            stations={index.stations}
+            shared={shared}
+            onSelect={(next) =>
+              select(
+                next,
+                next.line && shared.includes(next.line) ? shared : [],
+              )
+            }
+            onFocusLine={focusLine}
+            onFocusStation={focusStation}
+            onClose={() => select({})}
           />
           <header className={styles.title}>
             <h1>railprint</h1>

@@ -3,7 +3,7 @@ import type { LineCategory, Theme } from '@railprint/style';
 import { maxRank, type BasemapData } from './basemap.ts';
 import { levelFor } from './prepare.ts';
 import { createProjection, type View } from './projection.ts';
-import type { RenderData, RenderStation } from './types.ts';
+import type { RenderData, RenderLine, RenderStation } from './types.ts';
 
 /**
  * The subset of CanvasRenderingContext2D the renderer uses, so it also runs
@@ -57,6 +57,17 @@ export interface DrawOptions {
    * and only outline the globe.
    */
   terrain?: boolean;
+  highlight?: Highlight;
+}
+
+/** What the reader is pointing at or has selected; ids from the release. */
+export interface Highlight {
+  /** Selected line: drawn on top with its stations, other lines fade. */
+  line?: string;
+  /** Line under the pointer. */
+  hover?: string;
+  /** Selected station (`osm` property). */
+  station?: string;
 }
 
 export interface DrawStats {
@@ -74,7 +85,13 @@ export const ZOOM = {
   /** Intermediate stations (when drawn at all). */
   stations: 160,
   stationLabels: 220,
+  /** Stations of the selected line. */
+  lineStations: 30,
+  lineStationLabels: 60,
 } as const;
+
+/** Opacity of the other lines while one is selected. */
+const FADED = 0.3;
 
 /** Symbol radius in CSS pixels at full size. */
 const RADIUS = { endpoint: 2.8, intermediate: 1.8 } as const;
@@ -89,6 +106,36 @@ export function widthScale(pixelsPerDegree: number): number {
   return Math.min(2.4, Math.max(0.6, scale));
 }
 
+/**
+ * Whether a station gets a symbol and a name at this zoom. Junctions
+ * (线路所) never get a name unless selected.
+ */
+export function stationDisplay(
+  s: RenderStation,
+  pixelsPerDegree: number,
+  stations: 'endpoints' | 'all' = 'endpoints',
+  highlight: Highlight = {},
+): { symbol: boolean; label: boolean } {
+  const ppd = pixelsPerDegree;
+  if (s.properties.osm === highlight.station)
+    return { symbol: true, label: true };
+  const endpoint = s.properties.endpoint;
+  const onLine =
+    highlight.line !== undefined && s.properties.lines.includes(highlight.line);
+  const named = s.properties.kind !== 'junction';
+  if (onLine)
+    return {
+      symbol: ppd >= ZOOM.lineStations,
+      label: named && ppd >= ZOOM.lineStationLabels,
+    };
+  if (!endpoint && stations !== 'all') return { symbol: false, label: false };
+  return {
+    symbol: ppd >= (endpoint ? ZOOM.endpointSymbols : ZOOM.stations),
+    label:
+      named && ppd >= (endpoint ? ZOOM.endpointLabels : ZOOM.stationLabels),
+  };
+}
+
 export function draw({
   context: ctx,
   width,
@@ -100,6 +147,7 @@ export function draw({
   terrain,
   stations = 'endpoints',
   basemapOpacity = 1,
+  highlight = {},
 }: DrawOptions): DrawStats {
   const projection = createProjection(view, width, height);
   const path = geoPath(projection, ctx as unknown as CanvasRenderingContext2D);
@@ -162,6 +210,7 @@ export function draw({
   // Lines: one path per category, drawn bottom to top.
   ctx.lineJoin = 'round';
   ctx.lineCap = 'round';
+  if (highlight.line) ctx.globalAlpha = FADED;
   let i = 0;
   while (i < data.lines.length) {
     const category: LineCategory = data.lines[i]!.category;
@@ -174,6 +223,26 @@ export function draw({
     ctx.lineWidth = style.width * scale;
     ctx.stroke();
   }
+  ctx.globalAlpha = 1;
+  const emphasise = (line: RenderLine | undefined, factor: number) => {
+    if (!line) return;
+    const style = theme.lines[line.category];
+    const width = Math.max(2, style.width * scale * factor);
+    ctx.beginPath();
+    path({ type: 'LineString', coordinates: line.levels[level]! });
+    ctx.strokeStyle = theme.halo;
+    ctx.lineWidth = width + 3;
+    ctx.stroke();
+    ctx.strokeStyle = style.color;
+    ctx.lineWidth = width;
+    ctx.stroke();
+  };
+  const byId = (id: string | undefined) =>
+    id === undefined
+      ? undefined
+      : data.lines.find((l) => l.properties.id === id);
+  emphasise(byId(highlight.line), 1.6);
+  if (highlight.hover !== highlight.line) emphasise(byId(highlight.hover), 1.4);
 
   // Stations. All line endpoints are treated alike: names appear first,
   // written on the station; symbols follow when zoomed in and the names move
@@ -189,12 +258,7 @@ export function draw({
     label: boolean;
   }[] = [];
   for (const s of data.stations) {
-    const endpoint = s.properties.endpoint;
-    if (!endpoint && stations !== 'all') continue;
-    const symbol = ppd >= (endpoint ? ZOOM.endpointSymbols : ZOOM.stations);
-    const label =
-      s.properties.kind !== 'junction' &&
-      ppd >= (endpoint ? ZOOM.endpointLabels : ZOOM.stationLabels);
+    const { symbol, label } = stationDisplay(s, ppd, stations, highlight);
     if ((!symbol && !label) || !visible(s)) continue;
     const p = projection(s.coordinates);
     if (
@@ -207,10 +271,13 @@ export function draw({
       continue;
     placed.push({ x: p[0], y: p[1], s, symbol, label });
   }
-  // When names collide, stations where more lines meet keep theirs.
-  placed.sort(
-    (a, b) => b.s.properties.lines.length - a.s.properties.lines.length,
-  );
+  // When names collide, the selection keeps its names first, then stations
+  // where more lines meet.
+  const priority = (s: RenderStation) =>
+    (s.properties.osm === highlight.station ? 2000 : 0) +
+    (highlight.line && s.properties.lines.includes(highlight.line) ? 1000 : 0) +
+    s.properties.lines.length;
+  placed.sort((a, b) => priority(b.s) - priority(a.s));
 
   const symbolScale = Math.min(1.3, Math.max(0.6, Math.sqrt(ppd / 120)));
   ctx.lineWidth = 1.2;
@@ -233,6 +300,14 @@ export function draw({
     ctx.fill();
     ctx.strokeStyle = theme.station.stroke;
     ctx.stroke();
+    if (s.properties.osm === highlight.station) {
+      ctx.beginPath();
+      ctx.arc(x, y, r + 3.5, 0, Math.PI * 2);
+      ctx.strokeStyle = theme.accent;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.lineWidth = 1.2;
+    }
   }
 
   // Labels with greedy collision avoidance.
