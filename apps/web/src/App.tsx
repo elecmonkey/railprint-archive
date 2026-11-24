@@ -246,7 +246,7 @@ export function App() {
           />
           <div className={styles.corner}>
             <p className={`${styles.attribution} ${moved ? styles.faded : ''}`}>
-              铁路线路与车站数据来自{' '}
+              Rail data{' '}
               <a
                 href="https://www.openstreetmap.org/copyright"
                 target="_blank"
