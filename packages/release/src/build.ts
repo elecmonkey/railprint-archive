@@ -356,6 +356,7 @@ export function buildRelease(
 
   const stations: ReleaseStation[] = [];
   const consumed = new Set<string>();
+  const pinned: { station: ReleaseStation; rank: number }[] = [];
   for (const [ref, ep] of endpoints) {
     const hit = found.get(ref);
     const place = hit?.place ?? placeByRef.get(ref);
@@ -377,15 +378,47 @@ export function buildRelease(
     consumed.add(ref);
     const name =
       ep.kind === 'junction' ? junctionName(ep.name, osmName) : ep.name;
-    stations.push({
-      osm: ref,
-      name,
-      ...(osmName && osmName !== name ? { osmName } : {}),
-      kind: ep.kind,
-      endpoint: true,
-      lines: [...lines].sort((a, b) => a - b).map((i) => catalog.lines[i]!.id),
-      coordinates,
+    pinned.push({
+      station: {
+        osm: ref,
+        name,
+        ...(osmName && osmName !== name ? { osmName } : {}),
+        kind: ep.kind,
+        endpoint: true,
+        lines: [...lines].map((i) => catalog.lines[i]!.id),
+        coordinates,
+      },
+      // A bare track node only stands in for a station OSM lacks.
+      rank: place ? rank(place) : 3,
     });
+  }
+
+  // Lines may pin the same station through different OSM objects, such as
+  // its node and its area; keep the better one.
+  pinned.sort((a, b) => a.rank - b.rank);
+  for (const { station } of pinned) {
+    const twin = stations.find(
+      (s) =>
+        s.kind === station.kind &&
+        placeKey(s.name) === placeKey(station.name) &&
+        haversine(
+          s.coordinates[0],
+          s.coordinates[1],
+          station.coordinates[0],
+          station.coordinates[1],
+        ) < SAME_STATION_M,
+    );
+    if (twin) mergeLines(twin, station.lines);
+    else stations.push(station);
+  }
+  for (const s of stations) mergeLines(s, []);
+
+  /** Adds lines to a station, keeping them in catalog order. */
+  function mergeLines(station: ReleaseStation, more: string[]) {
+    const merged = new Set([...station.lines, ...more]);
+    station.lines = catalog.lines
+      .map((l) => l.id)
+      .filter((id) => merged.has(id));
   }
 
   // Remaining places, merging OSM duplicates (a station tagged both as a
@@ -404,13 +437,10 @@ export function buildRelease(
           SAME_STATION_M,
     );
     if (twin) {
-      const merged = new Set([
-        ...twin.lines,
-        ...[...served].map((i) => catalog.lines[i]!.id),
-      ]);
-      twin.lines = catalog.lines
-        .map((l) => l.id)
-        .filter((id) => merged.has(id));
+      mergeLines(
+        twin,
+        [...served].map((i) => catalog.lines[i]!.id),
+      );
       continue;
     }
     kept.push({

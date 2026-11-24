@@ -2090,6 +2090,5 @@
 {"type":"Feature","properties":{"osm":"way/227465776","name":"济南西","osmName":"济南西站","kind":"station","endpoint":true,"lines":["京沪高铁/北京南-上海虹桥","齐河联络线/大漠刘-济南西"]},"geometry":{"type":"Point","coordinates":[116.885803,36.669098]}},
 {"type":"Feature","properties":{"osm":"way/973585033","name":"长沙","osmName":"长沙站","kind":"station","endpoint":true,"lines":["京广线/广州-郑州","长株潭城际线/开福寺-株洲","石长线/石门县北-长沙"]},"geometry":{"type":"Point","coordinates":[113.008866,28.197141]}},
 {"type":"Feature","properties":{"osm":"way/1074877632","name":"老河口东","kind":"station","endpoint":true,"lines":["襄渝线/老河口东-磨心坡","汉丹线/襄阳北-老河口东"]},"geometry":{"type":"Point","coordinates":[111.736069,32.221194]}},
-{"type":"Feature","properties":{"osm":"way/1356670981","name":"云梦东","osmName":"云梦东站","kind":"station","endpoint":true,"lines":["汉孝城际/云梦东-汉口"]},"geometry":{"type":"Point","coordinates":[113.778885,31.047892]}},
 {"type":"Feature","properties":{"osm":"way/1466334497","name":"柳沟南","kind":"station","endpoint":true,"lines":["兰新客专/兰州西-柳沟南","柳沟南联络线/柳沟南-双塔"]},"geometry":{"type":"Point","coordinates":[96.416209,40.645027]}}
 ]}

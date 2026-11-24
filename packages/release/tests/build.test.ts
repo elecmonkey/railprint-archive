@@ -119,6 +119,36 @@ test('collects stations from relation members, path nodes and endpoints', () => 
   ]);
 });
 
+test('merges endpoints that pin one station through different objects', () => {
+  const spur: Catalog = {
+    ...catalog,
+    lines: [
+      ...catalog.lines,
+      // Starts at 甲 but pins the track node beside it.
+      {
+        id: 'spur',
+        name: '甲乙支线',
+        from: '甲',
+        to: '<乙>',
+        category: 'conventional',
+        osm: {
+          from: 'node/2',
+          to: 'node/3',
+          relations: [],
+          confirmed: '2026-01-01',
+        },
+      },
+    ],
+  };
+  const { stations } = buildRelease(net, spur, {
+    ...paths,
+    lines: { ...paths.lines, spur: [[10, 2, 3]] },
+  });
+  expect(stations.filter((s) => s.name === '甲')).toEqual([
+    expect.objectContaining({ osm: 'node/1', lines: ['hs', 'spur'] }),
+  ]);
+});
+
 test('refuses unconfirmed or broken lines', () => {
   const unconfirmed: Catalog = {
     version: 2,
