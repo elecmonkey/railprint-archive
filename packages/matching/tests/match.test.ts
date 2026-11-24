@@ -22,7 +22,7 @@ const line = (over: Partial<CatalogLine>): CatalogLine => ({
   ...over,
 });
 
-test('matches a line by relation alias and endpoints', () => {
+test('matches a line by relation name and endpoints', () => {
   const m = matcher.match(line({}));
   expect(m.status).toBe('ok');
   expect(m.relations.map((r) => r.name)).toEqual(['甲丙高速线']);

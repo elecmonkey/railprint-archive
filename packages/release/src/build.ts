@@ -24,7 +24,6 @@ export type StationKind = 'station' | 'junction' | 'non-passenger';
 export interface ReleaseLine {
   id: string;
   name: string;
-  aliases?: string[];
   category: LineCategory;
   /** Endpoint names as written in the catalog, without markers. */
   from: string;
@@ -245,7 +244,6 @@ export function buildRelease(
     lines.push({
       id: line.id,
       name: line.name,
-      ...(line.aliases?.length ? { aliases: line.aliases } : {}),
       category: line.category,
       from: parseEndpoint(line.from).name,
       to: parseEndpoint(line.to).name,

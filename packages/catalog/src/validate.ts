@@ -27,7 +27,6 @@ const isNonEmpty = (v: unknown): v is string =>
 const LINE_KEYS = new Set([
   'id',
   'name',
-  'aliases',
   'from',
   'to',
   'category',
@@ -193,16 +192,12 @@ export function parseCatalog(json: unknown): Catalog {
       );
       return;
     }
-    const aliases = checkStringList(raw.aliases, `${label}.aliases`, problems);
     const notes = checkStringList(raw.notes, `${label}.notes`, problems);
-    if (aliases?.includes(raw.name))
-      problems.push(`${label}.aliases repeats the name`);
     const osm = checkOsm(raw.osm, `${label}.osm`, problems);
 
     lines.push({
       id: raw.id,
       name: raw.name,
-      ...(aliases?.length ? { aliases } : {}),
       from: raw.from,
       to: raw.to,
       category: raw.category as LineCategory,

@@ -67,9 +67,6 @@ function LineDetails({
         <p className={styles.route}>
           {p.from} — {p.to}
         </p>
-        {p.aliases && p.aliases.length > 0 && (
-          <p className={styles.muted}>又名 {p.aliases.join('、')}</p>
-        )}
       </header>
       <dl className={styles.facts}>
         <div>

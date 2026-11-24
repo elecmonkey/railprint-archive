@@ -13,7 +13,6 @@ Run `pnpm catalog check` after editing.
 {
   "id": "西延高铁/延安-西安东", // stable key, see below
   "name": "西延高铁", // display name
-  "aliases": ["西延高速线"], // optional: other names for the same section
   "from": "延安", // endpoint, see notation
   "to": "西安东",
   "category": "emu", // emu | conventional | link
@@ -69,4 +68,4 @@ Run `pnpm catalog check` after editing.
 
 ## History
 
-The initial 195 lines were imported on 2026-11-23 from the author's hand-drawn draft; names that differ only in 高速线 / 高铁 / 客专 / 城际 suffixes for the same section were merged into one line with aliases. On 2026-11-24 the draft's grouping (province, inter-province class) was replaced by `category`, and the OSM correspondence moved into this directory.
+The initial 195 lines were imported on 2026-11-23 from the author's hand-drawn draft; names that differ only in 高速线 / 高铁 / 客专 / 城际 suffixes for the same section were merged into one line under a single name. On 2026-11-24 the draft's grouping (province, inter-province class) was replaced by `category`, and the OSM correspondence moved into this directory.

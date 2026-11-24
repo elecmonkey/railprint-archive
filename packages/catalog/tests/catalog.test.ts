@@ -35,7 +35,7 @@ test.each(['', '<>', '<a', 'a/b', '[a>'])(
 test('accepts a valid catalog and drops empty optional parts', () => {
   const catalog = parseCatalog({
     version: 2,
-    lines: [{ ...line, aliases: [], osm: {} }],
+    lines: [{ ...line, osm: {} }],
   });
   expect(catalog.lines[0]).toEqual(line);
 });
@@ -64,7 +64,6 @@ test('collects every problem at once', () => {
         { ...line, id: 'x', to: '延安' },
         { ...line, id: 'y', from: '西安东', to: '延安' },
         { ...line, id: 'z', category: 'red' },
-        { ...line, id: 'w', aliases: ['西延高铁'] },
         {
           ...line,
           id: 'v',
@@ -82,7 +81,6 @@ test('collects every problem at once', () => {
     expect(problems).toMatch(/same endpoint/);
     expect(problems).toMatch(/lines\[3\].*repeats the section of lines\[0\]/);
     expect(problems).toMatch(/category must be one of/);
-    expect(problems).toMatch(/aliases repeats the name/);
     expect(problems).toMatch(/osm\.from must be "node\/<id>"/);
     expect(problems).toMatch(/confirmed line needs both endpoints/);
     expect(problems).toMatch(

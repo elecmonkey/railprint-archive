@@ -214,16 +214,11 @@ export class Matcher {
     }
   }
 
-  /** Infrastructure relations named like the line or one of its aliases. */
+  /** Infrastructure relations named like the line. */
   relationsFor(line: CatalogLine): RailRelation[] {
-    const found = new Map<number, RailRelation>();
-    for (const name of [line.name, ...(line.aliases ?? [])]) {
-      for (const r of this.relationsByKey.get(lineKeyString(lineKey(name))) ??
-        []) {
-        found.set(r.id, r);
-      }
-    }
-    return [...found.values()];
+    return [
+      ...(this.relationsByKey.get(lineKeyString(lineKey(line.name))) ?? []),
+    ];
   }
 
   /**

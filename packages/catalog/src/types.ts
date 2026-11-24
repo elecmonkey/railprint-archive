@@ -48,8 +48,6 @@ export interface CatalogLine {
   id: string;
   /** Display name, e.g. 西延高铁. */
   name: string;
-  /** Other names for the same section (高速线 / 高铁 / 客专 variants, OSM names). */
-  aliases?: string[];
   /** Endpoint in catalog notation, see endpoint.ts. */
   from: string;
   to: string;

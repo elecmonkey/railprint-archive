@@ -6,7 +6,6 @@ export interface ReleaseLineProperties {
   category: LineCategory;
   id: string;
   name: string;
-  aliases?: string[];
   from: string;
   to: string;
   lengthKm: number;
