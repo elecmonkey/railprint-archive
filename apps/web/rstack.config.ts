@@ -5,7 +5,7 @@ define.app(async () => {
   const { pluginReact } = await import('@rsbuild/plugin-react');
   return {
     plugins: [pluginReact()],
-    html: { title: 'railprint' },
+    html: { title: 'railprint', favicon: './src/favicon.svg' },
     server: {
       // Serve the railway release and the basemap assets at the site root,
       // and copy both into the build output.
