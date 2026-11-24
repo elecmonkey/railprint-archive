@@ -14,9 +14,14 @@
 
 .mark {
   flex: none;
-  width: 36px;
-  height: 36px;
-  margin-top: 1px;
+  /*
+   * The text block is 60px of line boxes (20 + 2 + 18 + 2 + 4 + 14); the
+   * mark runs from the top of the title's letters to the bottom of the
+   * credit's characters.
+   */
+  width: 59px;
+  height: 59px;
+  margin-top: 2px;
 }
 
 .body {

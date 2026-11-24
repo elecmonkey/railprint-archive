@@ -9,7 +9,7 @@ interface Props {
 /** The favicon's crossing, in the map's own colours. */
 function Mark() {
   return (
-    <svg className={styles.mark} viewBox="0 0 32 32" aria-hidden="true">
+    <svg className={styles.mark} viewBox="1.3 1.3 29.4 29.4" aria-hidden="true">
       <g fill="none" strokeLinecap="round" strokeLinejoin="round">
         <path
           stroke="var(--rp-line-conventional)"
@@ -55,7 +55,6 @@ export function TitleCard({ counts, attribution }: Props) {
           ))}
         </p>
         <p className={styles.credit}>
-          地图数据{' '}
           <a
             href="https://www.openstreetmap.org/copyright"
             target="_blank"
