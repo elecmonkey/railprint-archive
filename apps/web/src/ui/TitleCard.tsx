@@ -42,7 +42,7 @@ export function TitleCard({ counts }: Props) {
       <Mark />
       <div className={styles.body}>
         <h1>
-          <span className={styles.owner}>Elecmonkey’s</span> Railprint
+          <span className={styles.owner}>{"Elecmonkey's"}</span> Railprint
         </h1>
         <p className={styles.figures}>
           {figures.map(([value, unit]) => (

@@ -1,8 +1,8 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-// Bundled so text looks the same everywhere; Windows would fall back to
-// Microsoft YaHei.
-import '@fontsource-variable/noto-sans-sc';
+// Latin letters, digits and punctuation in Geist everywhere; Chinese falls
+// through to the system's font.
+import '@fontsource-variable/geist';
 import { App } from './App';
 import './index.css';
 

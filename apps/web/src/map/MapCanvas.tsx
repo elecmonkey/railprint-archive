@@ -72,8 +72,8 @@ export function MapCanvas({
   } | null>(null);
   const hoverFrame = useRef(0);
   const picker = useMemo(() => new Picker(data), [data]);
-  // Canvas text does not fetch web fonts, and the bundled one is split by
-  // character range: load the pieces the station names need, then redraw.
+  // Canvas text does not fetch web fonts: load the bundled one for the
+  // labels' characters, then redraw.
   const [fontsLoaded, setFontsLoaded] = useState(0);
   useEffect(() => {
     if (!('fonts' in document)) return;

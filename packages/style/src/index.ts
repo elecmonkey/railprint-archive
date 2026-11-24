@@ -55,8 +55,10 @@ export interface TerrainStyle {
   opacity: number;
 }
 
+// Latin first, so punctuation such as the apostrophe in the title is not
+// drawn full-width by a Chinese font.
 const FONT =
-  '"Noto Sans SC Variable", "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", system-ui, sans-serif';
+  '"Geist Variable", Arial, Helvetica, "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", system-ui, sans-serif';
 
 export const light: Theme = {
   name: 'light',
