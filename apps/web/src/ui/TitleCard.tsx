@@ -1,7 +1,7 @@
 import styles from './TitleCard.module.css';
 
 interface Props {
-  counts: { lines: number; stations: number; lengthKm: number };
+  counts: { lines: number; lengthKm: number };
 }
 
 /** The favicon's crossing, in the map's own colours. */
@@ -34,9 +34,8 @@ function Mark() {
 
 export function TitleCard({ counts }: Props) {
   const figures: [string, string][] = [
-    [counts.lines.toLocaleString(), '条线路'],
+    [counts.lines.toLocaleString(), '个路段'],
     [counts.lengthKm.toLocaleString(), 'km'],
-    [counts.stations.toLocaleString(), '个车站'],
   ];
   return (
     <header className={styles.card}>
