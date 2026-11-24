@@ -6,6 +6,12 @@ import {
   type StationsCollection,
 } from '@railprint/render';
 
+// Imported rather than served as they are, so each file gets a name with a
+// content hash and can be cached for good. The small meta file is bundled.
+import linesUrl from '../../../../data/release/lines.geojson?url';
+import releaseMeta from '../../../../data/release/meta.json';
+import stationsUrl from '../../../../data/release/stations.geojson?url';
+
 export interface ReleaseMeta {
   osm: { timestamp?: string };
   attribution: string;
@@ -19,12 +25,6 @@ export type ReleaseState =
   | { status: 'loading'; progress?: number }
   | { status: 'error'; message: string }
   | { status: 'ready'; data: RenderData; meta: ReleaseMeta };
-
-async function getJson<T>(url: string, signal: AbortSignal): Promise<T> {
-  const response = await fetch(url, { signal });
-  if (!response.ok) throw new Error(`${url}: HTTP ${response.status}`);
-  return (await response.json()) as T;
-}
 
 /**
  * Fetch JSON, calling `onBytes` with each chunk's size as it arrives. The
@@ -56,15 +56,14 @@ async function streamJson<T>(
   return JSON.parse(text) as T;
 }
 
-/** Load data/release/ served at the site root and prepare it for drawing. */
+/** Load data/release/ and prepare it for drawing. */
 export function useRelease(): ReleaseState {
   const [state, setState] = useState<ReleaseState>({ status: 'loading' });
   useEffect(() => {
     const controller = new AbortController();
     const { signal } = controller;
     (async () => {
-      // The small meta file first: it says how much there is to load.
-      const meta = await getJson<ReleaseMeta>('meta.json', signal);
+      const meta = releaseMeta as ReleaseMeta;
       const total = meta.bytes
         ? meta.bytes.lines + meta.bytes.stations
         : undefined;
@@ -81,8 +80,8 @@ export function useRelease(): ReleaseState {
       };
       if (total) setState({ status: 'loading', progress: 0 });
       const [lines, stations] = await Promise.all([
-        streamJson<LinesCollection>('lines.geojson', signal, onBytes),
-        streamJson<StationsCollection>('stations.geojson', signal, onBytes),
+        streamJson<LinesCollection>(linesUrl, signal, onBytes),
+        streamJson<StationsCollection>(stationsUrl, signal, onBytes),
       ]);
       if (!signal.aborted)
         setState({ status: 'ready', data: prepareData(lines, stations), meta });

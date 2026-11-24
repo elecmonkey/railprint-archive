@@ -6,14 +6,9 @@ define.app(async () => {
   return {
     plugins: [pluginReact()],
     html: { title: "Elecmonkey's Railprint", favicon: './src/favicon.svg' },
-    server: {
-      // Serve the railway release and the basemap assets at the site root,
-      // and copy both into the build output.
-      publicDir: [
-        { name: '../../data/release', copyOnBuild: true, watch: true },
-        { name: '../../packages/basemap/assets', copyOnBuild: true },
-      ],
-    },
+    // The railway release and the basemap are imported as assets, so their
+    // file names carry a content hash.
+    source: { assetsInclude: /\.geojson$/ },
   };
 });
 

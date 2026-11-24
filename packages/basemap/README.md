@@ -1,6 +1,6 @@
 # @railprint/basemap
 
-Builds the physical-geography basemap in `assets/`: terrain textures, rivers and lake outlines. The web app serves `assets/` at the site root.
+Builds the physical-geography basemap in `assets/`: terrain textures, rivers and lake outlines. The web app imports these files, so the build gives each a name with a content hash; a texture added to `terrain.json` also needs an import in `apps/web/src/data/useBasemap.ts`.
 
 **You normally do not run this.** `assets/` is committed. It depends only on Natural Earth and ETOPO, which rarely change, not on the railway data. Rebuild only when those sources, the texture specs or the encoding change:
 

@@ -71,7 +71,8 @@ function lineBounds(line: RenderLine): Bounds {
 
 export function App() {
   const release = useRelease();
-  const basemap = useBasemap();
+  // The basemap waits for the railway, which matters more.
+  const basemap = useBasemap(release.status === 'ready');
   const [terrainReady, setTerrainReady] = useState(false);
   const [themeName, setThemeName] = useState<'light' | 'dark'>(preferredTheme);
   const [view, setView] = useState<View>();
