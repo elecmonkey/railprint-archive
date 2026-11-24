@@ -65,7 +65,7 @@ export function App() {
             view={view}
             theme={theme}
             {...(basemap.global ? { global: basemap.global } : {})}
-            {...(basemap.regional ? { regional: basemap.regional } : {})}
+            regional={basemap.regional}
             opacity={basemapOpacity}
             onReady={setTerrainReady}
           />

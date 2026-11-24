@@ -13,15 +13,16 @@ Then commit `assets/` together with the code change.
 
 ## Outputs
 
-| File                     | Contents                                          |
-| ------------------------ | ------------------------------------------------- |
-| `terrain-global.webp`    | 3600×1800, 6′ cells, whole world                  |
-| `terrain-east-asia.webp` | 8160×4560, 30″ cells, 74–142°E, 17–55°N           |
-| `terrain.json`           | Grid of each texture and the channel encoding     |
-| `rivers.geojson`         | Natural Earth 1:10m rivers with scale rank        |
-| `lakes.geojson`          | Natural Earth 1:10m lake outlines with scale rank |
+| File                          | Contents                                          |
+| ----------------------------- | ------------------------------------------------- |
+| `terrain-global.webp`         | 3600×1800, 6′ cells, whole world                  |
+| `terrain-east-asia-west.webp` | 4500×4560, 30″ cells, 73–110.5°E, 17–55°N         |
+| `terrain-east-asia-east.webp` | 4500×4560, 30″ cells, 109.5–147°E, 17–55°N        |
+| `terrain.json`                | Grid of each texture and the channel encoding     |
+| `rivers.geojson`              | Natural Earth 1:10m rivers with scale rank        |
+| `lakes.geojson`               | Natural Earth 1:10m lake outlines with scale rank |
 
-The global texture comes from ETOPO 60″; the East Asia one from ETOPO 30″ at full resolution, bounded to fit an 8192 px WebGL texture. Devices with a smaller texture limit use the global texture only.
+The global texture comes from ETOPO 60″. The two East Asia textures come from ETOPO 30″ at full resolution and together cover China, Korea and Japan; they overlap by one degree so the renderer can fade between them. Devices whose texture limit is below 4560 px use the global texture only.
 
 Terrain textures are lossless WebP whose channels are data, not colours: R hillshade, G sqrt(elevation / 7000 m) on land, B land fraction (lakes count as water). `@railprint/render` turns them into colours per theme.
 

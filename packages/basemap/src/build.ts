@@ -42,9 +42,10 @@ const ELEVATION = {
 } as const;
 
 /**
- * A global texture small enough for any WebGL device, and a sharper one for
- * East Asia where the network is: ETOPO's full 30″ resolution, bounded so
- * that it stays within an 8192 px texture (China, Korea and most of Japan).
+ * A global texture small enough for any WebGL device, and sharper ones for
+ * East Asia at ETOPO's full 30″ resolution: China, Korea and Japan, split in
+ * two so each stays well within common texture limits. They overlap by one
+ * degree, which the renderer fades across.
  */
 export const TERRAIN: TerrainSpec[] = [
   {
@@ -61,14 +62,27 @@ export const TERRAIN: TerrainSpec[] = [
     exaggeration: 10,
   },
   {
-    name: 'east-asia',
+    name: 'east-asia-west',
     elevation: '30s',
     grid: {
-      width: 8160,
+      width: 4500,
       height: 4560,
-      west: 74,
+      west: 73,
       south: 17,
-      east: 142,
+      east: 110.5,
+      north: 55,
+    },
+    exaggeration: 3,
+  },
+  {
+    name: 'east-asia-east',
+    elevation: '30s',
+    grid: {
+      width: 4500,
+      height: 4560,
+      west: 109.5,
+      south: 17,
+      east: 147,
       north: 55,
     },
     exaggeration: 3,

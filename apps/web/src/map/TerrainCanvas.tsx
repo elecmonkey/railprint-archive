@@ -11,7 +11,8 @@ interface Props {
   view: View | undefined;
   theme: Theme;
   global?: TerrainTexture;
-  regional?: TerrainTexture;
+  /** Sharper regional textures, drawn in order over the global one. */
+  regional: TerrainTexture[];
   /** Layer opacity, 0–1; applied in CSS so changing it needs no redraw. */
   opacity: number;
   /** Reports whether terrain is being drawn, so the 2D layer can go transparent. */

@@ -14,7 +14,8 @@ interface TerrainIndex {
 export interface Basemap {
   vectors?: BasemapData;
   global?: TerrainTexture;
-  regional?: TerrainTexture;
+  /** Sharper regional textures, in the order terrain.json lists them. */
+  regional: TerrainTexture[];
 }
 
 async function loadImage(url: string): Promise<HTMLImageElement> {
@@ -33,14 +34,15 @@ async function getJson<T>(url: string): Promise<T> {
 /**
  * Load the basemap assets (packages/basemap/assets, served at the site root).
  * Each part arrives independently, the global terrain before the regional
- * one; the map works without any of them.
+ * ones; the map works without any of them.
  */
 export function useBasemap(): Basemap {
-  const [basemap, setBasemap] = useState<Basemap>({});
+  const [basemap, setBasemap] = useState<Basemap>({ regional: [] });
   useEffect(() => {
     let cancelled = false;
-    const update = (part: Partial<Basemap>) => {
-      if (!cancelled) setBasemap((current) => ({ ...current, ...part }));
+    const update = (part: (current: Basemap) => Partial<Basemap>) => {
+      if (!cancelled)
+        setBasemap((current) => ({ ...current, ...part(current) }));
     };
     const warn = (error: unknown) => console.warn('basemap:', error);
 
@@ -49,7 +51,7 @@ export function useBasemap(): Basemap {
       getJson<BasemapCollection>('lakes.geojson'),
     ])
       .then(([rivers, lakes]) =>
-        update({ vectors: prepareBasemap(rivers, lakes) }),
+        update(() => ({ vectors: prepareBasemap(rivers, lakes) })),
       )
       .catch(warn);
 
@@ -57,10 +59,11 @@ export function useBasemap(): Basemap {
       .then(async (index) => {
         for (const entry of index.textures) {
           const image = await loadImage(entry.file);
-          update(
+          const texture = { grid: entry.grid, image };
+          update((current) =>
             entry.name === 'global'
-              ? { global: { grid: entry.grid, image } }
-              : { regional: { grid: entry.grid, image } },
+              ? { global: texture }
+              : { regional: [...current.regional, texture] },
           );
         }
       })

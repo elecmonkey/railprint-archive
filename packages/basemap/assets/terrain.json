@@ -20,14 +20,26 @@
       }
     },
     {
-      "name": "east-asia",
-      "file": "terrain-east-asia.webp",
+      "name": "east-asia-west",
+      "file": "terrain-east-asia-west.webp",
       "grid": {
-        "width": 8160,
+        "width": 4500,
         "height": 4560,
-        "west": 74,
+        "west": 73,
         "south": 17,
-        "east": 142,
+        "east": 110.5,
+        "north": 55
+      }
+    },
+    {
+      "name": "east-asia-east",
+      "file": "terrain-east-asia-east.webp",
+      "grid": {
+        "width": 4500,
+        "height": 4560,
+        "west": 109.5,
+        "south": 17,
+        "east": 147,
         "north": 55
       }
     }

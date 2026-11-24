@@ -97,6 +97,29 @@ const VERTEX = `#version 300 es
 in vec2 a_position;
 void main() { gl_Position = vec4(a_position, 0.0, 1.0); }`;
 
+/**
+ * Regional textures the shader can blend over the global one. Each is drawn
+ * over the previous ones, fading in over half a degree inside its edges, so
+ * neighbouring textures that overlap by at least that much join seamlessly.
+ */
+export const MAX_REGIONAL = 4;
+
+const REGIONAL_UNIFORMS = Array.from(
+  { length: MAX_REGIONAL },
+  (_, i) =>
+    `uniform sampler2D u_regional${i};\nuniform vec4 u_regionalBox${i};`,
+).join('\n');
+
+const REGIONAL_BLEND = Array.from(
+  { length: MAX_REGIONAL },
+  (_, i) => `  if (u_regionalCount > ${i}) {
+    vec4 b = u_regionalBox${i};
+    float edge = min(min(deg.x - b.x, b.z - deg.x), min(deg.y - b.y, b.w - deg.y));
+    float w = clamp(edge / 0.5, 0.0, 1.0);
+    if (w > 0.0) t = mix(t, texture(u_regional${i}, uv(b, deg)).rgb, w);
+  }`,
+).join('\n');
+
 const FRAGMENT = `#version 300 es
 precision highp float;
 out vec4 outColor;
@@ -113,9 +136,8 @@ uniform float u_meridian;     // conic central meridian, radians
 
 uniform sampler2D u_global;
 uniform vec4 u_globalBox;     // west, south, east, north (degrees)
-uniform sampler2D u_regional;
-uniform vec4 u_regionalBox;
-uniform bool u_hasRegional;
+${REGIONAL_UNIFORMS}
+uniform int u_regionalCount;
 
 uniform vec3 u_sea;
 uniform vec3 u_landLow;
@@ -166,13 +188,7 @@ void main() {
   deg.x = mod(deg.x + 180.0, 360.0) - 180.0;
 
   vec3 t = texture(u_global, uv(u_globalBox, deg)).rgb;
-  if (u_hasRegional) {
-    vec4 b = u_regionalBox;
-    // Fade from the global to the regional texture over half a degree.
-    float edge = min(min(deg.x - b.x, b.z - deg.x), min(deg.y - b.y, b.w - deg.y));
-    float w = clamp(edge / 0.5, 0.0, 1.0);
-    if (w > 0.0) t = mix(t, texture(u_regional, uv(b, deg)).rgb, w);
-  }
+${REGIONAL_BLEND}
   float relief = t.r / u_flatShade;            // 1 on flat ground
   float elevation = t.g * t.g;                 // undo the sqrt encoding
   float land = t.b;
@@ -215,7 +231,9 @@ export class TerrainRenderer {
   private readonly program: WebGLProgram;
   private readonly uniforms = new Map<string, WebGLUniformLocation | null>();
   private global?: { texture: WebGLTexture; grid: TerrainGrid };
-  private regional?: { texture: WebGLTexture; grid: TerrainGrid };
+  private regional: { texture: WebGLTexture; grid: TerrainGrid }[] = [];
+  /** Uploaded textures by image, so setting the same image again is free. */
+  private readonly uploaded = new Map<TexImageSource, WebGLTexture>();
   readonly maxTextureSize: number;
 
   constructor(gl: WebGL2RenderingContext) {
@@ -250,7 +268,9 @@ export class TerrainRenderer {
     return this.uniforms.get(name)!;
   }
 
-  private upload(image: TexImageSource): WebGLTexture {
+  private upload(image: TexImageSource, wrap: boolean): WebGLTexture {
+    const cached = this.uploaded.get(image);
+    if (cached) return cached;
     const gl = this.gl;
     const texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -266,32 +286,33 @@ export class TerrainRenderer {
       gl.LINEAR_MIPMAP_LINEAR,
     );
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+    gl.texParameteri(
+      gl.TEXTURE_2D,
+      gl.TEXTURE_WRAP_S,
+      wrap ? gl.REPEAT : gl.CLAMP_TO_EDGE,
+    );
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    this.uploaded.set(image, texture);
     return texture;
   }
 
   /**
-   * Set the global texture and optionally a sharper regional one. The
-   * regional texture is skipped when the device cannot hold it.
+   * Set the global texture and sharper regional ones, drawn in order over it.
+   * Regional textures the device cannot hold are skipped, as are any beyond
+   * MAX_REGIONAL.
    */
-  setTextures(global: TerrainTexture, regional?: TerrainTexture): void {
-    this.global = { texture: this.upload(global.image), grid: global.grid };
-    const fits =
-      regional &&
-      Math.max(regional.grid.width, regional.grid.height) <=
-        this.maxTextureSize;
-    this.regional = fits
-      ? { texture: this.upload(regional.image), grid: regional.grid }
-      : undefined;
-    if (this.regional) {
-      // Regional textures do not wrap around the globe.
-      this.gl.texParameteri(
-        this.gl.TEXTURE_2D,
-        this.gl.TEXTURE_WRAP_S,
-        this.gl.CLAMP_TO_EDGE,
-      );
-    }
+  setTextures(global: TerrainTexture, regional: TerrainTexture[] = []): void {
+    // The global texture wraps around the globe; regional ones do not.
+    this.global = {
+      texture: this.upload(global.image, true),
+      grid: global.grid,
+    };
+    this.regional = regional
+      .filter(
+        (r) => Math.max(r.grid.width, r.grid.height) <= this.maxTextureSize,
+      )
+      .slice(0, MAX_REGIONAL)
+      .map((r) => ({ texture: this.upload(r.image, false), grid: r.grid }));
   }
 
   get ready(): boolean {
@@ -334,13 +355,13 @@ export class TerrainRenderer {
     gl.bindTexture(gl.TEXTURE_2D, this.global.texture);
     gl.uniform1i(this.uniform('u_global'), 0);
     gl.uniform4f(this.uniform('u_globalBox'), ...box(this.global.grid));
-    gl.uniform1i(this.uniform('u_hasRegional'), this.regional ? 1 : 0);
-    if (this.regional) {
-      gl.activeTexture(gl.TEXTURE1);
-      gl.bindTexture(gl.TEXTURE_2D, this.regional.texture);
-      gl.uniform1i(this.uniform('u_regional'), 1);
-      gl.uniform4f(this.uniform('u_regionalBox'), ...box(this.regional.grid));
-    }
+    gl.uniform1i(this.uniform('u_regionalCount'), this.regional.length);
+    this.regional.forEach(({ texture, grid }, i) => {
+      gl.activeTexture(gl.TEXTURE1 + i);
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.uniform1i(this.uniform(`u_regional${i}`), 1 + i);
+      gl.uniform4f(this.uniform(`u_regionalBox${i}`), ...box(grid));
+    });
 
     const t = theme.terrain;
     gl.uniform3f(this.uniform('u_sea'), ...hex(theme.sea));
