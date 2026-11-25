@@ -16,7 +16,8 @@
     "osm": "node packages/osm/src/cli.ts",
     "match": "node packages/matching/src/cli.ts",
     "release": "node packages/release/src/cli.ts",
-    "basemap": "node packages/basemap/src/cli.ts"
+    "basemap": "node packages/basemap/src/cli.ts",
+    "export": "node packages/export/src/cli.ts"
   },
   "devDependencies": {
     "@types/node": "^26.6.6",

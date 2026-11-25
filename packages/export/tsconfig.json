@@ -1,0 +1,8 @@
+{
+  "extends": "../../tsconfig.node.json",
+  "compilerOptions": {
+    // The renderer's types reference CanvasRenderingContext2D.
+    "lib": ["ES2024", "DOM"]
+  },
+  "include": ["src", "tests", "rstack.config.ts"]
+}

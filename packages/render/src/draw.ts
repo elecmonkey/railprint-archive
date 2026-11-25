@@ -1,4 +1,4 @@
-import { geoDistance, geoPath } from 'd3-geo';
+import { geoDistance, geoPath, type GeoProjection } from 'd3-geo';
 import type { LineCategory, Theme } from '@railprint/style';
 import { maxRank, type BasemapData } from './basemap.ts';
 import { chunkVisible, viewRadius, type Chunk } from './chunks.ts';
@@ -63,6 +63,19 @@ export interface DrawOptions {
    */
   terrain?: boolean;
   highlight?: Highlight;
+  /**
+   * A flat map projection to draw through instead of the globe of `view`,
+   * for image export: no globe outline and nothing culled. `view` still sets
+   * the zoom that styles depend on.
+   */
+  projection?: GeoProjection;
+  /**
+   * Device pixels per CSS pixel. Geometry is simplified for device pixels,
+   * so a high-resolution export keeps its detail (default 1).
+   */
+  pixelRatio?: number;
+  /** Draw stations, their symbols and names (default true). */
+  places?: boolean;
 }
 
 /** What the reader is pointing at or has selected; ids from the release. */
@@ -153,14 +166,17 @@ export function draw({
   stations = 'endpoints',
   basemapOpacity = 1,
   highlight = {},
+  projection: flat,
+  pixelRatio = 1,
+  places = true,
 }: DrawOptions): DrawStats {
-  const projection = createProjection(view, width, height);
+  const projection = flat ?? createProjection(view, width, height);
   const path = geoPath(projection, ctx as unknown as CanvasRenderingContext2D);
   const ppd = view.pixelsPerDegree;
-  const level = levelFor(ppd);
+  const level = levelFor(ppd * pixelRatio);
   const scale = widthScale(ppd);
   // Only the parts of lines near the viewport are projected and drawn.
-  const reach = viewRadius(view, width, height);
+  const reach = flat ? Math.PI : viewRadius(view, width, height);
   const trace = (chunks: Chunk[]) => {
     for (const c of chunks)
       if (chunkVisible(c, view.center, reach))
@@ -175,7 +191,7 @@ export function draw({
   // The glow is cast by the disc but only shows outside it, so the terrain
   // layer underneath is not covered. Once the globe fills the viewport there
   // is no edge to glow.
-  const edgeShown = reach >= Math.PI / 2;
+  const edgeShown = !flat && reach >= Math.PI / 2;
   if (edgeShown) {
     ctx.save();
     ctx.beginPath();
@@ -190,21 +206,23 @@ export function draw({
     ctx.fill();
     ctx.restore();
   }
-  ctx.beginPath();
-  path({ type: 'Sphere' });
-  if (!terrain) {
-    ctx.fillStyle = theme.sea;
-    ctx.fill();
+  if (!flat) {
+    ctx.beginPath();
+    path({ type: 'Sphere' });
+    if (!terrain) {
+      ctx.fillStyle = theme.sea;
+      ctx.fill();
+    }
+    ctx.strokeStyle = theme.sphere;
+    ctx.lineWidth = 1;
+    ctx.stroke();
   }
-  ctx.strokeStyle = theme.sphere;
-  ctx.lineWidth = 1;
-  ctx.stroke();
 
   // Rivers and lake outlines, most important first so they stay on top.
   if (basemap && basemapOpacity > 0) {
     ctx.globalAlpha = basemapOpacity;
     const rank = maxRank(ppd);
-    const detail = ppd < 60 ? 0 : 1;
+    const detail = ppd * pixelRatio < 60 ? 0 : 1;
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
     ctx.strokeStyle = theme.water.lakeOutline;
@@ -273,6 +291,7 @@ export function draw({
   // written on the station; symbols follow when zoomed in and the names move
   // beside them. Junctions (线路所) get a symbol but no name.
   const visible = (s: RenderStation) =>
+    flat !== undefined ||
     geoDistance(s.coordinates, view.center) < Math.PI / 2 - 0.01;
   const placed: {
     x: number;
@@ -281,7 +300,7 @@ export function draw({
     symbol: boolean;
     label: boolean;
   }[] = [];
-  for (const s of data.stations) {
+  for (const s of places ? data.stations : []) {
     const { symbol, label } = stationDisplay(s, ppd, stations, highlight);
     if ((!symbol && !label) || !visible(s)) continue;
     const p = projection(s.coordinates);

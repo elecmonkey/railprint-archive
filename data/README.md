@@ -62,6 +62,7 @@ Everything in `cache/` is rebuilt from `sources/` and can be deleted at any time
 | --------------------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------- |
 | `cache/osm/china-rail.osm.pbf`    | `pnpm osm extract` | Railway objects of the China extract (osmium `tags-filter`), with a `.meta.json` naming the source snapshot |
 | `cache/matching/report.{json,md}` | `pnpm match`       | Catalog ↔ OSM matching results for review                                                                   |
+| `cache/export/*`                  | `pnpm export`      | Flat image of the whole network                                                                             |
 
 `pnpm match` refuses to run on an extract built from a different snapshot than the one in the lock.
 

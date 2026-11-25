@@ -14,6 +14,7 @@
 | `packages/release`  | Final line and station GeoJSON in `data/release/`                                   |
 | `packages/style`    | Design tokens: line, station and background styles, light and dark                  |
 | `packages/render`   | Canvas renderer for the release data, shared by the web app and export              |
+| `packages/export`   | Flat image of the whole network with terrain, rivers and lakes                      |
 | `packages/basemap`  | Terrain, rivers and lakes in `packages/basemap/assets/` (committed; rarely rebuilt) |
 | `data/`             | Committed data and ignored downloads, see [data/README.md](data/README.md)          |
 
@@ -29,21 +30,22 @@ pnpm install
 
 Run from the repository root:
 
-| Command                                  | Purpose                                                                  |
-| ---------------------------------------- | ------------------------------------------------------------------------ |
-| `pnpm sources status`                    | Which external sources are present locally                               |
-| `pnpm sources fetch [id...]`             | Download missing sources and update the lock                             |
-| `pnpm sources verify [id...]`            | Re-hash downloaded files against the lock                                |
-| `pnpm catalog check`                     | Validate the line catalog and print a summary                            |
-| `pnpm catalog notes`                     | List catalog lines with open questions                                   |
-| `pnpm osm update [id]`                   | Apply OSM change files to a downloaded extract                           |
-| `pnpm osm extract`                       | Build the railway extract in `data/cache/osm/`                           |
-| `pnpm match [line-id...]`                | Match catalog lines to OSM, write `data/cache/matching/report.{json,md}` |
-| `pnpm match confirm <line-id...\|--all>` | Record the current result of lines in `data/catalog/`                    |
-| `pnpm match audit`                       | Re-route confirmed lines under the current rules and list differences    |
-| `pnpm match overlaps [line-id...]`       | List track lines share with other lines, so it counts twice              |
-| `pnpm release`                           | Build `data/release/` from the confirmed catalog                         |
-| `pnpm basemap`                           | Rebuild the basemap assets (see packages/basemap/README.md)              |
+| Command                                       | Purpose                                                                  |
+| --------------------------------------------- | ------------------------------------------------------------------------ |
+| `pnpm sources status`                         | Which external sources are present locally                               |
+| `pnpm sources fetch [id...]`                  | Download missing sources and update the lock                             |
+| `pnpm sources verify [id...]`                 | Re-hash downloaded files against the lock                                |
+| `pnpm catalog check`                          | Validate the line catalog and print a summary                            |
+| `pnpm catalog notes`                          | List catalog lines with open questions                                   |
+| `pnpm osm update [id]`                        | Apply OSM change files to a downloaded extract                           |
+| `pnpm osm extract`                            | Build the railway extract in `data/cache/osm/`                           |
+| `pnpm match [line-id...]`                     | Match catalog lines to OSM, write `data/cache/matching/report.{json,md}` |
+| `pnpm match confirm <line-id...\|--all>`      | Record the current result of lines in `data/catalog/`                    |
+| `pnpm match audit`                            | Re-route confirmed lines under the current rules and list differences    |
+| `pnpm match overlaps [line-id...]`            | List track lines share with other lines, so it counts twice              |
+| `pnpm release`                                | Build `data/release/` from the confirmed catalog                         |
+| `pnpm basemap`                                | Rebuild the basemap assets (see packages/basemap/README.md)              |
+| `pnpm export [--width --scale --theme --out]` | Render the network as an image in `data/cache/export/`                   |
 
 ## JavaScript toolchain
 
