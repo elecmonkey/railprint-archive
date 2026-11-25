@@ -1,5 +1,8 @@
 # Elecmonkey's Railprint
 
+> [!NOTE]
+> This is an archive repository. The project has moved to https://github.com/elecmonkey/railprint.
+
 Elecmonkey's railway footprint: the lines I have travelled, drawn on a globe from OpenStreetMap geometry. See it at https://rail.elecmonkey.com.
 
 ## Licences
