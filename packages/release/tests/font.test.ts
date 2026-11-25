@@ -2,9 +2,9 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dataLayout } from '@railprint/layout';
 import { expect, test } from 'rstack/test';
-import { FONT_DIR, FONT_FILES, shownCharacters } from '../src/font.ts';
+import { CHARACTERS_FILE, shownCharacters } from '../src/font.ts';
 
-test('the committed font covers every character the site shows', async () => {
+test('the committed character list covers every character the site shows', async () => {
   const layout = dataLayout(
     fileURLToPath(new URL('../../..', import.meta.url)),
   );
@@ -18,7 +18,7 @@ test('the committed font covers every character the site shows', async () => {
     lines: properties('lines.geojson'),
     stations: properties('stations.geojson'),
   });
-  const covered = new Set(read(`${FONT_DIR}/${FONT_FILES.characters}`).trim());
+  const covered = new Set(read(CHARACTERS_FILE).trim());
   const missing = [...shown].filter((c) => !covered.has(c));
   // Run `pnpm release` after adding Chinese text to the web app.
   expect(missing.join('')).toBe('');

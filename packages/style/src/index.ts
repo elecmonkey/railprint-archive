@@ -57,7 +57,7 @@ export interface TerrainStyle {
 
 // Latin first, so punctuation such as the apostrophe in the title is not
 // drawn full-width by a Chinese font. Railprint SC is Noto Sans SC cut down
-// to the characters the site shows (data/release/font/); system fonts only
+// to the characters the site shows (packages/font); system fonts only
 // cover what it lacks.
 const FONT =
   '"Geist Variable", "Railprint SC", Arial, Helvetica, "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", system-ui, sans-serif';

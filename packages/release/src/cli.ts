@@ -5,14 +5,14 @@ import { dataLayout } from '@railprint/layout';
 import { readExtractMeta, requireFreshRailExtract } from '@railprint/osm';
 import { loadRailNetwork } from '@railprint/railnet';
 import { buildRelease, ReleaseError } from './build.ts';
-import { writeFont } from './font.ts';
+import { writeCharacters } from './font.ts';
 import { releaseMeta, writeRelease } from './write.ts';
 
 const USAGE = `Usage: railprint-release
 
 Build data/release/ (lines.geojson, stations.geojson, meta.json) from the
-confirmed catalog, and font/ with the Chinese font cut down to the characters
-the site shows. Every catalog line must be confirmed.
+confirmed catalog, and characters.txt with every Chinese character the site
+shows. Every catalog line must be confirmed.
 `;
 
 async function main(): Promise<number> {
@@ -50,10 +50,12 @@ async function main(): Promise<number> {
     console.log(
       `${lines} lines (${lengthKm} km), ${stations} stations (${endpoints} endpoints) → ${layout.release}`,
     );
-    const font = await writeFont(layout, release);
-    console.log(
-      `font: ${font.characters} characters, ${Math.round(font.bytes / 1024)} KB`,
+    const characters = await writeCharacters(
+      layout.root,
+      layout.release,
+      release,
     );
+    console.log(`characters.txt: ${characters} characters`);
     return 0;
   } catch (error) {
     if (error instanceof ReleaseError) {

@@ -9,11 +9,11 @@ body {
   background: var(--rp-background, #e9eef0);
 }
 
-/* Noto Sans SC cut down to the characters the site shows; `pnpm release`
-   writes it (see packages/release/src/font.ts). */
+/* Noto Sans SC cut down to the characters the site shows, built before each
+   build (see packages/font). */
 @font-face {
   font-family: 'Railprint SC';
-  src: url('../../../data/release/font/railprint-sc.woff2') format('woff2');
+  src: url('../../../data/cache/font/railprint-sc.woff2') format('woff2');
   font-weight: 400 700;
   font-display: swap;
 }

@@ -194,6 +194,12 @@ importers:
         specifier: ^19.3.1
         version: 19.3.1(react@19.3.1)
     devDependencies:
+      '@railprint/font':
+        specifier: workspace:^
+        version: link:../../packages/font
+      '@railprint/layout':
+        specifier: workspace:^
+        version: link:../../packages/layout
       '@rsbuild/plugin-react':
         specifier: ^2.1.1
         version: 2.1.1(@rsbuild/core@2.3.3)(@rspack/core@2.3.3(@swc/helpers@0.5.24))
@@ -265,6 +271,22 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1
 
+  packages/font:
+    dependencies:
+      '@railprint/layout':
+        specifier: workspace:^
+        version: link:../layout
+      '@railprint/sources':
+        specifier: workspace:^
+        version: link:../sources
+      subset-font:
+        specifier: ^2.9.0
+        version: 2.9.0
+    devDependencies:
+      '@types/subset-font':
+        specifier: ^2.3.0
+        version: 2.3.0
+
   packages/layout: {}
 
   packages/matching:
@@ -317,16 +339,6 @@ importers:
       '@railprint/railnet':
         specifier: workspace:^
         version: link:../railnet
-      '@railprint/sources':
-        specifier: workspace:^
-        version: link:../sources
-      subset-font:
-        specifier: ^2.9.0
-        version: 2.9.0
-    devDependencies:
-      '@types/subset-font':
-        specifier: ^2.3.0
-        version: 2.3.0
 
   packages/render:
     dependencies:

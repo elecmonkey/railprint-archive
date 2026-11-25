@@ -1,36 +1,11 @@
-import {
-  copyFile,
-  mkdir,
-  readdir,
-  readFile,
-  writeFile,
-} from 'node:fs/promises';
+import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import type { DataLayout } from '@railprint/layout';
-import {
-  loadManifest,
-  readLock,
-  sourceStatus,
-  type SourceDefinition,
-} from '@railprint/sources';
-import subsetFont from 'subset-font';
 
 /**
- * The site's Chinese font: Noto Sans SC cut down to the characters the
- * release and the web app show, written to data/release/font/ next to its
- * licence.
+ * Every Chinese character the site shows, written to data/release/ for
+ * `@railprint/font`, which cuts the site's font down to them.
  */
-export const FONT_DIR = 'font';
-export const FONT_FILES = {
-  font: 'railprint-sc.woff2',
-  characters: 'characters.txt',
-  license: 'OFL.txt',
-} as const;
-
-const SOURCES = { font: 'noto-sans-sc', license: 'noto-sans-sc-license' };
-
-/** Weights the web app uses (400–650), as a variable range. */
-const WEIGHTS = { min: 400, max: 700 };
+export const CHARACTERS_FILE = 'characters.txt';
 
 /** CJK characters and punctuation; everything else is drawn in Geist. */
 const CJK_RANGES: [number, number][] = [
@@ -85,39 +60,13 @@ export async function shownCharacters(
   return [...set].sort().join('');
 }
 
-async function sourcePath(layout: DataLayout, id: string): Promise<string> {
-  const manifest = await loadManifest(layout.sourcesManifest);
-  const source = manifest.sources.find((s) => s.id === id) as SourceDefinition;
-  const status = await sourceStatus(
-    source,
-    layout.sources,
-    await readLock(layout.sourcesLock),
-  );
-  if (status.state !== 'ok')
-    throw new Error(
-      `${id} is ${status.state}; run \`pnpm sources fetch ${id}\``,
-    );
-  return join(layout.sources, source.path);
-}
-
-/** Writes the cut-down font, its character list and licence; returns the font size in bytes. */
-export async function writeFont(
-  layout: DataLayout,
+/** Writes the character list; returns how many characters it holds. */
+export async function writeCharacters(
+  root: string,
+  dir: string,
   release: ShownText,
-): Promise<{ characters: number; bytes: number }> {
-  const characters = await shownCharacters(layout.root, release);
-  const font = await subsetFont(
-    await readFile(await sourcePath(layout, SOURCES.font)),
-    characters,
-    { targetFormat: 'woff2', variationAxes: { wght: WEIGHTS } },
-  );
-  const dir = join(layout.release, FONT_DIR);
-  await mkdir(dir, { recursive: true });
-  await writeFile(join(dir, FONT_FILES.font), font);
-  await writeFile(join(dir, FONT_FILES.characters), `${characters}\n`);
-  await copyFile(
-    await sourcePath(layout, SOURCES.license),
-    join(dir, FONT_FILES.license),
-  );
-  return { characters: characters.length, bytes: font.length };
+): Promise<number> {
+  const characters = await shownCharacters(root, release);
+  await writeFile(join(dir, CHARACTERS_FILE), `${characters}\n`);
+  return characters.length;
 }

@@ -20,9 +20,8 @@ export {
   type ReleaseMeta,
 } from './write.ts';
 export {
-  FONT_DIR,
-  FONT_FILES,
+  CHARACTERS_FILE,
   shownCharacters,
-  writeFont,
+  writeCharacters,
   type ShownText,
 } from './font.ts';

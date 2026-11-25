@@ -15,6 +15,7 @@
 | `packages/style`    | Design tokens: line, station and background styles, light and dark                  |
 | `packages/render`   | Canvas renderer for the release data, shared by the web app and export              |
 | `packages/export`   | Flat image of the whole network with terrain, rivers and lakes                      |
+| `packages/font`     | Noto Sans SC cut down to `data/release/characters.txt`, built before each web build |
 | `packages/basemap`  | Terrain, rivers and lakes in `packages/basemap/assets/` (committed; rarely rebuilt) |
 | `data/`             | Committed data and ignored downloads, see [data/README.md](data/README.md)          |
 
@@ -30,33 +31,34 @@ pnpm install
 
 Run from the repository root:
 
-| Command                                       | Purpose                                                                  |
-| --------------------------------------------- | ------------------------------------------------------------------------ |
-| `pnpm sources status`                         | Which external sources are present locally                               |
-| `pnpm sources fetch [id...]`                  | Download missing sources and update the lock                             |
-| `pnpm sources verify [id...]`                 | Re-hash downloaded files against the lock                                |
-| `pnpm catalog check`                          | Validate the line catalog and print a summary                            |
-| `pnpm catalog notes`                          | List catalog lines with open questions                                   |
-| `pnpm osm update [id]`                        | Apply OSM change files to a downloaded extract                           |
-| `pnpm osm extract`                            | Build the railway extract in `data/cache/osm/`                           |
-| `pnpm match [line-id...]`                     | Match catalog lines to OSM, write `data/cache/matching/report.{json,md}` |
-| `pnpm match confirm <line-id...\|--all>`      | Record the current result of lines in `data/catalog/`                    |
-| `pnpm match audit`                            | Re-route confirmed lines under the current rules and list differences    |
-| `pnpm match overlaps [line-id...]`            | List track lines share with other lines, so it counts twice              |
-| `pnpm release`                                | Build `data/release/` from the confirmed catalog                         |
-| `pnpm basemap`                                | Rebuild the basemap assets (see packages/basemap/README.md)              |
-| `pnpm export [--width --scale --theme --out]` | Render the network as an image in `data/cache/export/`                   |
+| Command                                       | Purpose                                                                      |
+| --------------------------------------------- | ---------------------------------------------------------------------------- |
+| `pnpm sources status`                         | Which external sources are present locally                                   |
+| `pnpm sources fetch [id...]`                  | Download missing sources and update the lock                                 |
+| `pnpm sources verify [id...]`                 | Re-hash downloaded files against the lock                                    |
+| `pnpm catalog check`                          | Validate the line catalog and print a summary                                |
+| `pnpm catalog notes`                          | List catalog lines with open questions                                       |
+| `pnpm osm update [id]`                        | Apply OSM change files to a downloaded extract                               |
+| `pnpm osm extract`                            | Build the railway extract in `data/cache/osm/`                               |
+| `pnpm match [line-id...]`                     | Match catalog lines to OSM, write `data/cache/matching/report.{json,md}`     |
+| `pnpm match confirm <line-id...\|--all>`      | Record the current result of lines in `data/catalog/`                        |
+| `pnpm match audit`                            | Re-route confirmed lines under the current rules and list differences        |
+| `pnpm match overlaps [line-id...]`            | List track lines share with other lines, so it counts twice                  |
+| `pnpm release`                                | Build `data/release/` from the confirmed catalog                             |
+| `pnpm basemap`                                | Rebuild the basemap assets (see packages/basemap/README.md)                  |
+| `pnpm export [--width --scale --theme --out]` | Render the network as an image in `data/cache/export/`                       |
+| `pnpm font`                                   | Build the cut-down font in `data/cache/font/` (the web build does it itself) |
 
 ## JavaScript toolchain
 
 The JavaScript toolchain is [Rstack](https://rstack.rs), run as `pnpm exec rs`.
 
-| Command      | Purpose                                    |
-| ------------ | ------------------------------------------ |
-| `pnpm dev`   | Start the web app at http://localhost:3000 |
-| `pnpm build` | Build the web app into `apps/web/dist/`    |
-| `pnpm test`  | Run all package tests                      |
-| `pnpm check` | Lint, type check and format check          |
+| Command      | Purpose                                                             |
+| ------------ | ------------------------------------------------------------------- |
+| `pnpm dev`   | Start the web app at http://localhost:3000                          |
+| `pnpm build` | Fetch the font source, then build the web app into `apps/web/dist/` |
+| `pnpm test`  | Run all package tests                                               |
+| `pnpm check` | Lint, type check and format check                                   |
 
 ## Package conventions
 
@@ -87,4 +89,4 @@ pnpm sources verify [id...]
 - `pnpm match` must end with every line `confirmed`. Lines that turn `review` or `failed` after an update need the author's decision before `pnpm match confirm <id>`; never confirm them on your own.
 - After changing matching rules or updating OSM, run `pnpm match audit`: it re-routes confirmed lines and lists those that would change. Show the list to the author; do not re-confirm on your own.
 - After `pnpm match confirm`, run `pnpm release` and commit `data/catalog/` and `data/release/` together.
-- `pnpm release` also cuts the Chinese font down to the characters shown (`data/release/font/`). After adding Chinese text to the web app, run it again and commit the font; a test fails while a character is missing.
+- `pnpm release` also lists every Chinese character shown in `data/release/characters.txt`; the web build cuts Noto Sans SC down to it. After adding Chinese text to the web app, run `pnpm release` again and commit the list; a test fails while a character is missing.
