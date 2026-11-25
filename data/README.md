@@ -74,11 +74,12 @@ See [catalog/README.md](catalog/README.md).
 
 `pnpm release` builds the files the web app and exporters read. Every catalog line must be confirmed; the output is deterministic for a given extract and catalog.
 
-| File                       | Contents                                                                                                                                               |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `release/lines.geojson`    | One LineString per catalog line along its confirmed path: id, name, category, endpoint names, length, high-speed share, relations                      |
-| `release/stations.geojson` | Stations and junctions on the lines: name (catalog name for endpoints, `<name>` for junctions), OSM object and name, kind, endpoint flag, lines served |
-| `release/meta.json`        | OSM snapshot, attribution and counts                                                                                                                   |
+| File                       | Contents                                                                                                                                                    |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `release/lines.geojson`    | One LineString per catalog line along its confirmed path: id, name, category, endpoint names, length, high-speed share, relations                           |
+| `release/stations.geojson` | Stations and junctions on the lines: name (catalog name for endpoints, `<name>` for junctions), OSM object and name, kind, endpoint flag, lines served      |
+| `release/meta.json`        | OSM snapshot, attribution and counts                                                                                                                        |
+| `release/font/`            | `railprint-sc.woff2`: Noto Sans SC cut down to the characters the release and the web app show, with `characters.txt` listing them and the font's `OFL.txt` |
 
 A station belongs to a line when it is a member of one of the line's relations near its path, or its node lies on the path. For lines whose relations list no stations, places connected to the path along main track within 1 km count as well. Coordinates have 6 decimals; each feature is one line of text.
 

@@ -87,3 +87,4 @@ pnpm sources verify [id...]
 - `pnpm match` must end with every line `confirmed`. Lines that turn `review` or `failed` after an update need the author's decision before `pnpm match confirm <id>`; never confirm them on your own.
 - After changing matching rules or updating OSM, run `pnpm match audit`: it re-routes confirmed lines and lists those that would change. Show the list to the author; do not re-confirm on your own.
 - After `pnpm match confirm`, run `pnpm release` and commit `data/catalog/` and `data/release/` together.
+- `pnpm release` also cuts the Chinese font down to the characters shown (`data/release/font/`). After adding Chinese text to the web app, run it again and commit the font; a test fails while a character is missing.

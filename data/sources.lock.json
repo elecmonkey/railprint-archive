@@ -59,6 +59,26 @@
       "lastModified": "Wed, 08 Sep 2021 06:23:11 GMT",
       "fetchedAt": "2026-11-23T11:35:45.504Z"
     },
+    "noto-sans-sc": {
+      "id": "noto-sans-sc",
+      "url": "https://github.com/google/fonts/raw/main/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf",
+      "resolvedUrl": "https://raw.githubusercontent.com/google/fonts/main/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf",
+      "path": "fonts/NotoSansSC[wght].ttf",
+      "bytes": 17772300,
+      "sha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
+      "etag": "\"3a4ef56b16cdb1eaf026c3049e35367f4a3eb3152ab5f3ad50bb8b0e21d2956f\"",
+      "fetchedAt": "2026-11-25T10:07:53.286Z"
+    },
+    "noto-sans-sc-license": {
+      "id": "noto-sans-sc-license",
+      "url": "https://github.com/google/fonts/raw/main/ofl/notosanssc/OFL.txt",
+      "resolvedUrl": "https://raw.githubusercontent.com/google/fonts/main/ofl/notosanssc/OFL.txt",
+      "path": "fonts/NotoSansSC-OFL.txt",
+      "bytes": 4388,
+      "sha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9",
+      "etag": "\"b7137eeea8cf569766b4475eb8f6b47f83709af2c2c4289c080466b51f3f60a5\"",
+      "fetchedAt": "2026-11-25T10:07:54.074Z"
+    },
     "osm-china": {
       "id": "osm-china",
       "url": "https://download.geofabrik.de/asia/china/china-latest.osm.pbf",

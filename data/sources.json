@@ -156,6 +156,32 @@
       },
       "optional": true,
       "notes": "Finer terrain (~0.9 km), fetched only when needed."
+    },
+    {
+      "id": "noto-sans-sc",
+      "title": "Noto Sans SC, variable weight",
+      "provider": "Google Fonts",
+      "url": "https://github.com/google/fonts/raw/main/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf",
+      "path": "fonts/NotoSansSC[wght].ttf",
+      "license": {
+        "id": "OFL-1.1",
+        "attribution": "Copyright 2014-2021 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'",
+        "url": "https://openfontlicense.org/"
+      },
+      "notes": "Chinese text on the site and in exports; `pnpm release` cuts it down to the characters used."
+    },
+    {
+      "id": "noto-sans-sc-license",
+      "title": "Noto Sans SC licence text",
+      "provider": "Google Fonts",
+      "url": "https://github.com/google/fonts/raw/main/ofl/notosanssc/OFL.txt",
+      "path": "fonts/NotoSansSC-OFL.txt",
+      "license": {
+        "id": "OFL-1.1",
+        "attribution": "Copyright 2014-2021 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'",
+        "url": "https://openfontlicense.org/"
+      },
+      "notes": "Shipped next to the cut-down font, as the OFL requires."
     }
   ]
 }

@@ -18,6 +18,11 @@
     "@railprint/layout": "workspace:^",
     "@railprint/matching": "workspace:^",
     "@railprint/osm": "workspace:^",
-    "@railprint/railnet": "workspace:^"
+    "@railprint/railnet": "workspace:^",
+    "@railprint/sources": "workspace:^",
+    "subset-font": "^2.9.0"
+  },
+  "devDependencies": {
+    "@types/subset-font": "^2.3.0"
   }
 }

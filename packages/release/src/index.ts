@@ -19,3 +19,10 @@ export {
   writeRelease,
   type ReleaseMeta,
 } from './write.ts';
+export {
+  FONT_DIR,
+  FONT_FILES,
+  shownCharacters,
+  writeFont,
+  type ShownText,
+} from './font.ts';
