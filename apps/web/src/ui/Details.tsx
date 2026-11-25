@@ -6,7 +6,7 @@ import {
 } from '@railprint/render';
 import type { Selection } from '../map/selection';
 import { LineIcon, StationIcon } from './Icons';
-import { formatKm } from './labels';
+import { formatKm, fullName } from './labels';
 import styles from './Details.module.css';
 
 interface Props {
@@ -151,8 +151,7 @@ function StationDetails({
         <span className={styles.icon}>
           <StationIcon station={station} />
         </span>
-        <h2>{p.name}</h2>
-        {p.osmName && <p className={styles.muted}>OSM 名称 {p.osmName}</p>}
+        <h2>{fullName(station)}</h2>
       </header>
       <div className={styles.actions}>
         <button type="button" onClick={() => onFocusStation(station)}>

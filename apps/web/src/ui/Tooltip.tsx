@@ -1,5 +1,6 @@
 import type { Hit, RenderLine, RenderStation } from '@railprint/render';
 import { LineIcon, StationIcon } from './Icons';
+import { fullName } from './labels';
 import styles from './Tooltip.module.css';
 
 interface Props {
@@ -49,13 +50,12 @@ function LineSummary({ line }: { line: RenderLine }) {
 }
 
 function StationSummary({ station }: { station: RenderStation }) {
-  const p = station.properties;
   return (
     <>
       <span className={styles.icon}>
         <StationIcon station={station} />
       </span>
-      <p className={styles.name}>{p.name}</p>
+      <p className={styles.name}>{fullName(station)}</p>
     </>
   );
 }

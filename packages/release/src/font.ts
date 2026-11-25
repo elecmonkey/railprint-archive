@@ -51,7 +51,7 @@ export interface ShownText {
     to: string;
     relations: { name: string }[];
   }[];
-  stations: { name: string; osmName?: string }[];
+  stations: { name: string }[];
 }
 
 /** Places in the repository whose source holds interface text. */
@@ -76,7 +76,7 @@ export async function shownCharacters(
   const texts: string[] = [];
   for (const l of release.lines)
     texts.push(l.name, l.from, l.to, ...l.relations.map((r) => r.name));
-  for (const s of release.stations) texts.push(s.name, s.osmName ?? '');
+  for (const s of release.stations) texts.push(s.name);
   for (const dir of UI_DIRS)
     for await (const file of sourceFiles(join(root, dir)))
       texts.push(await readFile(file, 'utf8'));

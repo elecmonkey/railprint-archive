@@ -39,11 +39,6 @@ export interface ReleaseStation {
   /** OSM object, e.g. `node/123`. */
   osm: string;
   name: string;
-  /**
-   * OSM name when it differs from `name`. Endpoints use the catalog name, and
-   * junctions are written `<横山>` for OSM's 横山线路所.
-   */
-  osmName?: string;
   kind: StationKind;
   /** True when some line starts or ends here. */
   endpoint: boolean;
@@ -350,6 +345,8 @@ export function buildRelease(
   const stations: ReleaseStation[] = [];
   const consumed = new Set<string>();
   const pinned: { station: ReleaseStation; rank: number }[] = [];
+  /** Each station's name in OSM, to recognise its duplicates there. */
+  const osmNames = new Map<ReleaseStation, string>();
   for (const [ref, ep] of endpoints) {
     const hit = found.get(ref);
     const place = hit?.place ?? placeByRef.get(ref);
@@ -369,17 +366,17 @@ export function buildRelease(
       coordinates = [round6(lon[n]!), round6(lat[n]!)];
     }
     consumed.add(ref);
-    const name = ep.kind === 'junction' ? junctionName(ep.name) : ep.name;
+    const station: ReleaseStation = {
+      osm: ref,
+      name: ep.kind === 'junction' ? junctionName(ep.name) : ep.name,
+      kind: ep.kind,
+      endpoint: true,
+      lines: [...lines].map((i) => catalog.lines[i]!.id),
+      coordinates,
+    };
+    osmNames.set(station, osmName ?? ep.name);
     pinned.push({
-      station: {
-        osm: ref,
-        name,
-        ...(osmName && osmName !== name ? { osmName } : {}),
-        kind: ep.kind,
-        endpoint: true,
-        lines: [...lines].map((i) => catalog.lines[i]!.id),
-        coordinates,
-      },
+      station,
       // A bare track node only stands in for a station OSM lacks.
       rank: place ? rank(place) : 3,
     });
@@ -424,7 +421,7 @@ export function buildRelease(
     const key = placeKey(name);
     const twin = [...stations, ...kept].find(
       (s) =>
-        placeKey(s.osmName ?? s.name.replace(/^<(.*)>$/, '$1')) === key &&
+        placeKey(osmNames.get(s)!) === key &&
         haversine(s.coordinates[0], s.coordinates[1], place.lon, place.lat) <
           SAME_STATION_M,
     );
@@ -437,15 +434,16 @@ export function buildRelease(
     }
     const kind = PLACE_KIND[place.railway]!;
     const shown = kind === 'junction' ? junctionName(name) : name;
-    kept.push({
+    const station: ReleaseStation = {
       osm: ref,
       name: shown,
-      ...(shown !== name ? { osmName: name } : {}),
       kind,
       endpoint: false,
       lines: [...served].sort((a, b) => a - b).map((i) => catalog.lines[i]!.id),
       coordinates: [round6(place.lon), round6(place.lat)],
-    });
+    };
+    osmNames.set(station, name);
+    kept.push(station);
   }
   stations.push(...kept);
   stations.sort((a, b) => compareRef(a.osm, b.osm));

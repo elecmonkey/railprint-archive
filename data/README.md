@@ -77,7 +77,7 @@ See [catalog/README.md](catalog/README.md).
 | File                       | Contents                                                                                                                                                    |
 | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `release/lines.geojson`    | One LineString per catalog line along its confirmed path: id, name, category, endpoint names, length, high-speed share, relations                           |
-| `release/stations.geojson` | Stations and junctions on the lines: name (catalog name for endpoints, `<name>` for junctions), OSM object and name, kind, endpoint flag, lines served      |
+| `release/stations.geojson` | Stations and junctions on the lines: name (catalog name for endpoints, `<name>` for junctions), OSM object, kind, endpoint flag, lines served               |
 | `release/meta.json`        | OSM snapshot, attribution and counts                                                                                                                        |
 | `release/font/`            | `railprint-sc.woff2`: Noto Sans SC cut down to the characters the release and the web app show, with `characters.txt` listing them and the font's `OFL.txt` |
 

@@ -16,7 +16,6 @@ export interface ReleaseLineProperties {
 export interface ReleaseStationProperties {
   osm: string;
   name: string;
-  osmName?: string;
   kind: 'station' | 'junction';
   endpoint: boolean;
   lines: string[];
