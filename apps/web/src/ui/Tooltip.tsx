@@ -55,12 +55,7 @@ function StationSummary({ station }: { station: RenderStation }) {
       <span className={styles.icon}>
         <StationIcon station={station} />
       </span>
-      <p className={styles.name}>
-        {p.name}
-        {p.kind === 'non-passenger' && (
-          <span className={styles.tag}>无客运</span>
-        )}
-      </p>
+      <p className={styles.name}>{p.name}</p>
     </>
   );
 }

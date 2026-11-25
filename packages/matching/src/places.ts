@@ -10,7 +10,6 @@ import { placeKey } from './names.ts';
 const KIND_RAILWAY: Record<EndpointKind, ReadonlySet<string>> = {
   station: new Set(['station', 'halt']),
   junction: new Set(['junction', 'service_station', 'crossover']),
-  'non-passenger': new Set(['station', 'halt', 'yard']),
 };
 
 export interface PlaceMatch {

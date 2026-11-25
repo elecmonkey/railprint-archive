@@ -6,7 +6,7 @@ import {
 } from '@railprint/render';
 import type { Selection } from '../map/selection';
 import { LineIcon, StationIcon } from './Icons';
-import { formatKm, STATION_KIND_LABEL } from './labels';
+import { formatKm } from './labels';
 import styles from './Details.module.css';
 
 interface Props {
@@ -119,11 +119,6 @@ function LineDetails({
                 >
                   {station.properties.name}
                 </span>
-                {station.properties.kind !== 'station' && (
-                  <span className={styles.tag}>
-                    {STATION_KIND_LABEL[station.properties.kind]}
-                  </span>
-                )}
               </button>
             </li>
           ))}
@@ -156,12 +151,7 @@ function StationDetails({
         <span className={styles.icon}>
           <StationIcon station={station} />
         </span>
-        <h2>
-          {p.name}
-          {p.kind === 'non-passenger' && (
-            <span className={styles.tag}>无客运</span>
-          )}
-        </h2>
+        <h2>{p.name}</h2>
         {p.osmName && <p className={styles.muted}>OSM 名称 {p.osmName}</p>}
       </header>
       <div className={styles.actions}>

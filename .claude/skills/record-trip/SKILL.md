@@ -18,7 +18,7 @@ The catalog in `data/catalog/` lists the sections the author has ridden, divided
 ## 2. Divide it into lines
 
 - Name each line after the railway it is, as OSM names it: 高铁 / 客专 / 高速线 variants are the same line. A connector is a link line named after its OSM 联络线 relation. Never invent a name for a section.
-- Endpoints are passenger stations, `<junction>` for 线路所 and `[station]` for stations without passenger service. Never invent names for unnamed track nodes; a short overlap at a station throat is fine.
+- Endpoints are stations, written by name, or junctions (线路所), written `<name>` without 线路所. Never invent names for unnamed track nodes; a short overlap at a station throat is fine.
 - Category: `emu` for 动车 lines, `conventional` for 普速, `link` for 联络线.
 - Never let one line contain another. When the trip covers more of a line already in the catalog, replace the pieces it covers with one line over the whole ridden extent: `杭深线/杭州东-宁波` replaces `杭深线/杭州东-绍兴北`, and several 杭深线 pieces become `杭深线/杭州东-深圳北`.
 - Short shared track is normal and stays: a link line leaving a station along a main line for a kilometre or two (`厦门北联络线` runs 1.25 km on 杭深线 before it turns off), or lines meeting at a station throat. Do not move endpoints to unnamed points to remove it.

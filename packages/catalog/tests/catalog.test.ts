@@ -18,14 +18,13 @@ const line = {
 test.each([
   ['西安东', { kind: 'station', name: '西安东' }],
   ['<耿镇>', { kind: 'junction', name: '耿镇' }],
-  ['[吕河]', { kind: 'non-passenger', name: '吕河' }],
   [' <K141> ', { kind: 'junction', name: 'K141' }],
 ])('parseEndpoint(%s)', (text, expected) => {
   expect(parseEndpoint(text)).toEqual(expected);
   expect(formatEndpoint(parseEndpoint(text))).toBe(text.trim());
 });
 
-test.each(['', '<>', '<a', 'a/b', '[a>'])(
+test.each(['', '<>', '<a', 'a/b', '[吕河]'])(
   'parseEndpoint rejects %j',
   (text) => {
     expect(() => parseEndpoint(text)).toThrow(/Invalid endpoint/);
@@ -106,7 +105,7 @@ test('summarizes categories and endpoint kinds', () => {
         },
         {
           ...line,
-          id: '西延高铁/耿镇-西安东',
+          id: '西延高铁/<耿镇>-西安东',
           from: '<耿镇>',
           category: 'link',
         },

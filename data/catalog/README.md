@@ -38,11 +38,10 @@ Run `pnpm catalog check` after editing.
 
 ### Endpoint notation
 
-| Written  | Meaning                           |
-| -------- | --------------------------------- |
-| `西安东` | passenger station                 |
-| `<耿镇>` | junction / 线路所                 |
-| `[吕河]` | station without passenger service |
+| Written  | Meaning                                             |
+| -------- | --------------------------------------------------- |
+| `西安东` | station                                             |
+| `<耿镇>` | junction (线路所), shown as `<耿镇>` on the map too |
 
 ### OSM endpoints
 
@@ -50,7 +49,7 @@ Run `pnpm catalog check` after editing.
 
 ### IDs
 
-`id` is `<name>/<from>-<to>` without endpoint markers, and validation enforces it: when a line's name or endpoints change, its id changes too, and the line's entry in `paths.json` is renamed with it.
+`id` is `<name>/<from>-<to>` with the endpoints as written (`蔡歌联络线/<K141>-歌乐山`), and validation enforces it: when a line's name or endpoints change, its id changes too, and the line's entry in `paths.json` is renamed with it.
 
 ## Correcting a line
 

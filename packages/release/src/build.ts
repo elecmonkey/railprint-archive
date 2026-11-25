@@ -1,4 +1,5 @@
 import {
+  formatEndpoint,
   parseEndpoint,
   parseRef,
   type Catalog,
@@ -19,13 +20,13 @@ import {
 } from '@railprint/railnet';
 
 /** Place kinds shown on the map; yards and depots are not included. */
-export type StationKind = 'station' | 'junction' | 'non-passenger';
+export type StationKind = 'station' | 'junction';
 
 export interface ReleaseLine {
   id: string;
   name: string;
   category: LineCategory;
-  /** Endpoint names as written in the catalog, without markers. */
+  /** Endpoints as written in the catalog: a junction is `<name>`. */
   from: string;
   to: string;
   lengthKm: number;
@@ -39,8 +40,8 @@ export interface ReleaseStation {
   osm: string;
   name: string;
   /**
-   * OSM name when it differs from `name`. Endpoints use the catalog name, a
-   * junction's in full: `<横山>` is shown as 横山线路所.
+   * OSM name when it differs from `name`. Endpoints use the catalog name, and
+   * junctions are written `<横山>` for OSM's 横山线路所.
    */
   osmName?: string;
   kind: StationKind;
@@ -56,15 +57,9 @@ export interface Release {
   stations: ReleaseStation[];
 }
 
-/**
- * The full name of a junction written `<横山>` in the catalog: the OSM name
- * when it is that name with a 所 suffix (横山线路所, 茂陵东辅助所), otherwise
- * the name with 线路所 added.
- */
-export function junctionName(name: string, osmName?: string): string {
-  if (name.endsWith('所')) return name;
-  if (osmName?.startsWith(name) && osmName.endsWith('所')) return osmName;
-  return `${name}线路所`;
+/** A junction's name as shown: 横山线路所 and 横山 are both `<横山>`. */
+export function junctionName(name: string): string {
+  return `<${name.replace(/线路所$/, '')}>`;
 }
 
 /** A relation's member station belongs to a line within this distance of its path. */
@@ -245,8 +240,8 @@ export function buildRelease(
       id: line.id,
       name: line.name,
       category: line.category,
-      from: parseEndpoint(line.from).name,
-      to: parseEndpoint(line.to).name,
+      from: formatEndpoint(parseEndpoint(line.from)),
+      to: formatEndpoint(parseEndpoint(line.to)),
       lengthKm: Math.round(lengthM / 100) / 10,
       relations: osm.relations ?? [],
       coordinates: drawn(nodes, osm.from!, osm.to!),
@@ -374,8 +369,7 @@ export function buildRelease(
       coordinates = [round6(lon[n]!), round6(lat[n]!)];
     }
     consumed.add(ref);
-    const name =
-      ep.kind === 'junction' ? junctionName(ep.name, osmName) : ep.name;
+    const name = ep.kind === 'junction' ? junctionName(ep.name) : ep.name;
     pinned.push({
       station: {
         osm: ref,
@@ -430,7 +424,7 @@ export function buildRelease(
     const key = placeKey(name);
     const twin = [...stations, ...kept].find(
       (s) =>
-        placeKey(s.osmName ?? s.name) === key &&
+        placeKey(s.osmName ?? s.name.replace(/^<(.*)>$/, '$1')) === key &&
         haversine(s.coordinates[0], s.coordinates[1], place.lon, place.lat) <
           SAME_STATION_M,
     );
@@ -441,10 +435,13 @@ export function buildRelease(
       );
       continue;
     }
+    const kind = PLACE_KIND[place.railway]!;
+    const shown = kind === 'junction' ? junctionName(name) : name;
     kept.push({
       osm: ref,
-      name,
-      kind: PLACE_KIND[place.railway]!,
+      name: shown,
+      ...(shown !== name ? { osmName: name } : {}),
+      kind,
       endpoint: false,
       lines: [...served].sort((a, b) => a - b).map((i) => catalog.lines[i]!.id),
       coordinates: [round6(place.lon), round6(place.lat)],
