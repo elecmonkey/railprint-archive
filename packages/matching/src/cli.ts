@@ -13,8 +13,10 @@ import {
 import { dataLayout } from '@railprint/layout';
 import { readExtractMeta, requireFreshRailExtract } from '@railprint/osm';
 import { loadRailNetwork } from '@railprint/railnet';
+import { readFile } from 'node:fs/promises';
 import { audit } from './audit.ts';
 import { confirmMatch, Matcher } from './match.ts';
+import { overlaps } from './overlaps.ts';
 import { buildReport, renderMarkdown } from './report.ts';
 
 const USAGE = `Usage:
@@ -23,6 +25,8 @@ const USAGE = `Usage:
   railprint-match confirm --all         Fix every line that is not failed
   railprint-match audit                 Re-route confirmed lines under the current
                                         rules and list those that differ
+  railprint-match overlaps [line-id...]  List track these lines (all by default)
+                                        share with other lines, so it counts twice
 
 The report goes to data/cache/matching/report.{json,md}. Confirming writes each
 line's OSM endpoints and relations into data/catalog/lines.json and the exact
@@ -53,7 +57,9 @@ async function main(): Promise<number> {
   }
   const auditing = positionals[0] === 'audit';
   const confirming = positionals[0] === 'confirm';
-  const ids = confirming || auditing ? positionals.slice(1) : positionals;
+  const listing = positionals[0] === 'overlaps';
+  const ids =
+    confirming || auditing || listing ? positionals.slice(1) : positionals;
   if (confirming && !ids.length && !values.all) {
     console.error(USAGE);
     return 1;
@@ -68,7 +74,37 @@ async function main(): Promise<number> {
   const extract = await requireFreshRailExtract(layout);
   const meta = (await readExtractMeta(extract))!;
   const started = Date.now();
-  const matcher = new Matcher(await loadRailNetwork(extract));
+  const network = await loadRailNetwork(extract);
+  if (listing) {
+    // Lines matched but not yet confirmed take their path from the report.
+    const all = { ...paths.lines };
+    try {
+      const report = JSON.parse(
+        await readFile(join(layout.cache, 'matching', 'report.json'), 'utf8'),
+      ) as { lines: ReturnType<Matcher['match']>[] };
+      for (const result of report.lines)
+        if (result.path && lines.some((l) => l.id === result.id))
+          all[result.id] = result.path.segments.map((g) => [
+            g.way,
+            g.from,
+            g.to,
+          ]);
+    } catch {
+      // No report yet: confirmed paths only.
+    }
+    const found = overlaps(
+      network,
+      all,
+      ids.length ? lines.map((l) => l.id) : undefined,
+    );
+    for (const o of found) console.log(`${o.km} km\t${o.line}\t${o.other}`);
+    const total = found.reduce((sum, o) => sum + o.km, 0);
+    console.log(
+      `${found.length} overlap(s), ${Math.round(total * 10) / 10} km counted twice`,
+    );
+    return 0;
+  }
+  const matcher = new Matcher(network);
   if (auditing) {
     const findings = audit(matcher, { version: 2, lines }, paths);
     for (const f of findings) {

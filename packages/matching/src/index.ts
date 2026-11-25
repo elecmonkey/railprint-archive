@@ -25,6 +25,7 @@ export {
   type RelationShare,
 } from './match.ts';
 export { buildReport, renderMarkdown, type MatchReport } from './report.ts';
+export { overlaps, type Overlap } from './overlaps.ts';
 export {
   audit,
   DEFAULT_AUDIT,

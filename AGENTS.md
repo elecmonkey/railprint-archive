@@ -41,6 +41,7 @@ Run from the repository root:
 | `pnpm match [line-id...]`                | Match catalog lines to OSM, write `data/cache/matching/report.{json,md}` |
 | `pnpm match confirm <line-id...\|--all>` | Record the current result of lines in `data/catalog/`                    |
 | `pnpm match audit`                       | Re-route confirmed lines under the current rules and list differences    |
+| `pnpm match overlaps [line-id...]`       | List track lines share with other lines, so it counts twice              |
 | `pnpm release`                           | Build `data/release/` from the confirmed catalog                         |
 | `pnpm basemap`                           | Rebuild the basemap assets (see packages/basemap/README.md)              |
 

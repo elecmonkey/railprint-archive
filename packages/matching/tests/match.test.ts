@@ -65,3 +65,23 @@ test('reports lines without a same-name relation', () => {
   expect(m.issues.map((i) => i.code)).toContain('no-relation');
   expect(m.path).toBeDefined();
 });
+
+test('measures track two lines share', async () => {
+  const { overlaps } = await import('../src/overlaps.ts');
+  const network = await loadRailNetwork(fixture);
+  const found = overlaps(network, {
+    a: [
+      [10, 1, 3],
+      [11, 3, 5],
+    ],
+    b: [[11, 4, 5]],
+    c: [[10, 1, 2]],
+  });
+  // b runs over the second half of way 11, c over the first half of way 10.
+  expect(found.map((o) => [o.line, o.other])).toEqual([
+    ['a', 'b'],
+    ['a', 'c'],
+  ]);
+  expect(found[0]!.km).toBeCloseTo(1, 0);
+  expect(overlaps(network, { b: [[11, 4, 5]], c: [[10, 1, 2]] })).toEqual([]);
+});
