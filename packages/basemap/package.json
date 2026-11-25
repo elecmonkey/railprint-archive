@@ -13,9 +13,7 @@
   "dependencies": {
     "@railprint/layout": "workspace:^",
     "@railprint/render": "workspace:^",
-    "@railprint/sources": "workspace:^",
-    "h5wasm": "^0.10.3",
-    "sharp": "^0.35.5"
+    "@railprint/sources": "workspace:^"
   },
   "bin": {
     "railprint-basemap": "./src/cli.ts"

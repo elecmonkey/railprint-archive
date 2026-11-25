@@ -16,7 +16,8 @@
 | `packages/render`   | Canvas renderer for the release data, shared by the web app and export              |
 | `packages/export`   | Flat image of the whole network with terrain, rivers and lakes                      |
 | `packages/font`     | Noto Sans SC cut down to `data/release/characters.txt`, built before each web build |
-| `packages/basemap`  | Terrain, rivers and lakes in `packages/basemap/assets/` (committed; rarely rebuilt) |
+| `packages/basemap`  | Rivers and lakes in `packages/basemap/assets/` (committed; rarely rebuilt)          |
+| `packages/tiles`    | Global terrain tiles, built by hand and uploaded to their own site; see its README  |
 | `data/`             | Committed data and ignored downloads, see [data/README.md](data/README.md)          |
 
 ## Requirements
@@ -31,23 +32,24 @@ pnpm install
 
 Run from the repository root:
 
-| Command                                       | Purpose                                                                      |
-| --------------------------------------------- | ---------------------------------------------------------------------------- |
-| `pnpm sources status`                         | Which external sources are present locally                                   |
-| `pnpm sources fetch [id...]`                  | Download missing sources and update the lock                                 |
-| `pnpm sources verify [id...]`                 | Re-hash downloaded files against the lock                                    |
-| `pnpm catalog check`                          | Validate the line catalog and print a summary                                |
-| `pnpm catalog notes`                          | List catalog lines with open questions                                       |
-| `pnpm osm update [id]`                        | Apply OSM change files to a downloaded extract                               |
-| `pnpm osm extract`                            | Build the railway extract in `data/cache/osm/`                               |
-| `pnpm match [line-id...]`                     | Match catalog lines to OSM, write `data/cache/matching/report.{json,md}`     |
-| `pnpm match confirm <line-id...\|--all>`      | Record the current result of lines in `data/catalog/`                        |
-| `pnpm match audit`                            | Re-route confirmed lines under the current rules and list differences        |
-| `pnpm match overlaps [line-id...]`            | List track lines share with other lines, so it counts twice                  |
-| `pnpm release`                                | Build `data/release/` from the confirmed catalog                             |
-| `pnpm basemap`                                | Rebuild the basemap assets (see packages/basemap/README.md)                  |
-| `pnpm export [--width --scale --theme --out]` | Render the network as an image in `data/cache/export/`                       |
-| `pnpm font`                                   | Build the cut-down font in `data/cache/font/` (the web build does it itself) |
+| Command                                       | Purpose                                                                            |
+| --------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `pnpm sources status`                         | Which external sources are present locally                                         |
+| `pnpm sources fetch [id...]`                  | Download missing sources and update the lock                                       |
+| `pnpm sources verify [id...]`                 | Re-hash downloaded files against the lock                                          |
+| `pnpm catalog check`                          | Validate the line catalog and print a summary                                      |
+| `pnpm catalog notes`                          | List catalog lines with open questions                                             |
+| `pnpm osm update [id]`                        | Apply OSM change files to a downloaded extract                                     |
+| `pnpm osm extract`                            | Build the railway extract in `data/cache/osm/`                                     |
+| `pnpm match [line-id...]`                     | Match catalog lines to OSM, write `data/cache/matching/report.{json,md}`           |
+| `pnpm match confirm <line-id...\|--all>`      | Record the current result of lines in `data/catalog/`                              |
+| `pnpm match audit`                            | Re-route confirmed lines under the current rules and list differences              |
+| `pnpm match overlaps [line-id...]`            | List track lines share with other lines, so it counts twice                        |
+| `pnpm release`                                | Build `data/release/` from the confirmed catalog                                   |
+| `pnpm basemap`                                | Rebuild rivers and lakes (see packages/basemap/README.md)                          |
+| `pnpm tiles`                                  | Build the terrain tiles in `packages/tiles/dist/` and their hash in `version.json` |
+| `pnpm export [--width --scale --theme --out]` | Render the network as an image in `data/cache/export/`                             |
+| `pnpm font`                                   | Build the cut-down font in `data/cache/font/` (the web build does it itself)       |
 
 ## JavaScript toolchain
 

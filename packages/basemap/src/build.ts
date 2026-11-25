@@ -8,106 +8,22 @@ import {
   sourceStatus,
   type SourceDefinition,
 } from '@railprint/sources';
-import sharp from 'sharp';
-import { rasterizeCoverage, type Grid } from './raster.ts';
-import { readShapefile, type Ring } from './shapefile.ts';
-import {
-  hillshade,
-  MAX_ELEVATION_M,
-  packTerrain,
-  readElevation,
-} from './terrain.ts';
+import { readShapefile } from './shapefile.ts';
 import { featureCollection, toLines } from './vector.ts';
 import { unzip } from './zip.ts';
 
 /**
- * Where the basemap is written: inside this package, committed with it. The
- * basemap depends only on Natural Earth and ETOPO, which rarely change, so it
- * is built once and reused rather than rebuilt with the railway data.
+ * Where rivers and lakes are written: inside this package, committed with
+ * it. They depend only on Natural Earth, which rarely changes, so they are
+ * built once and reused rather than rebuilt with the railway data. Terrain
+ * comes from packages/tiles.
  */
 export const ASSETS_DIR = fileURLToPath(new URL('../assets/', import.meta.url));
 
-export interface TerrainSpec {
-  name: string;
-  /** ETOPO source the texture is built from. */
-  elevation: keyof typeof ELEVATION;
-  grid: Grid;
-  /** Height exaggeration for the hillshade; coarser grids need more. */
-  exaggeration: number;
-}
-
-const ELEVATION = {
-  '60s': 'etopo-2022-60s',
-  '30s': 'etopo-2022-30s',
-} as const;
-
-/**
- * A global texture small enough for any WebGL device, and sharper ones for
- * East Asia at ETOPO's full 30″ resolution: China, Korea and Japan, split in
- * two so each stays well within common texture limits. They overlap by one
- * degree, which the renderer fades across.
- */
-export const TERRAIN: TerrainSpec[] = [
-  {
-    name: 'global',
-    elevation: '60s',
-    grid: {
-      width: 3600,
-      height: 1800,
-      west: -180,
-      south: -90,
-      east: 180,
-      north: 90,
-    },
-    exaggeration: 10,
-  },
-  {
-    name: 'east-asia-west',
-    elevation: '30s',
-    grid: {
-      width: 4500,
-      height: 4560,
-      west: 73,
-      south: 17,
-      east: 110.5,
-      north: 55,
-    },
-    exaggeration: 3,
-  },
-  {
-    name: 'east-asia-east',
-    elevation: '30s',
-    grid: {
-      width: 4500,
-      height: 4560,
-      west: 109.5,
-      south: 17,
-      east: 147,
-      north: 55,
-    },
-    exaggeration: 3,
-  },
-];
-
-const SOURCES = {
-  land: 'ne-10m-land',
+const SOURCES: Record<string, string> = {
   lakes: 'ne-10m-lakes',
   rivers: 'ne-10m-rivers-lake-centerlines',
-  ...Object.fromEntries(
-    Object.entries(ELEVATION).map(([k, id]) => [`etopo${k}`, id]),
-  ),
-} as Record<string, string>;
-
-export interface TerrainIndex {
-  encoding: {
-    r: string;
-    g: string;
-    b: string;
-    flatShade: number;
-    maxElevationM: number;
-  };
-  textures: { name: string; file: string; grid: Grid }[];
-}
+};
 
 async function sourcePaths(
   layout: DataLayout,
@@ -151,11 +67,6 @@ export async function buildBasemap(
   const out = ASSETS_DIR;
   await mkdir(out, { recursive: true });
 
-  const land = await loadShapes(
-    paths.land!,
-    join(cache, 'land'),
-    'ne_10m_land',
-  );
   const lakes = await loadShapes(
     paths.lakes!,
     join(cache, 'lakes'),
@@ -166,53 +77,7 @@ export async function buildBasemap(
     join(cache, 'rivers'),
     'ne_10m_rivers_lake_centerlines',
   );
-  const landRings: Ring[] = land.records.flatMap((r) => r.parts);
-  const lakeRings: Ring[] = lakes.records.flatMap((r) => r.parts);
-  log(
-    `land ${land.records.length} records, lakes ${lakes.records.length}, rivers ${rivers.records.length}`,
-  );
-
-  const index: TerrainIndex = {
-    encoding: {
-      r: 'hillshade, 0–255',
-      g: `sqrt(elevation / ${MAX_ELEVATION_M} m) on land, 0–255`,
-      b: 'land fraction (lakes are water), 0–255',
-      flatShade: Math.round(Math.cos(Math.PI / 4) * 255),
-      maxElevationM: MAX_ELEVATION_M,
-    },
-    textures: [],
-  };
-  for (const spec of TERRAIN) {
-    const started = Date.now();
-    const elevation = await readElevation(
-      paths[`etopo${spec.elevation}`]!,
-      spec.grid,
-    );
-    const shade = hillshade(elevation, spec.grid, spec.exaggeration);
-    const landCover = rasterizeCoverage(landRings, spec.grid);
-    const lakeCover = rasterizeCoverage(lakeRings, spec.grid);
-    for (let i = 0; i < landCover.length; i++)
-      landCover[i] = Math.max(0, landCover[i]! - lakeCover[i]!);
-    const file = `terrain-${spec.name}.webp`;
-    // Lossless: the channels are data, not colours.
-    const webp = await sharp(
-      Buffer.from(packTerrain(shade, elevation, landCover)),
-      {
-        raw: { width: spec.grid.width, height: spec.grid.height, channels: 3 },
-      },
-    )
-      .webp({ lossless: true, effort: 6 })
-      .toBuffer();
-    await atomicWrite(join(out, file), webp);
-    index.textures.push({ name: spec.name, file, grid: spec.grid });
-    log(
-      `${file}: ${spec.grid.width}×${spec.grid.height}, ${(webp.length / 1048576).toFixed(1)} MiB, ${((Date.now() - started) / 1000).toFixed(0)} s`,
-    );
-  }
-  await atomicWrite(
-    join(out, 'terrain.json'),
-    `${JSON.stringify(index, null, 2)}\n`,
-  );
+  log(`lakes ${lakes.records.length}, rivers ${rivers.records.length}`);
 
   const riverFeatures = toLines(rivers, (p) => p.featurecla === 'River');
   const lakeFeatures = toLines(lakes, () => true);

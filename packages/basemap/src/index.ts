@@ -1,22 +1,10 @@
-export {
-  buildBasemap,
-  TERRAIN,
-  type TerrainIndex,
-  type TerrainSpec,
-} from './build.ts';
-export { rasterizeCoverage, type Grid } from './raster.ts';
+export { buildBasemap } from './build.ts';
 export {
   readShapefile,
   type Ring,
   type ShapeRecord,
   type Shapefile,
 } from './shapefile.ts';
-export {
-  hillshade,
-  MAX_ELEVATION_M,
-  packTerrain,
-  readElevation,
-} from './terrain.ts';
 export {
   featureCollection,
   toLines,

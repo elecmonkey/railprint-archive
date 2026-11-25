@@ -8,15 +8,15 @@ import {
   draw,
   prepareBasemap,
   prepareData,
+  tileLevelFor,
   type BasemapCollection,
   type LinesCollection,
   type StationsCollection,
-  type TerrainGrid,
   type View,
 } from '@railprint/render';
 import type { Theme } from '@railprint/style';
 import sharp from 'sharp';
-import { paintTerrain, type TerrainRaster } from './terrain.ts';
+import { frameBox, paintTerrain, TileSampler } from './terrain.ts';
 
 /** Standard parallels of the Lambert conformal conic used for China. */
 const PARALLELS: [number, number] = [25, 47];
@@ -92,13 +92,6 @@ export interface ExportResult {
 const readJson = async <T>(path: string) =>
   JSON.parse(await readFile(path, 'utf8')) as T;
 
-async function loadRaster(path: string, grid: TerrainGrid) {
-  const { data, info } = await sharp(path)
-    .raw()
-    .toBuffer({ resolveWithObject: true });
-  return { grid, data, channels: info.channels } satisfies TerrainRaster;
-}
-
 /** Renders the release with its basemap as an image. */
 export async function renderExport(
   options: ExportOptions,
@@ -115,16 +108,6 @@ export async function renderExport(
     await readJson<BasemapCollection>(join(assets, 'rivers.geojson')),
     await readJson<BasemapCollection>(join(assets, 'lakes.geojson')),
   );
-  const index = await readJson<{
-    textures: { name: string; file: string; grid: TerrainGrid }[];
-  }>(join(assets, 'terrain.json'));
-  const rasters = await Promise.all(
-    index.textures.map((t) => loadRaster(join(assets, t.file), t.grid)),
-  );
-  const global = rasters[index.textures.findIndex((t) => t.name === 'global')];
-  if (!global) throw new Error('terrain.json lists no global texture');
-  const regional = rasters.filter((r) => r !== global);
-
   const frame = fitFrame(dataPoints(data), options.width, options.padding);
   const width = Math.round(frame.width * scale);
   const height = Math.round(frame.height * scale);
@@ -132,19 +115,21 @@ export async function renderExport(
     throw new Error(
       `WebP allows at most ${WEBP_MAX} px a side, this is ${width}×${height}; export as .jpg`,
     );
+  // The tiles the web app uses, at about one texel per output pixel.
+  const tiles = await TileSampler.load(
+    join(layout.root, 'packages', 'tiles', 'dist'),
+    tileLevelFor(1 / (frame.view.pixelsPerDegree * scale)),
+    frameBox(frame.projection, frame.width, frame.height),
+  ).catch((error: unknown) => {
+    throw new Error(
+      `No terrain tiles in packages/tiles/dist; run \`pnpm tiles\` (${String(error)})`,
+    );
+  });
   const canvas = createCanvas(width, height);
   const ctx = canvas.getContext('2d');
   const image = ctx.createImageData(width, height);
   image.data.set(
-    paintTerrain(
-      frame.projection,
-      width,
-      height,
-      scale,
-      global,
-      regional,
-      theme,
-    ),
+    paintTerrain(frame.projection, width, height, scale, tiles, theme),
   );
   ctx.putImageData(image, 0, 0);
   ctx.scale(scale, scale);

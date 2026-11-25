@@ -1,4 +1,5 @@
 import { geoDistance } from 'd3-geo';
+import { cosAngle, unitVector } from './chunks.ts';
 import { createProjection, type View } from './projection.ts';
 import type { RenderData, RenderLine, RenderStation } from './types.ts';
 
@@ -145,8 +146,9 @@ export class Picker {
     { tolerance, stations, z = () => 0 }: PickOptions,
   ): Hit {
     const projection = createProjection(view, width, height);
+    const facing = unitVector(view.center);
     const visible = (c: [number, number]) =>
-      geoDistance(c, view.center) < Math.PI / 2 - 0.01;
+      cosAngle(unitVector(c), facing) > Math.sin(0.01);
     const hit: Hit = { lines: [] };
 
     if (stations) {

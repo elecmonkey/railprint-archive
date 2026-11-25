@@ -13,6 +13,8 @@ const CHUNK_SIZE = 64;
 export interface Chunk {
   points: [number, number][];
   center: [number, number];
+  /** `center` as a unit vector, for cheap angle tests. */
+  vector: Vector;
   /** Angular radius of the circle, in radians. */
   radius: number;
 }
@@ -31,7 +33,7 @@ export function chunk(points: [number, number][]): Chunk[] {
     const center: [number, number] = [(west + east) / 2, (south + north) / 2];
     let radius = 0;
     for (const p of part) radius = Math.max(radius, geoDistance(center, p));
-    chunks.push({ points: part, center, radius });
+    chunks.push({ points: part, center, vector: unitVector(center), radius });
   }
   return chunks;
 }
@@ -49,10 +51,28 @@ export function viewRadius(view: View, width: number, height: number): number {
   return corner >= globe ? Math.PI / 2 : Math.asin(corner / globe);
 }
 
+/** A point on the sphere as a unit vector. */
+export type Vector = [number, number, number];
+
+export function unitVector([lon, lat]: [number, number]): Vector {
+  const cosLat = Math.cos(lat * DEG);
+  return [
+    cosLat * Math.cos(lon * DEG),
+    cosLat * Math.sin(lon * DEG),
+    Math.sin(lat * DEG),
+  ];
+}
+
+/** Cosine of the angle between two unit vectors. */
+export const cosAngle = (a: Vector, b: Vector) =>
+  a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+
+/** Whether the chunk comes within `radius` of the unit vector `center`. */
 export function chunkVisible(
   c: Chunk,
-  center: [number, number],
+  center: Vector,
   radius: number,
 ): boolean {
-  return geoDistance(c.center, center) - c.radius < radius;
+  const reach = radius + c.radius;
+  return reach >= Math.PI || cosAngle(c.vector, center) > Math.cos(reach);
 }

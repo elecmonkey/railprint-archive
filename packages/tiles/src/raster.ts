@@ -1,4 +1,4 @@
-import type { Ring } from './shapefile.ts';
+import type { Ring } from '@railprint/basemap';
 
 /** An equirectangular grid: `width` × `height` cells over [west, south, east, north]. */
 export interface Grid {

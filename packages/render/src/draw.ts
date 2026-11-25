@@ -1,7 +1,13 @@
-import { geoDistance, geoPath, type GeoProjection } from 'd3-geo';
+import { geoPath, type GeoProjection } from 'd3-geo';
 import type { LineCategory, Theme } from '@railprint/style';
 import { maxRank, type BasemapData } from './basemap.ts';
-import { chunkVisible, viewRadius, type Chunk } from './chunks.ts';
+import {
+  chunkVisible,
+  cosAngle,
+  unitVector,
+  viewRadius,
+  type Chunk,
+} from './chunks.ts';
 import { levelFor } from './prepare.ts';
 import { createProjection, type View } from './projection.ts';
 import type { RenderData, RenderLine, RenderStation } from './types.ts';
@@ -177,9 +183,10 @@ export function draw({
   const scale = widthScale(ppd);
   // Only the parts of lines near the viewport are projected and drawn.
   const reach = flat ? Math.PI : viewRadius(view, width, height);
+  const centre = unitVector(view.center);
   const trace = (chunks: Chunk[]) => {
     for (const c of chunks)
-      if (chunkVisible(c, view.center, reach))
+      if (chunkVisible(c, centre, reach))
         path({ type: 'LineString', coordinates: c.points });
   };
 
@@ -292,7 +299,7 @@ export function draw({
   // beside them. Junctions (线路所) get a symbol but no name.
   const visible = (s: RenderStation) =>
     flat !== undefined ||
-    geoDistance(s.coordinates, view.center) < Math.PI / 2 - 0.01;
+    cosAngle(unitVector(s.coordinates), centre) > Math.sin(0.01);
   const placed: {
     x: number;
     y: number;

@@ -35,6 +35,17 @@ export {
   type PickOptions,
 } from './pick.ts';
 export { simplify } from './simplify.ts';
+export {
+  TILE_LEVELS,
+  TILE_SIZE,
+  tileBounds,
+  tileCount,
+  tileKey,
+  tileLevelFor,
+  tilesInBox,
+  tileSpan,
+  type TileIndex,
+} from './tiles.ts';
 export type {
   LinesCollection,
   ReleaseLineProperties,
@@ -54,7 +65,8 @@ export {
 } from './basemap.ts';
 export {
   invertPoint,
+  projectPoint,
   TerrainRenderer,
-  type TerrainGrid,
-  type TerrainTexture,
+  viewBox,
+  type TerrainOptions,
 } from './terrain.ts';

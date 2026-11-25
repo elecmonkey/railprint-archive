@@ -23,7 +23,7 @@ import {
   writeHash,
   type Selection,
 } from './map/selection';
-import { TerrainCanvas } from './map/TerrainCanvas';
+import { TerrainCanvas, type TerrainStatus } from './map/TerrainCanvas';
 import { Details } from './ui/Details';
 import { Loading } from './ui/Loading';
 import { TitleCard } from './ui/TitleCard';
@@ -73,7 +73,7 @@ export function App() {
   const release = useRelease();
   // The basemap waits for the railway, which matters more.
   const basemap = useBasemap(release.status === 'ready');
-  const [terrainReady, setTerrainReady] = useState(false);
+  const [terrain, setTerrain] = useState<TerrainStatus>();
   const [themeName, setThemeName] = useState<'light' | 'dark'>(preferredTheme);
   const [view, setView] = useState<View>();
   // The OSM credit fades once the reader first moves the map.
@@ -208,15 +208,14 @@ export function App() {
           <TerrainCanvas
             view={view}
             theme={theme}
-            {...(basemap.global ? { global: basemap.global } : {})}
-            regional={basemap.regional}
+            load
             opacity={theme.terrain.opacity}
-            onReady={setTerrainReady}
+            onStatus={setTerrain}
           />
           <MapCanvas
             data={release.data}
-            {...(basemap.vectors ? { basemap: basemap.vectors } : {})}
-            terrain={terrainReady}
+            {...(basemap ? { basemap } : {})}
+            terrain={terrain === 'ready' || terrain === 'mismatch'}
             basemapOpacity={theme.terrain.opacity}
             theme={theme}
             view={view}
@@ -245,6 +244,13 @@ export function App() {
             onFocusStation={focusStation}
             onClose={() => select({})}
           />
+          {terrain === 'mismatch' || terrain === 'failed' ? (
+            <p className={styles.notice} role="status">
+              {terrain === 'mismatch'
+                ? 'Terrain tiles out of date'
+                : 'Terrain unavailable'}
+            </p>
+          ) : null}
           <div className={styles.corner}>
             <p className={`${styles.attribution} ${moved ? styles.faded : ''}`}>
               Rail data{' '}

@@ -233,12 +233,6 @@ importers:
       '@railprint/sources':
         specifier: workspace:^
         version: link:../sources
-      h5wasm:
-        specifier: ^0.10.3
-        version: 0.10.3
-      sharp:
-        specifier: ^0.35.5
-        version: 0.35.5(@types/node@26.6.6)
 
   packages/catalog:
     dependencies:
@@ -363,6 +357,27 @@ importers:
         version: link:../layout
 
   packages/style: {}
+
+  packages/tiles:
+    dependencies:
+      '@railprint/basemap':
+        specifier: workspace:^
+        version: link:../basemap
+      '@railprint/layout':
+        specifier: workspace:^
+        version: link:../layout
+      '@railprint/render':
+        specifier: workspace:^
+        version: link:../render
+      '@railprint/sources':
+        specifier: workspace:^
+        version: link:../sources
+      h5wasm:
+        specifier: ^0.10.3
+        version: 0.10.3
+      sharp:
+        specifier: ^0.35.5
+        version: 0.35.5(@types/node@26.6.6)
 
 packages:
 

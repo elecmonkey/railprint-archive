@@ -13,6 +13,17 @@
   color: var(--rp-text-muted);
 }
 
+/* Terrain tiles that are missing or from another build. */
+.notice {
+  position: absolute;
+  left: 16px;
+  bottom: 12px;
+  margin: 0;
+  color: var(--rp-text-muted);
+  font-size: 11px;
+  line-height: 14px;
+}
+
 .attribution {
   position: absolute;
   right: 16px;

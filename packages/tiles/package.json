@@ -1,0 +1,25 @@
+{
+  "name": "@railprint/tiles",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Global terrain tiles from ETOPO 2022 and Natural Earth, served on their own site.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "bin": {
+    "railprint-tiles": "./src/cli.ts"
+  },
+  "scripts": {
+    "build": "pnpm -w sources fetch etopo-2022-60s etopo-2022-30s ne-10m-land ne-10m-lakes && node src/cli.ts",
+    "test": "rs test"
+  },
+  "dependencies": {
+    "@railprint/basemap": "workspace:^",
+    "@railprint/layout": "workspace:^",
+    "@railprint/render": "workspace:^",
+    "@railprint/sources": "workspace:^",
+    "h5wasm": "^0.10.3",
+    "sharp": "^0.35.5"
+  }
+}

@@ -1,54 +1,36 @@
 import { useEffect, useRef, useState } from 'react';
-import {
-  TerrainRenderer,
-  type TerrainTexture,
-  type View,
-} from '@railprint/render';
+import { TerrainRenderer, type TileIndex, type View } from '@railprint/render';
 import type { Theme } from '@railprint/style';
+import { TILES } from '../data/tiles';
 import styles from './MapCanvas.module.css';
+
+/**
+ * How the terrain stands: drawn; drawn from tiles other than the ones this
+ * build was made with; or not available.
+ */
+export type TerrainStatus = 'ready' | 'mismatch' | 'failed';
 
 interface Props {
   view: View | undefined;
   theme: Theme;
-  global?: TerrainTexture;
-  /** Sharper regional textures, drawn in order over the global one. */
-  regional: TerrainTexture[];
+  /** Start loading; the railway comes first. */
+  load: boolean;
   /** Layer opacity, 0–1; applied in CSS so changing it needs no redraw. */
   opacity: number;
-  /** Reports whether terrain is being drawn, so the 2D layer can go transparent. */
-  onReady: (ready: boolean) => void;
+  onStatus: (status: TerrainStatus) => void;
 }
 
-/** WebGL terrain layer underneath the 2D map canvas. */
-export function TerrainCanvas({
-  view,
-  theme,
-  global,
-  regional,
-  opacity,
-  onReady,
-}: Props) {
+/** WebGL terrain layer underneath the 2D map canvas, drawn from the tiles. */
+export function TerrainCanvas({ view, theme, load, opacity, onStatus }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const renderer = useRef<TerrainRenderer | null>(null);
+  const [renderer, setRenderer] = useState<TerrainRenderer>();
   const [size, setSize] = useState<{ width: number; height: number }>();
-  const [texturesVersion, setTexturesVersion] = useState(0);
+  // Bumped when a tile arrives, to draw again.
+  const [tiles, setTiles] = useState(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const gl = canvas.getContext('webgl2', {
-      premultipliedAlpha: true,
-      antialias: false,
-    });
-    if (!gl) {
-      console.warn('terrain: WebGL2 unavailable');
-      return;
-    }
-    try {
-      renderer.current = new TerrainRenderer(gl);
-    } catch (error) {
-      console.warn('terrain:', error);
-    }
     const observer = new ResizeObserver(([entry]) => {
       if (entry)
         setSize({
@@ -61,17 +43,41 @@ export function TerrainCanvas({
   }, []);
 
   useEffect(() => {
-    const r = renderer.current;
-    if (!r || !global) return;
-    r.setTextures(global, regional);
-    setTexturesVersion((v) => v + 1);
-    onReady(true);
-  }, [global, regional, onReady]);
+    const canvas = canvasRef.current;
+    if (!load || !canvas) return;
+    let live = true;
+    (async () => {
+      const response = await fetch(`${TILES.url}tiles.json`, {
+        cache: 'no-cache',
+      });
+      if (!response.ok) throw new Error(`tiles.json: HTTP ${response.status}`);
+      const index = (await response.json()) as TileIndex;
+      const gl = canvas.getContext('webgl2', {
+        premultipliedAlpha: true,
+        antialias: false,
+      });
+      if (!gl) throw new Error('WebGL2 unavailable');
+      if (!live) return;
+      setRenderer(
+        new TerrainRenderer(gl, {
+          url: TILES.url,
+          index,
+          onTile: () => live && setTiles((n) => n + 1),
+        }),
+      );
+      onStatus(index.hash === TILES.hash ? 'ready' : 'mismatch');
+    })().catch((error: unknown) => {
+      console.warn('terrain:', error);
+      if (live) onStatus('failed');
+    });
+    return () => {
+      live = false;
+    };
+  }, [load, onStatus]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const r = renderer.current;
-    if (!canvas || !r?.ready || !size || !view) return;
+    if (!canvas || !renderer || !size || !view) return;
     const frame = requestAnimationFrame(() => {
       const ratio = window.devicePixelRatio || 1;
       const w = Math.round(size.width * ratio);
@@ -80,10 +86,10 @@ export function TerrainCanvas({
         canvas.width = w;
         canvas.height = h;
       }
-      r.draw(view, size.width, size.height, ratio, theme);
+      renderer.draw(view, size.width, size.height, ratio, theme);
     });
     return () => cancelAnimationFrame(frame);
-  }, [view, theme, size, texturesVersion]);
+  }, [renderer, view, theme, size, tiles]);
 
   return (
     <canvas
